@@ -1,6 +1,7 @@
-package com.testvagrant.ekam.atoms;
+package com.testvagrant.ekam.atoms.base;
 
 import com.google.inject.Inject;
+import com.testvagrant.ekam.atoms.MobileActions;
 import com.testvagrant.optimuscloud.entities.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -40,6 +41,7 @@ public abstract class BaseActivity implements MobileActions<BaseActivity> {
 
     @Inject
     MobileDriverDetails mobileDriverDetails;
+
     private String option = "//android.widget.TextView[@text=\"%s\"]";
 
     public BaseActivity(MobileDriverDetails mobileDriverDetails) {
@@ -66,9 +68,8 @@ public abstract class BaseActivity implements MobileActions<BaseActivity> {
         try{
             return click(webElement, 2);
         } catch (Exception e) {
-
+            return this;
         }
-        return this;
     }
 
     public String text(WebElement element) {
@@ -119,8 +120,8 @@ public abstract class BaseActivity implements MobileActions<BaseActivity> {
             acceptElement.click();
             return true;
         } catch (TimeoutException e) {
+            return false;
         }
-        return false;
     }
 
     public void waitForElementToBeVisible(By by) {

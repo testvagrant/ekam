@@ -2,6 +2,7 @@ package com.testvagrant.ekam.web.drivers.browserManager;
 
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.Target;
+import com.testvagrant.ekam.web.RunMode;
 import com.testvagrant.ekam.web.drivers.DriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
@@ -35,7 +36,7 @@ public class ChromeDriverManager extends DriverManager {
     }
 
     private void enableHeadless(ChromeOptions chromeOptions) {
-        if(SystemProperties.TARGET.equals(Target.HEADLESS)) {
+        if(SystemProperties.RUN_MODE.equals(RunMode.HEADLESS)) {
             chromeOptions.setHeadless(true);
             chromeOptions.addArguments(headlessArguments());
         }

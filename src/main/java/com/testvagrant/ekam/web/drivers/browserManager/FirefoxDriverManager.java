@@ -2,6 +2,7 @@ package com.testvagrant.ekam.web.drivers.browserManager;
 
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.Target;
+import com.testvagrant.ekam.web.RunMode;
 import com.testvagrant.ekam.web.drivers.DriverManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
@@ -33,7 +34,7 @@ public class FirefoxDriverManager extends DriverManager {
     }
 
     private void enableHeadless(FirefoxOptions firefoxOptions) {
-        if(SystemProperties.TARGET.equals(Target.HEADLESS)) {
+        if(SystemProperties.RUN_MODE.equals(RunMode.HEADLESS)) {
             firefoxOptions.setHeadless(Boolean.TRUE);
             firefoxOptions.addArguments(headlessArguments());
         }

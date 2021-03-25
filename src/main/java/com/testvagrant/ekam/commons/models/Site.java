@@ -3,7 +3,6 @@ package com.testvagrant.ekam.commons.models;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import com.testvagrant.ekam.web.models.Entity;
 import lombok.*;
 
 import java.util.Objects;

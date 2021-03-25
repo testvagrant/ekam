@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.atoms;
+package com.testvagrant.ekam.atoms.base;
 
 public abstract class BaseComponent extends BasePage<BaseComponent> {
 

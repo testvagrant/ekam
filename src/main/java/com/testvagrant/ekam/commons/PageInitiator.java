@@ -1,8 +1,8 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.atoms.BaseComponent;
-import com.testvagrant.ekam.atoms.BasePage;
+import com.testvagrant.ekam.atoms.base.BaseComponent;
+import com.testvagrant.ekam.atoms.base.BasePage;
 import org.testng.Reporter;
 
 public class PageInitiator {
