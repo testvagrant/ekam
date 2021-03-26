@@ -20,7 +20,7 @@ stages:
   allow_failure: true
   stage: test
   script:
-    - ./gradlew runTests -DslackNotif=true
+    - ./gradlew runTests
   artifacts:
     when: always
     name: "$CI_COMMIT_REF_NAME"
