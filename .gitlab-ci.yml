@@ -8,8 +8,7 @@ stages:
 .download_history: &download_history
   after_script:
     - mkdir backup && cd backup
-    - ${CI_PROJECT_DIR}/history.sh
-    - (unzip report.zip) || true
+    - "curl --location --output report.zip --request GET \"https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/artifacts/master/download?job=pages\" --header \"Authorization: Bearer ${CI_DEPLOY_TOKEN}\" || true"
     - ls
     - cd ../
     - ls
@@ -20,12 +19,13 @@ stages:
   allow_failure: true
   stage: test
   script:
-    - ./gradlew runTests
+    - ./gradlew runWebTests
   artifacts:
     when: always
     name: "$CI_COMMIT_REF_NAME"
     paths:
       - ./report/*
+      - logs/
     expire_in: 7 days
 
 build:

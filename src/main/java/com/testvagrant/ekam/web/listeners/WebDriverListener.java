@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.web.listeners;
 
 import com.testvagrant.ekam.commons.Injectors;
+import com.testvagrant.ekam.commons.ModulesLibrary;
 import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.PropertyModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
@@ -26,7 +27,7 @@ public class WebDriverListener implements ITestListener {
     public void onTestStart(ITestResult result) {
         Reporter.log(String.format("Test %s has started", result.getName().toLowerCase()), true);
         addDivider();
-        Injector driverInjector = result.getTestContext().getSuite().getParentInjector().createChildInjector(setupModules());
+        Injector driverInjector = result.getTestContext().getSuite().getParentInjector().createChildInjector(new ModulesLibrary().webModules());
         result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
         result.setAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector(), driverInjector);
         driverInjector.getInstance(Launcher.class).launch();
@@ -73,16 +74,5 @@ public class WebDriverListener implements ITestListener {
     private void addDivider() {
         Reporter.log("==================================================", true);
     }
-
-    private List<Module> setupModules() {
-        return Arrays.asList(
-                new SiteModule(),
-                new PropertyModule(),
-                new LocaleModule(),
-                new SwitchViewModule(),
-                new WebModule(),
-                new PageModule());
-    }
-
 
 }

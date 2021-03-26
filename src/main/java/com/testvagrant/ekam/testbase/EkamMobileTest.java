@@ -11,9 +11,6 @@ import org.testng.annotations.Guice;
 /**
  * TestBase for mobile tests alone
  */
-@Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        MobileModule.class})
+@Guice(modules = {})
 public class EkamMobileTest {
 }

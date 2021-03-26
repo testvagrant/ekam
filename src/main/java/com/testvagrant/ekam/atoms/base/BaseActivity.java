@@ -33,23 +33,25 @@ import java.util.stream.IntStream;
 
 import static java.lang.Runtime.getRuntime;
 
-public abstract class BaseActivity implements MobileActions<BaseActivity> {
+public abstract class BaseActivity<T> implements MobileActions<BaseActivity> {
 
     protected AppiumDriver driver;
 
-    private WebDriverWait wait;
+    @Inject
+    WebDriverWait wait;
 
     @Inject
     MobileDriverDetails mobileDriverDetails;
 
+    T page;
+
     private String option = "//android.widget.TextView[@text=\"%s\"]";
 
-    public BaseActivity(MobileDriverDetails mobileDriverDetails) {
+    public BaseActivity init(BaseActivity page) {
         this.driver = (AppiumDriver) mobileDriverDetails.getMobileDriver();
-        this.mobileDriverDetails = mobileDriverDetails;
         FieldDecorator fieldDecorator = new AppiumFieldDecorator(driver, Duration.ofSeconds(30));
-        PageFactory.initElements(driver, this);
-        wait = new WebDriverWait(driver, 30);
+        PageFactory.initElements(fieldDecorator, page);
+        return  page;
     }
 
     public BaseActivity click(WebElement webElement) {
@@ -687,16 +689,8 @@ public abstract class BaseActivity implements MobileActions<BaseActivity> {
         }
         driver.terminateApp(bundleId);
         driver.activateApp(bundleId);
-        sleep(3000);
     }
 
-   private void sleep(int millis) {
-       try {
-           Thread.sleep(millis);
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
-   }
 
     protected void chooseOption(String optionValue) {
         By optionBy = By.xpath(String.format(option, optionValue));

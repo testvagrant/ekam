@@ -127,7 +127,7 @@ tasks.withType(Test) {
     ]
 }
 
-task runTests(type: Test) {
+task runWebTests(type: Test) {
     outputs.upToDateWhen {false}
     useTestNG {
         parallel = "classes"
@@ -136,7 +136,23 @@ task runTests(type: Test) {
         useDefaultListeners  true
         listeners << 'com.testvagrant.ekam.web.listeners.WebSiteListener'
         listeners << 'com.testvagrant.ekam.web.listeners.WebDriverListener'
+        listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
         listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
+        outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
+    }
+}
+
+task runMobileTests(type: Test) {
+    outputs.upToDateWhen {false}
+    useTestNG {
+        parallel = "classes"
+        threadCount = 1
+        includeGroups System.getProperty("tags", "mobile")
+        testLogging.showStandardStreams = true
+        useDefaultListeners  true
+        listeners << 'com.testvagrant.ekam.mobile.listeners.MobileDriverListener'
+        listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
+        listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
         outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
     }
 }
