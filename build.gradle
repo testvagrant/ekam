@@ -111,8 +111,6 @@ allure {
     autoconfigure = true
     aspectjweaver = true
     allureJavaVersion = '2.10.0'
-    reportDir = new File(project.projectDir as File, '/allure-report/ui')
-    resultsDir = new File(project.projectDir as File, '/allure-report/results')
     clean = true
 }
 
