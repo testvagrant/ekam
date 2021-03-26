@@ -12,6 +12,8 @@ plugins {
     id "io.qameta.allure" version "2.8.1"
 }
 
+sourceCompatibility = 1.8
+
 repositories {
     mavenCentral()
     mavenLocal()
@@ -104,11 +106,6 @@ dependencies {
 
 }
 
-test {
-    // Use TestNG for unit tests
-    useTestNG()
-}
-
 allure {
     version = '2.8.1'
     autoconfigure = true
@@ -117,4 +114,17 @@ allure {
     reportDir = new File(project.projectDir as File, '/allure-report/ui')
     resultsDir = new File(project.projectDir as File, '/allure-report/results')
     clean = true
+}
+
+task runTests(type: Test) {
+    outputs.upToDateWhen {false}
+    useTestNG {
+        parallel = "classes"
+        threadCount = 2
+        testLogging.showStandardStreams = true
+        useDefaultListeners  true
+        listeners << 'com.testvagrant.ekam.web.listeners.WebSiteListener'
+        listeners << 'com.testvagrant.ekam.web.listeners.WebDriverListener'
+        outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
+    }
 }

@@ -14,19 +14,19 @@ public class PageInitiator {
     }
 
     public static <T extends BaseComponent> T getWebComponent(Class<T> tComponent) {
-        return  getPageInstance(tComponent, Injectors.WEB_PAGE_INJECTOR);
+        return getPageInstance(tComponent, Injectors.WEB_PAGE_INJECTOR);
     }
 
     public static <T extends BaseComponent> T getMobileComponent(Class<T> tComponent) {
-        return  getPageInstance(tComponent, Injectors.MOBILE_PAGE_INJECTOR);
+        return getPageInstance(tComponent, Injectors.MOBILE_PAGE_INJECTOR);
     }
 
     public static <T extends BaseComponent> T getActivity(Class<T> tActivity) {
-        return  getPageInstance(tActivity, Injectors.MOBILE_PAGE_INJECTOR);
+        return getPageInstance(tActivity, Injectors.MOBILE_PAGE_INJECTOR);
     }
 
     public static <T extends BaseComponent> T getView(Class<T> tView) {
-        return  getPageInstance(tView, Injectors.MOBILE_PAGE_INJECTOR);
+        return getPageInstance(tView, Injectors.MOBILE_PAGE_INJECTOR);
     }
 
     public static <T extends BasePage> T getPageInstance(Class<T> tClass, Injectors injectorType) {
