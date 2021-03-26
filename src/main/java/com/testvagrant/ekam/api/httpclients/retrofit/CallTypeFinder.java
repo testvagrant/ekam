@@ -5,20 +5,22 @@ import retrofit2.Invocation;
 
 public class CallTypeFinder {
 
-    private ClassNameExtractor classNameExtractor;
-    public CallTypeFinder() {
-        classNameExtractor = new ClassNameExtractor();
-    }
+  private final ClassNameExtractor classNameExtractor;
 
-    public <T> Class getType(Call call) {
-        Invocation tag = call.request().tag(Invocation.class);
-        String typeName = tag.method().getGenericReturnType().getTypeName();
-        String type = classNameExtractor.extract(typeName);
-        try {
-            return Class.forName(type);
-        } catch (ClassNotFoundException e) {
+  public CallTypeFinder() {
+    classNameExtractor = new ClassNameExtractor();
+  }
 
-        }
-        throw new RuntimeException("Cannot create type for call " + typeName);
+  public <T> Class getType(Call call) {
+    Invocation tag = call.request().tag(Invocation.class);
+    String typeName = tag.method().getGenericReturnType().getTypeName();
+    String type = classNameExtractor.extract(typeName);
+    try {
+      return Class.forName(type);
+    } catch (ClassNotFoundException exception) {
+      throw new RuntimeException(
+          String.format(
+              "Cannot create type for call %s. Error: %s" + typeName, exception.getMessage()));
     }
+  }
 }
