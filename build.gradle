@@ -121,7 +121,7 @@ tasks.withType(Test) {
             env                     : System.getProperty('env', 'staging'),
             tags                    : System.getProperty('tags', 'smoke'),
             browser                 : System.getProperty('browser', 'chrome'),
-            runMode                 : System.getProperty('runMode', 'ui'),
+            runMode                 : System.getProperty('runMode', 'headless'),
             timeline                : System.getProperty('timeline', 'true'),
             slackNotif              : System.getProperty('slackNotif','false')
     ]

@@ -13,3 +13,4 @@ allure-results/
 .DS_Store
 .classpath
 .settings
+logs/
