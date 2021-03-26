@@ -23,8 +23,10 @@ stages:
     - ./gradlew runTests -DslackNotif=true
   artifacts:
     when: always
+    name: "$CI_COMMIT_REF_NAME"
     paths:
-      - allure-results/
+      - ./report/*
+    expire_in: 7 days
 
 build:
   stage: build
