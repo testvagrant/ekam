@@ -11,3 +11,5 @@ allure-report/
 allure-results/
 .allure/
 .DS_Store
+.classpath
+.settings
