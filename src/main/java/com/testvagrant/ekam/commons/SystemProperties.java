@@ -21,5 +21,5 @@ public final class SystemProperties {
     public static final String PAGES_URL = System.getenv("CI_PAGES_URL");
     public static final String SLACK_CHANNEL_TOKEN = System.getenv("CHANNEL_TOKEN");
     public static final boolean SLACK_NOTIF = Boolean.parseBoolean(System.getProperty("slackNotif", String.valueOf(false)));
-    public static final String BROWSER = System.getProperty("browser", Browser.FIREFOX.name().toLowerCase());
+    public static final String BROWSER = System.getProperty("browser", Browser.CHROME.name().toLowerCase());
 }

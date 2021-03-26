@@ -31,7 +31,7 @@ build:
 
 web_tests:
   stage: test
-  image: cmaohuang/firefox-java
+  image: krishnanandb/chromeheadless
   <<: *test_template
   <<: *download_history
 
