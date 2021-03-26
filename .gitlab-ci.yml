@@ -31,7 +31,7 @@ build:
 
 web_tests:
   stage: test
-  image: selenium/standalone-firefox
+  image: cmaohuang/firefox-java
   <<: *test_template
   <<: *download_history
 
