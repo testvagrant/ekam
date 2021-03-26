@@ -7,18 +7,20 @@ stages:
 
 .download_history: &download_history
   after_script:
-    - apt-get install -y unzip
-    - mkdir backup && cd backup || true
-    - "curl --location --output report.zip --request GET \"https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/jobs/artifacts/master/download?job=pages\" --header \"Authorization: Bearer ${CI_DEPLOY_TOKEN}\" || true"
+    - mkdir backup && cd backup
+    - ${CI_PROJECT_DIR}/history.sh
     - (unzip report.zip) || true
+    - ls
     - cd ../
-    - (cp -r backup/public/history/ allure-results/history) || true
+    - ls
+    - (cp -r backup/report/results/ allure-report) || true
+    - .allure/allure-2.8.1/bin/allure generate allure-report/results -o report
 
 .test_template: &test_template
   allow_failure: true
   stage: test
   script:
-    - ./gradlew runTests
+    - ./gradlew runTests -DslackNotif=true
   artifacts:
     when: always
     paths:
@@ -35,27 +37,13 @@ web_tests:
   <<: *test_template
   <<: *download_history
 
-allure_report:
-  stage: allure
-  when: always
-  dependencies:
-    - web_tests
-  script:
-    - gradle allureReport #change allure command specific to your framework
-  artifacts:
-    when: always
-    paths:
-      - allure-report/
-      - allure-results/
-  only:
-    - master
 pages:
   stage: deploy
   when: always
   dependencies:
-    - allure_report
+    - web_tests
   script:
-    - mv allure-report/ public/
+    - mv report/ public/
   artifacts:
     paths:
       - public

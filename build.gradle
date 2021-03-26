@@ -111,7 +111,20 @@ allure {
     autoconfigure = true
     aspectjweaver = true
     allureJavaVersion = '2.10.0'
+    reportDir = new File(project.projectDir as File, '/allure-report/ui')
+    resultsDir = new File(project.projectDir as File, '/allure-report/results')
     clean = true
+}
+
+tasks.withType(Test) {
+    systemProperties = [
+            env                     : System.getProperty('env', 'staging'),
+            tags                    : System.getProperty('tags', 'smoke'),
+            browser                 : System.getProperty('browser', 'chrome'),
+            runMode                 : System.getProperty('runMode', 'ui'),
+            timeline                : System.getProperty('timeline', 'true'),
+            slackNotif              : System.getProperty('slackNotif','false')
+    ]
 }
 
 task runTests(type: Test) {
@@ -123,6 +136,7 @@ task runTests(type: Test) {
         useDefaultListeners  true
         listeners << 'com.testvagrant.ekam.web.listeners.WebSiteListener'
         listeners << 'com.testvagrant.ekam.web.listeners.WebDriverListener'
+        listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
         outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
     }
 }

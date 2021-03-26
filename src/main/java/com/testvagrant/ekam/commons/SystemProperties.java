@@ -8,7 +8,7 @@ public final class SystemProperties {
     public static final String TESTFEED = System.getProperty("testFeed", "paylater_nightly_local");
     public static final String ENV = System.getProperty("env", DEFAULT_ENV);
     public static final String LOCALE = System.getProperty("locale", "en");
-    public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "true"));
+    public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "false"));
     public static final Boolean MOCK = Boolean.valueOf(System.getProperty("mock", "false"));
     public static final Boolean LOGS = Boolean.valueOf(System.getProperty("logs", "false"));
     public static final String HUB = System.getProperty("hub", "kobiton").toUpperCase();
