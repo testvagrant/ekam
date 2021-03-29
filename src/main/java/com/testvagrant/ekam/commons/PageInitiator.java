@@ -1,48 +1,31 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.atoms.base.BaseActivity;
-import com.testvagrant.ekam.atoms.base.BaseComponent;
-import com.testvagrant.ekam.atoms.base.BasePage;
+import com.testvagrant.ekam.atoms.mobile.android.BaseActivity;
+import com.testvagrant.ekam.atoms.web.BasePage;
 import org.testng.Reporter;
 
 public class PageInitiator {
 
-    //Sugar coated methods for readability
+  // Sugar coated methods for readability
+  public static <Page extends BasePage> Page getWebPage(Class<Page> tPage) {
+    return getPageInstance(tPage, Injectors.WEB_PAGE_INJECTOR);
+  }
 
-    public static <T extends BasePage> T getWebPage(Class<T> tPage) {
-        return getPageInstance(tPage, Injectors.WEB_PAGE_INJECTOR);
-    }
+  public static <T> T getPageInstance(Class<T> tClass, Injectors injectorType) {
+    Injector pageInjector =
+        (Injector) Reporter.getCurrentTestResult().getAttribute(injectorType.getInjector());
+    return pageInjector.getInstance(tClass);
+  }
 
-    public static <T extends BaseComponent> T getWebComponent(Class<T> tComponent) {
-        return getPageInstance(tComponent, Injectors.WEB_PAGE_INJECTOR);
-    }
+  public static <T> T getActivity(Class<T> tActivity) {
+    return getPageInstance(tActivity, Injectors.MOBILE_PAGE_INJECTOR);
+  }
 
-    public static <T extends BaseComponent> T getMobileComponent(Class<T> tComponent) {
-        return getPageInstance(tComponent, Injectors.MOBILE_PAGE_INJECTOR);
-    }
-
-    public static <T extends BaseActivity> T getActivity(Class<T> tActivity) {
-        return getPageActivity(tActivity, Injectors.MOBILE_PAGE_INJECTOR);
-    }
-
-    public static <T extends BaseActivity> T getView(Class<T> tView) {
-        return getPageActivity(tView, Injectors.MOBILE_PAGE_INJECTOR);
-    }
-
-    public static <T extends BasePage> T getPageInstance(Class<T> tClass, Injectors injectorType) {
-        Injector pageInjector = (Injector) Reporter.getCurrentTestResult()
-                .getAttribute(injectorType.getInjector());
-        T page = pageInjector.getInstance(tClass);
-        return (T) page.init(page);
-    }
-
-    public static <T extends BaseActivity> T getPageActivity(Class<T> tClass, Injectors injectorType) {
-        Injector pageInjector = (Injector) Reporter.getCurrentTestResult()
-                .getAttribute(injectorType.getInjector());
-        T page = pageInjector.getInstance(tClass);
-        return (T) page.init(page);
-    }
-
-
+  public static <Activity extends BaseActivity> Activity getActivityInstance(
+      Class<Activity> tClass, Injectors injectorType) {
+    Injector activityInjector =
+        (Injector) Reporter.getCurrentTestResult().getAttribute(injectorType.getInjector());
+    return activityInjector.getInstance(tClass);
+  }
 }

@@ -12,49 +12,43 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-
 public class SiteClient {
 
-    @Inject
-    @Url
-    private String url;
+  @Inject @Url private String url;
 
+  private OkHttpClient okHttpClient;
 
-    private OkHttpClient okHttpClient;
+  public SiteClient() {
+    okHttpClient = new OkHttpClient();
+  }
 
-    public SiteClient() {
-        okHttpClient = new OkHttpClient();
+  @Step("Checking if site is down")
+  public boolean isSiteDown() {
+    try {
+      Request siteRequest = buildBasicRequest();
+      ReportLogger.log("Creating a new site request" + siteRequest.toString());
+      Response execute = okHttpClient.newCall(buildBasicRequest()).execute();
+      return !execute.isSuccessful();
+    } catch (IOException e) {
+      ReportLogger.log("Failed to execute site request");
+      e.printStackTrace();
     }
+    return true;
+  }
 
-    @Step("Checking if site is down")
-    public boolean isSiteDown() {
-        try {
-            Request siteRequest = buildBasicRequest();
-            ReportLogger.log("Creating a new site request" + siteRequest.toString());
-            Response execute = okHttpClient.newCall(buildBasicRequest())
-                    .execute();
-            return !execute.isSuccessful();
-        } catch (IOException e) {
-            ReportLogger.log("Failed to execute site request");
-            e.printStackTrace();
-        }
-        return true;
+  public void terminateIfSiteIsDown() {
+    try {
+      if (isSiteDown()) {
+        throw new UnReachableSiteException(url);
+      }
+      ReportLogger.log("Proceeding ahead as env is available");
+    } catch (UnReachableSiteException e) {
+      ReportLogger.log("Unable to reach site, terminating build");
+      System.exit(1);
     }
+  }
 
-
-    public void terminateIfSiteIsDown() {
-        try {
-            if (isSiteDown()) {
-                throw new UnReachableSiteException(url);
-            }
-            ReportLogger.log("Proceeding ahead as env is available");
-        } catch (UnReachableSiteException e) {
-            ReportLogger.log("Unable to reach site, terminating build");
-            System.exit(1);
-        }
-    }
-
-    private Request buildBasicRequest() {
-        return new Builder().url(url).build();
-    }
+  private Request buildBasicRequest() {
+    return new Builder().url(url).build();
+  }
 }
