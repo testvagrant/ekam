@@ -15,14 +15,11 @@ import java.util.stream.Collectors;
 public class ElementCollection {
 
   @Inject WebDriver driver;
-  private final By locator;
 
-  private ElementCollection(By locator) {
+  private By locator;
+
+  protected void locate(By locator) {
     this.locator = locator;
-  }
-
-  public static ElementCollection ElementCollection(By locator) {
-    return new ElementCollection(locator);
   }
 
   public List<String> getTextValues() {

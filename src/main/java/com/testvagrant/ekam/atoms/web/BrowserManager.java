@@ -16,9 +16,9 @@ public class BrowserManager {
     @Inject
     private WebDriver driver;
 
-    public static BrowserManager BrowserManager() {
-        return new BrowserManager();
-    }
+//    public static BrowserManager BrowserManager() {
+//        return new BrowserManager();
+//    }
 
     public void get(String url) {
         this.driver.get(url);
