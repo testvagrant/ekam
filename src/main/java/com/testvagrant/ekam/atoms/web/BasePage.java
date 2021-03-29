@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.testvagrant.ekam.atoms.QueryFunctions;
 import com.testvagrant.ekam.reports.ReportLogger;
-import org.openqa.selenium.By;
 
 public class BasePage implements QueryFunctions {
 
