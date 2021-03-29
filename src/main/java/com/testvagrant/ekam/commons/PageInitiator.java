@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.atoms.mobile.BaseActivity;
+import com.testvagrant.ekam.atoms.mobile.android.BaseActivity;
 import com.testvagrant.ekam.atoms.web.BasePage;
 import org.testng.Reporter;
 

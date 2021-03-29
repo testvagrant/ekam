@@ -5,7 +5,7 @@ import com.testvagrant.ekam.web.drivers.Browser;
 
 public final class SystemProperties {
     public static final String DEFAULT_ENV = System.getProperty("defaultEnv", "staging");
-    public static final String TESTFEED = System.getProperty("testFeed", "paylater_nightly_local");
+    public static final String TESTFEED = System.getProperty("testFeed", "calculator");
     public static final String ENV = System.getProperty("env", DEFAULT_ENV);
     public static final String LOCALE = System.getProperty("locale", "en");
     public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "false"));

@@ -3,6 +3,7 @@ package com.testvagrant.ekam.mobile.listeners;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.testvagrant.ekam.commons.Injectors;
+import com.testvagrant.ekam.commons.ModulesLibrary;
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.PropertyModule;
@@ -24,11 +25,11 @@ public class MobileDriverListener implements ITestListener {
     public void onTestStart(ITestResult result) {
         Reporter.log(String.format("Test %s has started", result.getName().toLowerCase()));
         addDivider();
-        Injector driverInjector = result.getTestContext().getSuite().getParentInjector().createChildInjector(new SwitchViewModule(), new MobileModule());
-        result.getTestContext().setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
-        result.getTestContext().setAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector(), driverInjector);
+        Injector driverInjector = result.getTestContext().getSuite().getParentInjector().createChildInjector(new ModulesLibrary().mobileModules());
+        result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
+        result.setAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector(), driverInjector);
         MobileDriverDetails mobileDriverDetails = driverInjector.getInstance(MobileDriverDetails.class);
-        result.getTestContext().setAttribute(Injectors.MOBILE_DRIVER.getInjector(), mobileDriverDetails);
+        result.setAttribute(Injectors.MOBILE_DRIVER.getInjector(), mobileDriverDetails);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class MobileDriverListener implements ITestListener {
 
     public void quit(ITestResult result) {
         if(SystemProperties.TARGET.equals(Target.OPTIMUS)) return;
-        Injector driver = (Injector) result.getTestContext().getAttribute(Injectors.DRIVER_INJECTOR.getInjector());
+        Injector driver = (Injector) result.getAttribute(Injectors.DRIVER_INJECTOR.getInjector());
         MobileDriverDetails driverInstance = driver.getInstance(MobileDriverDetails.class);
         addDivider();
         Reporter.log(String.format("Test %s has ended",result.getName().toLowerCase()));
@@ -70,13 +71,8 @@ public class MobileDriverListener implements ITestListener {
         Reporter.log("==================================================");
     }
 
-    private List<Module> setupModules() {
-        return Arrays.asList(
-                new PropertyModule(),
-                new LocaleModule(),
-                new SwitchViewModule(),
-                new MobileModule());
+    private Module[] setupModules() {
+        return new Module[]{new PropertyModule(), new LocaleModule(), new SwitchViewModule(), new MobileModule()};
     }
-
 
 }

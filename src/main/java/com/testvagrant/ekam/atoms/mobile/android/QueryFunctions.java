@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.atoms;
+package com.testvagrant.ekam.atoms.mobile.android;
 
 import org.openqa.selenium.By;
 
@@ -23,7 +23,7 @@ public interface QueryFunctions {
 
   default String ignoreSpaceAndCase(String value) {
     return String.format(
-        "normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) = '%1$s'",
+        "normalize-space(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) = '%1$s'",
         value.toLowerCase());
   }
 
@@ -33,7 +33,7 @@ public interface QueryFunctions {
     }
 
     return String.format(
-        "contains(normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) , '%1$s')",
+        "contains(normalize-space(translate(@text, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')) , '%1$s')",
         value.toLowerCase());
   }
 

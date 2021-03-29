@@ -24,16 +24,17 @@ import java.util.Timer;
 
 public class DriverProvider implements Provider<MobileDriverDetails> {
 
-    private MobileDriverDetails mobileDriverDetails;
+    protected ThreadLocal<MobileDriverDetails> mobileDriverDetailsThreadLocal = new ThreadLocal<>();
 
-    public DriverProvider() {
+    public MobileDriverDetails setupMobileDriver() {
         String testFeed = SystemProperties.TESTFEED;
         TestFeedToDesiredCapConverter testFeedToDesiredCapConverter = new TestFeedToDesiredCapConverter(testFeed);
         List<DesiredCapabilities> desiredCapabilities = testFeedToDesiredCapConverter.convert();
-        mobileDriverDetails = createDriver(desiredCapabilities);
-
+        MobileDriverDetails mobileDriverDetails = createDriver(desiredCapabilities);
+        mobileDriverDetailsThreadLocal.set(mobileDriverDetails);
 //        mobileDriverDetails.getMobileDriver().resetApp();
         captureLogs();
+        return mobileDriverDetailsThreadLocal.get();
     }
 
     private MobileDriverDetails createDriver(List<DesiredCapabilities> desiredCapabilitiesList) {
@@ -68,7 +69,8 @@ public class DriverProvider implements Provider<MobileDriverDetails> {
 
     @Override
     public MobileDriverDetails get() {
-        return mobileDriverDetails;
+        setupMobileDriver();
+        return mobileDriverDetailsThreadLocal.get();
     }
 
     private DesiredCapabilities updateCapabilities(DesiredCapabilities desiredCapabilities) {
@@ -100,6 +102,6 @@ public class DriverProvider implements Provider<MobileDriverDetails> {
             return;
         }
         Timer timer = new Timer();
-        timer.schedule(new AppiumLogRecorder(mobileDriverDetails.getMobileDriver()), 0, 3000);
+        timer.schedule(new AppiumLogRecorder(mobileDriverDetailsThreadLocal.get().getMobileDriver()), 0, 3000);
     }
 }

@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.atoms.mobile;
+package com.testvagrant.ekam.atoms.mobile.android;
 
 import com.google.inject.Inject;
 import io.appium.java_client.AppiumDriver;

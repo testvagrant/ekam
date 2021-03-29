@@ -1,0 +1,34 @@
+{
+  "executionDetails": {
+    "appium_js_path": "/usr/local/bin/appium",
+    "appium_node_path": "/usr/local/bin/node",
+    "monitoring":true
+  },
+  "testFeed":[
+    {
+      "belongsTo":"calculator",
+      "runsOn": "any",
+      "appDir": "app",
+      "nativeApp":true,
+      "optimusDesiredCapabilities": {
+        "appiumServerCapabilities": {
+          "app": "calculator.apk",
+          "platformName": "Android",
+          "automationName": "UIAutomator2",
+          "udid": "emulator-5554",
+          "newCommandTimeout": 300,
+          "autoGrantPermissions": true,
+          "noReset": true
+        },
+        "androidOnlyCapabilities": {
+          "avdLaunchTimeout": 300,
+          "autoAcceptAlerts": true,
+          "useKeystore": false
+        }
+      },
+      "deviceState": {
+        "captureVideo": true
+      }
+    }
+  ]
+}

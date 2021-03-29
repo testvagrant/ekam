@@ -4,7 +4,7 @@ import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.web.drivers.Browser;
 import com.testvagrant.ekam.web.drivers.browserManager.ChromeDriverManager;
 import com.testvagrant.ekam.web.drivers.browserManager.FirefoxDriverManager;
-import com.testvagrant.ekam.web.drivers.wait.Waits;
+import com.testvagrant.ekam.web.drivers.wait.WebWaits;
 import com.google.inject.AbstractModule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,7 +17,7 @@ public class WebModule extends AbstractModule {
     @Override
     public void configure() {
         bind(WebDriver.class).toProvider(getBrowserManager()).asEagerSingleton();
-        bind(WebDriverWait.class).toProvider(Waits.class).asEagerSingleton();
+        bind(WebDriverWait.class).toProvider(WebWaits.class).asEagerSingleton();
     }
 
 
