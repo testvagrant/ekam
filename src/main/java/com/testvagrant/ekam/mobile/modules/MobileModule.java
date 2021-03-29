@@ -2,7 +2,7 @@ package com.testvagrant.ekam.mobile.modules;
 
 import com.google.inject.AbstractModule;
 import com.testvagrant.ekam.mobile.driver.DriverProvider;
-import com.testvagrant.ekam.web.drivers.wait.MobileWaits;
+import com.testvagrant.ekam.mobile.wait.MobileWaits;
 import com.testvagrant.optimuscloud.entities.MobileDriverDetails;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
