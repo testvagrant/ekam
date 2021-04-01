@@ -19,7 +19,7 @@ stages:
   allow_failure: true
   stage: test
   script:
-    - ./gradlew runWebTests
+    - ./gradlew $TASK
   artifacts:
     when: always
     name: "$CI_COMMIT_REF_NAME"
@@ -35,7 +35,23 @@ build:
 
 web_tests:
   stage: test
+  variables:
+    TASK: runWebTests
   image: krishnanandb/chromeheadless
+  <<: *test_template
+  <<: *download_history
+
+api_tests:
+  stage: test
+  variables:
+    TASK: runApiTests
+  <<: *test_template
+  <<: *download_history
+
+db_tests:
+  stage: test
+  variables:
+    TASK: runDBTests
   <<: *test_template
   <<: *download_history
 

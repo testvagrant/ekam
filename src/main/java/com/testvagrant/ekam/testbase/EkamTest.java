@@ -8,6 +8,7 @@ import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
 import com.testvagrant.ekam.web.modules.WebModule;
 import org.testng.annotations.Guice;
+import org.testng.annotations.Test;
 
 /**
  * A single testbase to cover web/mobile/api tests for an application
@@ -19,5 +20,6 @@ import org.testng.annotations.Guice;
         GrpcModule.class,
         WebModule.class,
         MobileModule.class})
+@Test(groups = {"web", "mobile", "api"})
 public class EkamTest {
 }

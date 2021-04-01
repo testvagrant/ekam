@@ -9,14 +9,11 @@ import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 @Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        HttpClientModule.class,
-        GrpcModule.class})
+        LocaleModule.class})
 /**
- * Entry point to API tests with GRPC Support
+ * Entry point to DB tests
  */
-@Test(groups = "api")
-public class EkamApiTest {
+@Test(groups = "db")
+public class EkamDBTest {
 
 }

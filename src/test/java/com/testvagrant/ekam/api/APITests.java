@@ -18,7 +18,7 @@ public class APITests extends EkamApiTest {
     @Inject
     AnimalFactsAssertions animalFactsAssertions;
 
-    @Test
+    @Test(groups = "api")
     public void getAnimalFacts() {
         Response<List<CatFacts>> catFacts = animalFactsClient.getCatFacts();
         animalFactsAssertions.assertThatCatFactsAreAvailable(catFacts);

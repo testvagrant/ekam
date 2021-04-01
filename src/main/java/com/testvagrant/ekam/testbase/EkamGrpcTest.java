@@ -6,6 +6,7 @@ import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.PropertyModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import org.testng.annotations.Guice;
+import org.testng.annotations.Test;
 
 /**
  * Entrypoint to GRPC Test
@@ -14,5 +15,6 @@ import org.testng.annotations.Guice;
         LocaleModule.class,
         SwitchViewModule.class,
         GrpcModule.class})
+@Test(groups = {"api", "grpc"})
 public class EkamGrpcTest {
 }

@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import static com.testvagrant.ekam.commons.PageInitiator.getWebPage;
 
+@Test(groups = "web")
 public class WebTests1 extends EkamWebTest {
 
     @Test

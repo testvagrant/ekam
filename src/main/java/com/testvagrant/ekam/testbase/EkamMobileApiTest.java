@@ -7,6 +7,7 @@ import com.testvagrant.ekam.commons.modules.PropertyModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
 import org.testng.annotations.Guice;
+import org.testng.annotations.Test;
 
 /**
  * TestBase for mobile tests with API access
@@ -17,5 +18,6 @@ import org.testng.annotations.Guice;
         HttpClientModule.class,
         GrpcModule.class,
         MobileModule.class})
+@Test(groups = {"mobile", "api"})
 public class EkamMobileApiTest {
 }
