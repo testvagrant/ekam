@@ -4,7 +4,9 @@ public enum Toggles {
     MOCK(SystemProperties.MOCK),
     LOGS(SystemProperties.LOGS),
     SWITCH_VIEW(SystemProperties.SWITCH_VIEW),
-    TIMELINE(SystemProperties.TIMELINE);
+    TIMELINE(SystemProperties.TIMELINE),
+    SLACK_NOTIF(SystemProperties.SLACK_NOTIF),
+    SLACK_NOTIFY_ME_EVERYTIME(SystemProperties.SLACK_NOTIFY_ME_EVERYTIME);
 
     private Boolean active;
 

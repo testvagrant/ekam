@@ -17,6 +17,7 @@ public class ScreenshotTaker {
     @Inject(optional = true)
     MobileDriverDetails mobileDriverDetails;
 
+
     @Attachment(value = "Screenshot", type = "image/png")
     public byte[] saveScreenshot() {
         return ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);

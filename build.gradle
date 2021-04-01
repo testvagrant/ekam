@@ -113,7 +113,8 @@ tasks.withType(Test) {
             browser   : System.getProperty('browser', 'chrome'),
             runMode   : System.getProperty('runMode', 'headless'),
             timeline  : System.getProperty('timeline', 'true'),
-            slackNotif: System.getProperty('slackNotif', 'false')
+            slackNotif: System.getProperty('slackNotif', 'false'), //Global => On Failures
+            slackNotifyMeEverytime: System.getProperty('slackNotifyMeEverytime', 'false')
     ]
 }
 
@@ -123,6 +124,7 @@ task runWebTests(type: Test) {
     useTestNG {
         parallel = "classes"
         threadCount = 2
+        includeGroups System.getProperty("tags", "web")
         testLogging.showStandardStreams = true
         useDefaultListeners true
         listeners << 'com.testvagrant.ekam.web.listeners.WebSiteListener'
@@ -143,6 +145,32 @@ task runMobileTests(type: Test) {
         useDefaultListeners true
         listeners << 'com.testvagrant.ekam.mobile.listeners.MobileDriverListener'
         listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
+        listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
+        outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
+    }
+}
+
+task runApiTests(type: Test) {
+    outputs.upToDateWhen { false }
+    useTestNG {
+        parallel = "classes"
+        threadCount = 1
+        includeGroups System.getProperty("tags", "api")
+        testLogging.showStandardStreams = true
+        useDefaultListeners true
+        listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
+        outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
+    }
+}
+
+task runDBTests(type: Test) {
+    outputs.upToDateWhen { false }
+    useTestNG {
+        parallel = "classes"
+        threadCount = 1
+        includeGroups System.getProperty("tags", "db")
+        testLogging.showStandardStreams = true
+        useDefaultListeners true
         listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
         outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))
     }

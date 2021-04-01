@@ -17,10 +17,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.Reporter;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Guice;
+import org.testng.annotations.*;
 import org.testng.xml.XmlTest;
 
 import java.lang.reflect.Method;
@@ -31,5 +28,6 @@ import java.util.List;
  * TestBase for web tests alone
  */
 @Guice(modules = {})
+@Test(groups = "web")
 public class EkamWebTest {
 }

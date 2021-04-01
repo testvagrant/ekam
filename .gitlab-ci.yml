@@ -1,6 +1,7 @@
 image: "gradle:5.1-jdk8"
 stages:
   - build
+  - unit
   - test
   - allure
   - deploy
@@ -12,21 +13,22 @@ stages:
     - ls
     - cd ../
     - ls
-    - (cp -r backup/report/results/ allure-report) || true
-    - .allure/allure-2.8.1/bin/allure generate allure-report/results -o report
+    - (cp -r backup/report/results/ allure-report/results) || true
+    - ./gradlew allureReport
 
 .test_template: &test_template
   allow_failure: true
   stage: test
   script:
-    - ./gradlew runWebTests
+    - echo $CI_JOB_URL
+    - ./gradlew $TASK -DslackNotif=true
   artifacts:
     when: always
     name: "$CI_COMMIT_REF_NAME"
     paths:
-      - ./report/*
+      - ./allure-report/ui/*
       - logs/
-    expire_in: 7 days
+    expire_in: 14 days
 
 build:
   stage: build
@@ -35,7 +37,23 @@ build:
 
 web_tests:
   stage: test
+  variables:
+    TASK: runWebTests
   image: krishnanandb/chromeheadless
+  <<: *test_template
+  <<: *download_history
+
+api_tests:
+  stage: test
+  variables:
+    TASK: runApiTests
+  <<: *test_template
+  <<: *download_history
+
+db_tests:
+  stage: test
+  variables:
+    TASK: runDBTests
   <<: *test_template
   <<: *download_history
 
@@ -45,7 +63,7 @@ pages:
   dependencies:
     - web_tests
   script:
-    - mv report/ public/
+    - mv allure-report/ui/ public/
   artifacts:
     paths:
       - public

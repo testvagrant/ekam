@@ -18,8 +18,9 @@ public final class SystemProperties {
     public static final String CLIENT = System.getProperty("client", "retrofit").toUpperCase();
     public static final String TAGS = System.getProperty("tags", "smoke");
     public static final String LANGUAGE = System.getProperty("language", "en");
-    public static final String PAGES_URL = System.getenv("CI_PAGES_URL");
+    public static final String JOB_URL = System.getenv("CI_JOB_URL");
     public static final String SLACK_CHANNEL_TOKEN = System.getenv("CHANNEL_TOKEN");
     public static final boolean SLACK_NOTIF = Boolean.parseBoolean(System.getProperty("slackNotif", String.valueOf(false)));
+    public static final boolean SLACK_NOTIFY_ME_EVERYTIME = Boolean.parseBoolean(System.getProperty("notifyMeEverytime", String.valueOf(false)));
     public static final String BROWSER = System.getProperty("browser", Browser.CHROME.name().toLowerCase());
 }
