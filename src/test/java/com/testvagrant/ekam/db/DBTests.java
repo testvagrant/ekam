@@ -17,4 +17,10 @@ public class DBTests extends EkamDBTest {
         String userName = accountsDBClient.getUserName(1001);
         assertThat(userName).isEqualTo("ekam_user");
     }
+
+    @Test(groups = "db")
+    public void accountsTest1() {
+        String userName = accountsDBClient.getUserName(1001);
+        assertThat(userName).isEqualTo("ekam_user1");
+    }
 }

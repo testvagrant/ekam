@@ -20,6 +20,7 @@ stages:
   allow_failure: true
   stage: test
   script:
+    - echo $CI_JOB_URL
     - ./gradlew $TASK -DslackNotif=true
   artifacts:
     when: always
@@ -62,7 +63,7 @@ pages:
   dependencies:
     - web_tests
   script:
-    - mv report/ public/
+    - mv allure-report/ui/ public/
   artifacts:
     paths:
       - public
