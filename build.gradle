@@ -113,7 +113,8 @@ tasks.withType(Test) {
             browser   : System.getProperty('browser', 'chrome'),
             runMode   : System.getProperty('runMode', 'headless'),
             timeline  : System.getProperty('timeline', 'true'),
-            slackNotif: System.getProperty('slackNotif', 'true')
+            slackNotif: System.getProperty('slackNotif', 'false'), //Global => On Failures
+            slackNotifyMeEverytime: System.getProperty('slackNotifyMeEverytime', 'false')
     ]
 }
 

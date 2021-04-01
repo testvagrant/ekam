@@ -42,7 +42,7 @@ public class SlackClient {
         MessageRequest messageRequest = MessageRequest.builder()
                 .username("Autobot Slack")
                 .iconEmoji(SlackMarkdown.EMOJI.decorate("robot_face"))
-                .text("Autobot Test Report " + SlackMarkdown.LINK.decorate(url(SystemProperties.PAGES_URL)," [Report Link]"))
+                .text("Autobot Test Report " + SlackMarkdown.LINK.decorate(url(SystemProperties.JOB_URL)," [Job Link]"))
                 .addAttachments(attachments)
                 .build();
 
