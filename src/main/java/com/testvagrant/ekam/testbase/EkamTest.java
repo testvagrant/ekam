@@ -10,16 +10,16 @@ import com.testvagrant.ekam.web.modules.WebModule;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-/**
- * A single testbase to cover web/mobile/api tests for an application
- */
-@Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        HttpClientModule.class,
-        GrpcModule.class,
-        WebModule.class,
-        MobileModule.class})
+/** A single testbase to cover web/mobile/api tests for an application */
+@Guice(
+    modules = {
+      PropertyModule.class,
+      LocaleModule.class,
+      SwitchViewModule.class,
+      HttpClientModule.class,
+      GrpcModule.class,
+      WebModule.class,
+      MobileModule.class
+    })
 @Test(groups = {"web", "mobile", "api"})
-public class EkamTest {
-}
+public class EkamTest {}

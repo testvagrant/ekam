@@ -9,16 +9,14 @@ import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class APIUnitTest extends EkamApiTest {
-    @Inject
-    HttpClient httpClient;
+public class InjectorTests extends EkamApiTest {
+  @Inject private HttpClient httpClient;
 
-    @Inject
-    GrpcClient grpcClient;
+  @Inject private GrpcClient grpcClient;
 
-    @Test(groups = "unit")
-    public void apiInjects() {
-        assertThat(httpClient).isNotNull();
-        assertThat(grpcClient).isNotNull();
-    }
+  @Test(groups = "unit")
+  public void apiInjects() {
+    assertThat(httpClient).isNotNull();
+    assertThat(grpcClient).isNotNull();
+  }
 }

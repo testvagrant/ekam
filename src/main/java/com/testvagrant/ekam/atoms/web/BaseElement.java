@@ -2,21 +2,19 @@ package com.testvagrant.ekam.atoms.web;
 
 import com.google.inject.Inject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
 
 abstract class BaseElement {
 
-  @Inject WebDriver driver;
-  @Inject Wait wait;
+  @Inject private WebDriver driver;
+  @Inject private FluentWait<WebDriver> wait;
 
-  protected By locator;
+  private By locator;
 
   protected void locate(By locator) {
     this.locator = locator;
@@ -70,11 +68,9 @@ abstract class BaseElement {
   protected WebElement getElement() {
     int implicitTimeoutInSeconds = 5;
 
-    Wait<WebDriver> wait =
-        new FluentWait<>(driver)
-            .ignoring(NoSuchElementException.class)
-            .withTimeout(Duration.ofSeconds(implicitTimeoutInSeconds));
+    FluentWait<WebDriver> fluentWait =
+        wait.withTimeout(Duration.ofSeconds(implicitTimeoutInSeconds));
 
-    return wait.until(driver -> driver.findElement(locator));
+    return fluentWait.until(driver -> driver.findElement(locator));
   }
 }

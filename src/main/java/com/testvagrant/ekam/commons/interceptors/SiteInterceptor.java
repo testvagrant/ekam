@@ -9,19 +9,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class SiteInterceptor {
 
-
-    protected AtomicReference<Object> retryObjInvoke(MethodInvocation invocation) {
-        AtomicReference<Object> proceed = new AtomicReference<>();
-        RetryCallback retryCallback = retry -> {
-            try {
-                proceed.set(invocation.proceed());
-                return proceed.get();
-            } catch (StaleElementReferenceException e) {
-                throw e;
-            }
+  protected AtomicReference<Object> retryObjInvoke(MethodInvocation invocation) {
+    AtomicReference<Object> proceed = new AtomicReference<>();
+    RetryCallback retryCallback =
+        retry -> {
+          proceed.set(invocation.proceed());
+          return proceed.get();
         };
-        RetryEngine retryEngine = new RetryEngine(StaleElementReferenceException.class);
-        retryEngine.execute(retryCallback);
-        return proceed;
-    }
+    RetryEngine retryEngine = new RetryEngine(StaleElementReferenceException.class);
+    retryEngine.execute(retryCallback);
+    return proceed;
+  }
 }

@@ -9,14 +9,14 @@ import java.sql.SQLException;
 
 public class AccountsDBClient extends PostgresDBClient {
 
-    AccountsDBInterface accountsDBInterface;
+  AccountsDBInterface accountsDBInterface;
 
-    protected AccountsDBClient() throws SQLException, InvalidConnectionException {
-        super(DBClient.configManager.getConfiguration("ekam_pg"));
-        accountsDBInterface = load(AccountsDBInterface.class);
-    }
+  protected AccountsDBClient() throws SQLException, InvalidConnectionException {
+    super(DBClient.configManager.getConfiguration("ekam_pg"));
+    accountsDBInterface = load(AccountsDBInterface.class);
+  }
 
-    public String getUserName(Integer userId) {
-       return accountsDBInterface.getAccountName(userId);
-    }
+  public String getUserName(Integer userId) {
+    return accountsDBInterface.getAccountName(userId);
+  }
 }

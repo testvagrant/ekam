@@ -14,11 +14,10 @@ import java.util.List;
 
 public class DataMapper {
 
-    public <T> List<T> map(String fileName, Class<T> as) {
-        FileFinder fileFinder = FileFinder.fileFinder();
-        File file = fileFinder.find(fileName, FileExtension.JSON);
-        Type listType = new TypeToken<ArrayList>(){}.getType();
-        List<T> t =  new Gson().fromJson(Files.contentOf(file, Charset.defaultCharset()), listType);
-        return t;
-    }
+  public <T> List<T> map(String fileName, Class<T> as) {
+    FileFinder fileFinder = FileFinder.fileFinder();
+    File file = fileFinder.find(fileName, FileExtension.JSON);
+    Type listType = new TypeToken<ArrayList>() {}.getType();
+    return new Gson().fromJson(Files.contentOf(file, Charset.defaultCharset()), listType);
+  }
 }

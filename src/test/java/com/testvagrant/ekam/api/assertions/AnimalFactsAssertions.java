@@ -9,9 +9,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnimalFactsAssertions extends BaseApiAssertions {
 
-    public void assertThatCatFactsAreAvailable(Response<List<CatFacts>> catFactsResponse) {
-        assertThatStatusIsOK(catFactsResponse);
-        List<CatFacts> catFacts = catFactsResponse.body();
-        assertThat(catFacts.size()).isGreaterThan(0);
-    }
+  public void assertThatCatFactsAreAvailable(Response<List<CatFacts>> catFactsResponse) {
+    assertThatStatusIsOK(catFactsResponse);
+    List<CatFacts> catFacts = catFactsResponse.body();
+    assert catFacts != null;
+    assertThat(catFacts.size()).isGreaterThan(0);
+  }
 }

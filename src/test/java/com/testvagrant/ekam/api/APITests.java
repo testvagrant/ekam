@@ -12,15 +12,13 @@ import java.util.List;
 
 public class APITests extends EkamApiTest {
 
-    @Inject
-    AnimalFactsClient animalFactsClient;
+  @Inject AnimalFactsClient animalFactsClient;
 
-    @Inject
-    AnimalFactsAssertions animalFactsAssertions;
+  @Inject AnimalFactsAssertions animalFactsAssertions;
 
-    @Test(groups = "api")
-    public void getAnimalFacts() {
-        Response<List<CatFacts>> catFacts = animalFactsClient.getCatFacts();
-        animalFactsAssertions.assertThatCatFactsAreAvailable(catFacts);
-    }
+  @Test(groups = "api")
+  public void getAnimalFacts() {
+    Response<List<CatFacts>> catFacts = animalFactsClient.getCatFacts();
+    animalFactsAssertions.assertThatCatFactsAreAvailable(catFacts);
+  }
 }

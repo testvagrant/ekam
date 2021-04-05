@@ -1,11 +1,11 @@
 package com.testvagrant.ekam.internal;
 
-import com.testvagrant.ekam.commons.PageInitiator;
+import static com.testvagrant.ekam.commons.PageInitiator.Page;
 
 public class Launcher {
 
   public void launch() {
-    LaunchPage launchPage = PageInitiator.getWebPage(LaunchPage.class);
+    LaunchPage launchPage = Page().getInstance(LaunchPage.class);
     launchPage.launch();
     launchPage.getSiteDetails().assertThatSiteIsUp();
   }

@@ -2,7 +2,6 @@ package com.testvagrant.ekam.internal;
 
 import com.google.inject.Inject;
 import com.testvagrant.ekam.atoms.web.BasePage;
-import com.testvagrant.ekam.atoms.web.BrowserManager;
 import com.testvagrant.ekam.commons.annotations.Url;
 import com.testvagrant.ekam.commons.models.Site;
 

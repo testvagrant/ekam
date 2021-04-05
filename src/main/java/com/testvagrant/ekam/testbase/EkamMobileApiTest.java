@@ -9,15 +9,15 @@ import com.testvagrant.ekam.mobile.modules.MobileModule;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-/**
- * TestBase for mobile tests with API access
- */
-@Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        HttpClientModule.class,
-        GrpcModule.class,
-        MobileModule.class})
+/** TestBase for mobile tests with API access */
+@Guice(
+    modules = {
+      PropertyModule.class,
+      LocaleModule.class,
+      SwitchViewModule.class,
+      HttpClientModule.class,
+      GrpcModule.class,
+      MobileModule.class
+    })
 @Test(groups = {"mobile", "api"})
-public class EkamMobileApiTest {
-}
+public class EkamMobileApiTest {}

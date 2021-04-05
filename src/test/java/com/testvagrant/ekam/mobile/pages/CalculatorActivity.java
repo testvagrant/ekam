@@ -1,25 +1,20 @@
 package com.testvagrant.ekam.mobile.pages;
 
 import com.testvagrant.ekam.atoms.mobile.android.BaseActivity;
+import com.testvagrant.ekam.commons.annotations.Screenshot;
 import org.openqa.selenium.By;
 
 import java.util.Arrays;
 
 public class CalculatorActivity extends BaseActivity {
 
-  By delete = queryById("del");
-  By op_divide = queryById("op_div");
-  By op_mul = queryById("op_mul");
-  By op_subtract = queryById("op_sub");
   By op_add = queryById("op_add");
-  By eq = queryById("eq");
-  By dec_point = queryById("dec_point");
-  By formula = queryById("formula");
   By resultPreview = queryById("result_preview");
-  private String numKey = "digit_%s";
+  private final String numKey = "digit_%s";
 
-  public int add(int... nums) {
-    Arrays.stream(nums)
+  @Screenshot
+  public int add(int... numbers) {
+    Arrays.stream(numbers)
         .forEach(
             num -> {
               Element(queryById(String.format(numKey, num))).click();

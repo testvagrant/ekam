@@ -3,16 +3,13 @@ package com.testvagrant.ekam.atoms.mobile.android;
 import org.openqa.selenium.By;
 
 public interface QueryFunctions {
+
   default By query(String value) {
-    return value.contains("//") ? By.xpath(value) : By.cssSelector(value);
+    return By.xpath(value);
   }
 
   default By queryById(String id) {
     return By.id(id);
-  }
-
-  default By queryByName(String name) {
-    return By.name(name);
   }
 
   default String ignoreSpaceAndCase(String attribute, String value) {

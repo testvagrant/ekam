@@ -16,7 +16,7 @@ public class SiteClient {
 
   @Inject @Url private String url;
 
-  private OkHttpClient okHttpClient;
+  private final OkHttpClient okHttpClient;
 
   public SiteClient() {
     okHttpClient = new OkHttpClient();

@@ -1,27 +1,20 @@
 package com.testvagrant.ekam.atoms.mobile.android;
 
 import com.google.inject.Inject;
-import com.testvagrant.optimuscloud.entities.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidTouchAction;
 import io.appium.java_client.touch.offset.ElementOption;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
 
 abstract class BaseElement {
-  @Inject MobileDriverDetails mobileDriverDetails;
-  @Inject Wait wait;
-
-  private final AppiumDriver<MobileElement> driver =
-      (AppiumDriver<MobileElement>) mobileDriverDetails.getMobileDriver();
-
-  protected By locator;
+  @Inject private AppiumDriver<MobileElement> driver;
+  @Inject private FluentWait<AppiumDriver<MobileElement>> wait;
+  private By locator;
 
   protected void locate(By locator) {
     this.locator = locator;
@@ -73,22 +66,20 @@ abstract class BaseElement {
   }
 
   public void tap() {
-    TouchAction touchAction = new TouchAction(driver);
+    AndroidTouchAction touchAction = new AndroidTouchAction(driver);
     touchAction.tap(ElementOption.element(getElement())).perform();
   }
 
   public void longPress() {
-    TouchAction touchAction = new TouchAction(driver);
+    AndroidTouchAction touchAction = new AndroidTouchAction(driver);
     touchAction.longPress(ElementOption.element(getElement())).perform();
   }
 
   public MobileElement getElement() {
     int implicitTimeoutInSeconds = 5;
-    Wait<AppiumDriver<MobileElement>> wait =
-        new FluentWait<>(driver)
-            .ignoring(NoSuchElementException.class)
-            .withTimeout(Duration.ofSeconds(implicitTimeoutInSeconds));
+    FluentWait<AppiumDriver<MobileElement>> fluentWait =
+        wait.withTimeout(Duration.ofSeconds(implicitTimeoutInSeconds));
 
-    return wait.until(driver -> driver.findElement(locator));
+    return fluentWait.until(driver -> driver.findElement(locator));
   }
 }
