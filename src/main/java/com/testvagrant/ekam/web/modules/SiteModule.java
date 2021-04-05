@@ -5,8 +5,8 @@ import com.testvagrant.ekam.commons.clients.SiteClient;
 
 public class SiteModule extends AbstractModule {
 
-    @Override
-    public void configure() {
-        bind(SiteClient.class).asEagerSingleton();
-    }
+  @Override
+  public void configure() {
+    bind(SiteClient.class).asEagerSingleton();
+  }
 }

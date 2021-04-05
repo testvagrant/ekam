@@ -12,15 +12,16 @@ import java.util.List;
 
 public class AnimalFactsClient extends BaseClient {
 
-    private AnimalFactsService animalFactsService;
-    @Inject
-    public AnimalFactsClient(HttpClient httpClient, @Named("catFactsHost") String baseUrl) {
-        super(httpClient, baseUrl);
-        animalFactsService = (AnimalFactsService) httpClient.getService(AnimalFactsService.class);
-    }
+  private final AnimalFactsService animalFactsService;
 
-    public <T> Response<T> getCatFacts() {
-        Call<List<CatFacts>> responseCall = animalFactsService.catFacts();
-        return httpClient.executeAsResponse(responseCall);
-    }
+  @Inject
+  public AnimalFactsClient(HttpClient httpClient, @Named("catFactsHost") String baseUrl) {
+    super(httpClient, baseUrl);
+    animalFactsService = (AnimalFactsService) httpClient.getService(AnimalFactsService.class);
+  }
+
+  public <T> Response<T> getCatFacts() {
+    Call<List<CatFacts>> responseCall = animalFactsService.catFacts();
+    return httpClient.executeAsResponse(responseCall);
+  }
 }

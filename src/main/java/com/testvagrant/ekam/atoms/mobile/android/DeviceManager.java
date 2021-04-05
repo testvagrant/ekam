@@ -15,55 +15,52 @@ import static java.lang.Runtime.getRuntime;
 
 public class DeviceManager {
 
-    @Inject
-    AppiumDriver<MobileElement> driver;
+  @Inject private AppiumDriver<MobileElement> driver;
 
-    public void openDeeplink(String link) {
-        driver.get(link);
-    }
+  @Inject private WebDriverWait webDriverWait;
 
-    public JavascriptExecutor jsDriver() {
-        return ((JavascriptExecutor) driver);
-    }
+  public void openDeeplink(String link) {
+    driver.get(link);
+  }
 
-    public void scrollToBottomInWeb() {
-        jsDriver().executeScript("window.scrollTo(0, document.body.scrollHeight)");
-    }
+  public JavascriptExecutor jsDriver() {
+    return ((JavascriptExecutor) driver);
+  }
 
-    public void switchToWebView() {
-        Set<String> contextHandles = driver.getContextHandles();
-        contextHandles.forEach(
-                context -> {
-                    driver.context(context);
-                });
-    }
+  public void scrollToBottomInWeb() {
+    jsDriver().executeScript("window.scrollTo(0, document.body.scrollHeight)");
+  }
 
-    public void executeCommand(String command) {
-        try {
-            Process process = getRuntime().exec(command);
-            process.waitFor();
-            System.out.println(process.exitValue());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
-    }
+  public void switchToWebView() {
+    Set<String> contextHandles = driver.getContextHandles();
+    contextHandles.forEach(driver::context);
+  }
 
-    public void navigateBack() {
-        driver.navigate().back();
+  public void executeCommand(String command) {
+    try {
+      Process process = getRuntime().exec(command);
+      process.waitFor();
+      System.out.println(process.exitValue());
+    } catch (Exception ex) {
+      throw new RuntimeException(ex.getMessage());
     }
+  }
 
-    public void hideKeyboard() {
-        driver.hideKeyboard();
-    }
+  public void navigateBack() {
+    driver.navigate().back();
+  }
 
-    public boolean allowPermissionPopup() {
-        WebDriverWait webDriverWait = new WebDriverWait(driver, 10);
-        By allowXpath = By.xpath("//*[@text='Allow' or @name = 'Allow']");
-        WebElement acceptElement =
-                webDriverWait.until(ExpectedConditions.elementToBeClickable(allowXpath));
-        acceptElement.click();
-        acceptElement = webDriverWait.until(ExpectedConditions.elementToBeClickable(allowXpath));
-        acceptElement.click();
-        return true;
-    }
+  public void hideKeyboard() {
+    driver.hideKeyboard();
+  }
+
+  public boolean allowPermissionPopup() {
+    By allowXpath = By.xpath("//*[@text='Allow' or @name = 'Allow']");
+    WebElement acceptElement =
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(allowXpath));
+    acceptElement.click();
+    acceptElement = webDriverWait.until(ExpectedConditions.elementToBeClickable(allowXpath));
+    acceptElement.click();
+    return true;
+  }
 }

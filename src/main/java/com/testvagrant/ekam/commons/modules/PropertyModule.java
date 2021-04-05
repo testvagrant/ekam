@@ -17,32 +17,25 @@ import java.util.logging.Logger;
 
 public class PropertyModule extends AbstractModule {
 
-    @Inject
-    Logger logger;
+  @Inject Logger logger;
 
-    @Override
-    public void configure() {
-        Properties envProps = loadProperties();
-        Names.bindProperties(binder(), envProps);
-        bind(Key.get(String.class, Url.class)).toInstance(envProps.getProperty("url"));
-        bind(Key.get(String.class, WaitDuration.class)).toInstance(envProps.getProperty("wait"));
+  @Override
+  public void configure() {
+    Properties envProps = loadProperties();
+    Names.bindProperties(binder(), envProps);
+    bind(Key.get(String.class, Url.class)).toInstance(envProps.getProperty("url"));
+    bind(Key.get(String.class, WaitDuration.class)).toInstance(envProps.getProperty("wait"));
+  }
+
+  private Properties loadProperties() {
+    String envFile = String.format("envs/%s.properties", SystemProperties.ENV.toLowerCase());
+    Properties envProps = new Properties();
+    try {
+      InputStream envStream = this.getClass().getClassLoader().getResourceAsStream(envFile);
+      envProps.load(Objects.requireNonNull(envStream));
+    } catch (IOException | NullPointerException e) {
+      throw new InvalidEnvException(SystemProperties.ENV);
     }
-
-
-    private Properties loadProperties() {
-        String envFile = String.format("envs/%s.properties",
-                SystemProperties.ENV.toLowerCase());
-        Properties envProps = new Properties();
-        try {
-            InputStream envStream = this.getClass().getClassLoader()
-                    .getResourceAsStream(envFile);
-            envProps.load(Objects.requireNonNull(envStream));
-        } catch (IOException | NullPointerException e) {
-            throw new InvalidEnvException(SystemProperties.ENV);
-        }
-        return envProps;
-    }
-
-
-
+    return envProps;
+  }
 }

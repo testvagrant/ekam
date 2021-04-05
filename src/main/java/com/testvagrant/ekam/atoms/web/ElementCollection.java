@@ -2,11 +2,9 @@ package com.testvagrant.ekam.atoms.web;
 
 import com.google.inject.Inject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 
 import java.time.Duration;
 import java.util.List;
@@ -14,7 +12,8 @@ import java.util.stream.Collectors;
 
 public class ElementCollection {
 
-  @Inject WebDriver driver;
+  @Inject private WebDriver driver;
+  @Inject private FluentWait<WebDriver> wait;
 
   private By locator;
 
@@ -33,12 +32,9 @@ public class ElementCollection {
   }
 
   private List<WebElement> getMatchingElements() {
-    Wait<WebDriver> wait =
-        new FluentWait<>(driver)
-            .ignoring(NoSuchElementException.class)
-            .withTimeout(Duration.ofSeconds(10));
+    FluentWait<WebDriver> fluentWait = wait.withTimeout(Duration.ofSeconds(10));
 
-    wait.until(
+    fluentWait.until(
         driver -> {
           List<WebElement> elements = driver.findElements(locator);
           return !elements.isEmpty();

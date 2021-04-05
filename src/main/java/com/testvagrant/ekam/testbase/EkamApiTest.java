@@ -8,15 +8,14 @@ import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-@Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        HttpClientModule.class,
-        GrpcModule.class})
-/**
- * Entry point to API tests with GRPC Support
- */
+@Guice(
+    modules = {
+      PropertyModule.class,
+      LocaleModule.class,
+      SwitchViewModule.class,
+      HttpClientModule.class,
+      GrpcModule.class
+    })
+/** Entry point to API tests with GRPC Support */
 @Test(groups = "api")
-public class EkamApiTest {
-
-}
+public class EkamApiTest {}

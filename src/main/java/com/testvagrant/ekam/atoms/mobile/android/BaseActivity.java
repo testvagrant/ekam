@@ -2,7 +2,6 @@ package com.testvagrant.ekam.atoms.mobile.android;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.testvagrant.ekam.atoms.web.QueryFunctions;
 import com.testvagrant.ekam.reports.ReportLogger;
 import org.openqa.selenium.By;
 
@@ -11,6 +10,7 @@ public class BaseActivity implements QueryFunctions {
   @Named("persona")
   private String persona;
 
+  @Inject protected DeviceManager deviceManager;
   @Inject private Element element;
 
   protected Element Element(By locator) {

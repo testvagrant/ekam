@@ -10,7 +10,7 @@ public class GooglePage extends BasePage {
   By searchTextBox = queryByName("q");
 
   @Step("Search")
-//  @Screenshot
+  @Screenshot
   public void search(String searchKey) {
     TextBox(searchTextBox).setText(searchKey);
   }

@@ -9,15 +9,15 @@ import com.testvagrant.ekam.web.modules.WebModule;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
-/**
- * TestBase for web tests with API access
- */
-@Guice(modules = {PropertyModule.class,
-        LocaleModule.class,
-        SwitchViewModule.class,
-        HttpClientModule.class,
-        GrpcModule.class,
-        WebModule.class})
+/** TestBase for web tests with API access */
+@Guice(
+    modules = {
+      PropertyModule.class,
+      LocaleModule.class,
+      SwitchViewModule.class,
+      HttpClientModule.class,
+      GrpcModule.class,
+      WebModule.class
+    })
 @Test(groups = {"web", "api"})
-public class EkamWebApiTest {
-}
+public class EkamWebApiTest {}

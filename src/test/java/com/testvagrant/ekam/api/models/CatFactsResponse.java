@@ -1,7 +1,8 @@
 package com.testvagrant.ekam.api.models;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@Getter @Setter
-public class CatFactsResponse {
-}
+@Getter
+@Setter
+public class CatFactsResponse {}

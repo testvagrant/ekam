@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SwitchView {
-    Class view();
-    Injectors useInjector() default Injectors.MOBILE_PAGE_INJECTOR;
+  Class view();
+
+  Injectors useInjector() default Injectors.MOBILE_PAGE_INJECTOR;
 }

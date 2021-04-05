@@ -11,16 +11,26 @@ import java.util.List;
 
 public class ReportListener implements IReporter {
 
-    @Override
-    public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-        suites.forEach(suite -> {
-            suite.getResults().entrySet().forEach(entry -> {
-                entry.getValue().getTestContext().getPassedTests().getAllResults().forEach(iTestResult -> {
-                    List<String> logs = Reporter.getOutput(iTestResult);
-                    String logFolder = (String) suite.getAttribute(Injectors.LOG_FOLDER.getInjector());
-                    LogWriter.writeLog(logFolder, iTestResult.getName(),logs);
-                });
-            });
+  @Override
+  public void generateReport(
+      List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+    suites.forEach(
+        suite -> {
+          suite
+              .getResults()
+              .forEach(
+                  (key, value) ->
+                      value
+                          .getTestContext()
+                          .getPassedTests()
+                          .getAllResults()
+                          .forEach(
+                              iTestResult -> {
+                                List<String> logs = Reporter.getOutput(iTestResult);
+                                String logFolder =
+                                    (String) suite.getAttribute(Injectors.LOG_FOLDER.getInjector());
+                                LogWriter.writeLog(logFolder, iTestResult.getName(), logs);
+                              }));
         });
-    }
+  }
 }
