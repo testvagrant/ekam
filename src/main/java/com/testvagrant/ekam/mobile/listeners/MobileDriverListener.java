@@ -6,16 +6,23 @@ import com.testvagrant.ekam.commons.Injectors;
 import com.testvagrant.ekam.commons.ModulesLibrary;
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.Target;
+import com.testvagrant.ekam.commons.logs.LogWriter;
 import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.PropertyModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
 import com.testvagrant.optimuscloud.entities.MobileDriverDetails;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
-import org.testng.Reporter;
+import org.testng.*;
 
-public class MobileDriverListener implements ITestListener {
+public class MobileDriverListener implements ITestListener, ISuiteListener {
+
+  @Override
+  public void onStart(ISuite suite) {
+    Injector injector =
+        suite.getParentInjector().createChildInjector(new ModulesLibrary().mobileModules());
+    String logFolder = injector.getInstance(LogWriter.class).createLogFolder();
+    suite.setAttribute(Injectors.LOG_FOLDER.getInjector(), logFolder);
+  }
 
   @Override
   public void onTestStart(ITestResult result) {
@@ -27,9 +34,10 @@ public class MobileDriverListener implements ITestListener {
             .getSuite()
             .getParentInjector()
             .createChildInjector(new ModulesLibrary().mobileModules());
+
+    MobileDriverDetails mobileDriverDetails = driverInjector.getInstance(MobileDriverDetails.class);
     result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
     result.setAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector(), driverInjector);
-    MobileDriverDetails mobileDriverDetails = driverInjector.getInstance(MobileDriverDetails.class);
     result.setAttribute(Injectors.MOBILE_DRIVER.getInjector(), mobileDriverDetails);
   }
 
