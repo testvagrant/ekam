@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.commons.modules;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.testvagrant.ekam.commons.SystemProperties;
@@ -13,11 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class PropertyModule extends AbstractModule {
-
-  @Inject Logger logger;
 
   @Override
   public void configure() {
