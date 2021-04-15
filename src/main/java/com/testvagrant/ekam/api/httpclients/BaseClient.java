@@ -2,18 +2,19 @@ package com.testvagrant.ekam.api.httpclients;
 
 import com.google.inject.Inject;
 import okhttp3.Interceptor;
+import retrofit2.Retrofit;
 
 public class BaseClient {
 
-  @Inject protected HttpClient httpClient;
+  protected RetrofitClient httpClient;
 
-  public BaseClient(HttpClient httpClient, String baseUrl) {
+  @Inject
+  public BaseClient(RetrofitClient httpClient, String baseUrl) {
     this.httpClient = httpClient;
     this.httpClient.build(baseUrl);
   }
 
-  public BaseClient(HttpClient httpClient, String baseUrl, Interceptor... interceptors) {
-    this.httpClient = httpClient;
+  public BaseClient(String baseUrl, Interceptor... interceptors) {
     this.httpClient.build(baseUrl, interceptors);
   }
 }

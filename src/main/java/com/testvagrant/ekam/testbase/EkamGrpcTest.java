@@ -10,5 +10,5 @@ import org.testng.annotations.Test;
 /** Entrypoint to GRPC Test */
 @Guice(
     modules = {PropertyModule.class, LocaleModule.class, SwitchViewModule.class, GrpcModule.class})
-@Test(groups = {"api", "grpc"})
+@Test(groups = "grpc")
 public class EkamGrpcTest {}

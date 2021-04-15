@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.atoms.mobile.android.BaseActivity;
+import com.testvagrant.ekam.atoms.mobile.MobileScreen;
 import org.testng.Reporter;
 
 public class ActivityInitiator {
@@ -10,7 +10,7 @@ public class ActivityInitiator {
     return new ActivityInitiator();
   }
 
-  public <Activity extends BaseActivity> Activity getInstance(Class<Activity> tActivity) {
+  public <Activity extends MobileScreen> Activity getInstance(Class<Activity> tActivity) {
     Injector activityInjector =
         (Injector)
             Reporter.getCurrentTestResult()

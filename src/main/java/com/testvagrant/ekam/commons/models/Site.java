@@ -3,10 +3,9 @@ package com.testvagrant.ekam.commons.models;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import lombok.*;
+import org.testng.Assert;
 
 import java.util.Objects;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Getter
 @Setter
@@ -26,7 +25,7 @@ public class Site implements Model<Site> {
   }
 
   public void assertThatSiteIsUp() {
-    assertThat(title).startsWith(siteTitle);
+    Assert.assertTrue(title.startsWith(siteTitle));
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.web.listeners;
+package com.testvagrant.ekam.commons.listeners;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.Injectors;
@@ -11,15 +11,13 @@ import org.testng.ISuiteListener;
 
 import static com.testvagrant.ekam.reports.ReportLogger.log;
 
-public class WebSiteListener implements ISuiteListener {
+public class LogListener implements ISuiteListener {
 
   @Override
   public void onStart(ISuite suite) {
-    Injector siteInjector =
+    Injector logInjector =
         suite.getParentInjector().createChildInjector(new SiteModule(), new PropertyModule());
-    log("Verifying if site is up");
-    siteInjector.getInstance(SiteClient.class).terminateIfSiteIsDown();
-    String logFolder = siteInjector.getInstance(LogWriter.class).createLogFolder();
+    String logFolder = logInjector.getInstance(LogWriter.class).createLogFolder();
     suite.setAttribute(Injectors.LOG_FOLDER.getInjector(), logFolder);
   }
 
