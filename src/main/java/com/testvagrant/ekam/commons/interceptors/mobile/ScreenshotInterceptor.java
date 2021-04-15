@@ -13,7 +13,7 @@ public class ScreenshotInterceptor extends SiteInterceptor implements MethodInte
 
   @Override
   public Object invoke(MethodInvocation invocation) {
-    AtomicReference<Object> proceed = retryObjInvoke(invocation);
+    AtomicReference<Object> proceed = invokeMethod(invocation);
     if (Toggles.TIMELINE.isActive()) screenshotTaker.saveScreenshot();
     return proceed.get();
   }

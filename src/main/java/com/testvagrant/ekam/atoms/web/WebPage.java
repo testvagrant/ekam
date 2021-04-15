@@ -5,13 +5,13 @@ import com.google.inject.name.Named;
 import com.testvagrant.ekam.reports.ReportLogger;
 import org.openqa.selenium.By;
 
-public class BasePage implements QueryFunctions {
+public class WebPage implements QueryFunctions {
 
   @Inject
   @Named("persona")
   private String persona;
 
-  @Inject protected BrowserManager browserManager;
+  @Inject protected BrowserDriver browserDriver;
 
   @Inject private Textbox textBox;
   @Inject private Element element;

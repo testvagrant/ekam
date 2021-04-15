@@ -11,7 +11,7 @@ import static com.testvagrant.ekam.commons.PageInitiator.Page;
 
 public class WebTests extends EkamWebTest {
 
-  @Test
+  @Test(groups = "web")
   @Story("Abc")
   @Feature("Hello")
   @Epic("APC")
@@ -20,7 +20,7 @@ public class WebTests extends EkamWebTest {
     googlePage.search("Calling from Ekam");
   }
 
-  @Test
+  @Test(groups = "web")
   @Story("Abc")
   @Feature("Hello")
   @Epic("APC")
@@ -29,7 +29,7 @@ public class WebTests extends EkamWebTest {
     googlePage.search("Calling from Ekam");
   }
 
-  @Test
+  @Test(groups = "web")
   @Story("Abc")
   @Feature("Hello")
   @Epic("APC")
@@ -38,7 +38,7 @@ public class WebTests extends EkamWebTest {
     googlePage.search("Calling from Ekam");
   }
 
-  @Test
+  @Test(groups = "web")
   @Story("Abc")
   @Feature("Hello")
   @Epic("APC")
@@ -47,7 +47,7 @@ public class WebTests extends EkamWebTest {
     googlePage.search("Calling from Ekam");
   }
 
-  @Test
+  @Test(groups = "web")
   @Story("Abc")
   @Feature("Hello")
   @Epic("APC")

@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class BrowserManager {
+public class BrowserDriver {
 
   @Inject private WebDriver driver;
 
@@ -79,5 +79,9 @@ public class BrowserManager {
 
   public void navigateBack() {
     this.driver.navigate().back();
+  }
+
+  public void scrollToBottomInWeb() {
+    jsDriver().executeScript("window.scrollTo(0, document.body.scrollHeight)");
   }
 }

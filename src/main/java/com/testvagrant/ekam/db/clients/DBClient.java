@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public abstract class DBClient {
 
-    private Handle handle;
+    private final Handle handle;
     protected static ConfigManager configManager = new ConfigManager();
 
     protected DBClient(DBConfig dbConfig, DBType dbType) throws SQLException {

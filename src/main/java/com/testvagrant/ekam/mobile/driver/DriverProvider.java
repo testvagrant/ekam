@@ -4,22 +4,17 @@ import com.google.inject.Provider;
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.logs.AppiumLogRecorder;
+import com.testvagrant.optimus.core.appium.DriverManager;
+import com.testvagrant.optimus.core.model.MobileDriverDetails;
+import com.testvagrant.optimus.core.parser.TestFeedParser;
 import com.testvagrant.optimusCloud.remote.CloudConfigBuilder;
 import com.testvagrant.optimusCloud.remote.drivers.RemoteCloudDriver;
 import com.testvagrant.optimusCloud.remote.models.CloudConfig;
-import com.testvagrant.optimuscloud.dashboard.testng.builders.MobileDriverDetailsBuilder;
-import com.testvagrant.optimuscloud.entities.MobileDriverDetails;
-import com.testvagrant.optimuscloud.local.OptimusLocalDriver;
-import com.testvagrant.optimuscloud.remote.OptimusCloudDriver;
-import com.testvagrant.optimuscloud.utils.TestFeedToDesiredCapConverter;
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileDriver;
 import io.appium.java_client.MobileElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.util.List;
 import java.util.Timer;
 
 public class DriverProvider implements Provider<MobileDriverDetails> {
@@ -27,76 +22,49 @@ public class DriverProvider implements Provider<MobileDriverDetails> {
   protected ThreadLocal<MobileDriverDetails> mobileDriverDetailsThreadLocal = new ThreadLocal<>();
 
   public MobileDriverDetails setupMobileDriver() {
-    String testFeed = SystemProperties.TESTFEED;
-    TestFeedToDesiredCapConverter testFeedToDesiredCapConverter =
-        new TestFeedToDesiredCapConverter(testFeed);
-    List<DesiredCapabilities> desiredCapabilities = testFeedToDesiredCapConverter.convert();
-    MobileDriverDetails mobileDriverDetails = createDriver(desiredCapabilities);
+    MobileDriverDetails mobileDriverDetails = new MobileDriverDetails();
+    switch (SystemProperties.TARGET) {
+      case REMOTE:
+        mobileDriverDetails = createRemoteDriver(mobileDriverDetails);
+        break;
+      case OPTIMUS:
+        throw new UnsupportedOperationException(
+            "Support for optimus coming soon!! Please use REMOTE / LOCAL as targets");
+      default:
+        mobileDriverDetails = new DriverManager().createDriver();
+        break;
+    }
     mobileDriverDetailsThreadLocal.set(mobileDriverDetails);
-    captureLogs();
     return mobileDriverDetailsThreadLocal.get();
   }
 
-  private MobileDriverDetails createDriver(List<DesiredCapabilities> desiredCapabilitiesList) {
-    DesiredCapabilities desiredCapabilities = updateCapabilities(desiredCapabilitiesList.get(0));
-    switch (SystemProperties.TARGET) {
-      case LOCAL:
-        return new OptimusLocalDriver().createDriver(desiredCapabilities);
-      case OPTIMUS:
-        return new OptimusCloudDriver().createDriver(desiredCapabilities);
-      case REMOTE:
-        String updatedAppPath =
-            desiredCapabilities
-                .getCapability("app")
-                .toString()
-                .replace(System.getProperty("user.dir") + "/app/", "");
-        desiredCapabilities.setCapability("app", updatedAppPath);
-        CloudConfig build = new CloudConfigBuilder().build();
-        try {
-          MobileDriver mobileDriver =
+  private MobileDriverDetails createRemoteDriver(MobileDriverDetails mobileDriverDetails) {
+    TestFeedParser testFeedParser = new TestFeedParser(SystemProperties.TESTFEED);
+    DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
+    CloudConfig build = new CloudConfigBuilder().build();
+    try {
+      AppiumDriver<MobileElement> mobileDriver =
+          (AppiumDriver<MobileElement>)
               new RemoteCloudDriver().buildRemoteCloudDriver(build, desiredCapabilities);
-          return buildMobileDriverDetails(mobileDriver, desiredCapabilities);
-        } catch (MalformedURLException e) {
-          e.printStackTrace();
-        }
+      Thread.sleep(2000);
+      mobileDriverDetails = buildMobileDriverDetails(mobileDriver, desiredCapabilities);
+    } catch (MalformedURLException | InterruptedException e) {
+      e.printStackTrace();
     }
-    throw new RuntimeException("Cannot create driver");
+    return mobileDriverDetails;
   }
 
   private MobileDriverDetails buildMobileDriverDetails(
-      MobileDriver mobileDriver, DesiredCapabilities desiredCapabilities) {
-    return new MobileDriverDetailsBuilder()
-        .withMobileDriver(mobileDriver)
-        .withDesiredCapabilities(desiredCapabilities)
-        .build();
+      AppiumDriver<MobileElement> mobileDriver, DesiredCapabilities desiredCapabilities) {
+    MobileDriverDetails mobileDriverDetails = new MobileDriverDetails();
+    mobileDriverDetails.setDriver(mobileDriver);
+    mobileDriverDetails.setCapabilities(desiredCapabilities);
+    return mobileDriverDetails;
   }
 
   @Override
   public MobileDriverDetails get() {
-    setupMobileDriver();
-    return mobileDriverDetailsThreadLocal.get();
-  }
-
-  private DesiredCapabilities updateCapabilities(DesiredCapabilities desiredCapabilities) {
-    if (desiredCapabilities.getCapability("automationName") != null
-        && desiredCapabilities
-            .getCapability("automationName")
-            .toString()
-            .equalsIgnoreCase("UIAutomator2")) {
-      desiredCapabilities.setCapability("systemPort", findRandomOpenPortOnAllLocalInterfaces());
-    }
-    desiredCapabilities.setCapability("clearDeviceLogsOnStart", true);
-    return desiredCapabilities;
-  }
-
-  private Integer findRandomOpenPortOnAllLocalInterfaces() {
-    try (ServerSocket socket = new ServerSocket(0); ) {
-      return socket.getLocalPort();
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    throw new RuntimeException("Cannot find open port");
+    return setupMobileDriver();
   }
 
   private void captureLogs() {
@@ -106,9 +74,6 @@ public class DriverProvider implements Provider<MobileDriverDetails> {
     }
     Timer timer = new Timer();
     timer.schedule(
-        new AppiumLogRecorder(
-            (AppiumDriver<MobileElement>) mobileDriverDetailsThreadLocal.get().getMobileDriver()),
-        0,
-        3000);
+        new AppiumLogRecorder(mobileDriverDetailsThreadLocal.get().getDriver()), 0, 3000);
   }
 }

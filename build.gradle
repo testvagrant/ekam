@@ -13,13 +13,11 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
-    implementation('com.google.guava:guava:28.0-jre')
-
     // Use TestNG framework, also requires calling test.useTestNG() below
     implementation('org.testng:testng:6.14.3')
 
     //google
+    implementation('com.google.guava:guava:28.0-jre')
     implementation('com.google.inject:guice:4.2.3')
     implementation("com.google.protobuf:protobuf-java:3.9.1")
 
@@ -36,15 +34,8 @@ dependencies {
     //lombok
     implementation('org.projectlombok:lombok:1.18.12')
     annotationProcessor('org.projectlombok:lombok:1.18.12')
-
     testImplementation('org.projectlombok:lombok:1.18.12')
     testAnnotationProcessor('org.projectlombok:lombok:1.18.12')
-
-    //assertj
-    implementation('org.assertj:assertj-core:3.16.1')
-
-    //spring
-    implementation('org.springframework.retry:spring-retry:1.3.0')
 
     //jboss
     implementation('org.jboss.aerogear:aerogear-otp-java:1.0.0')
@@ -61,12 +52,6 @@ dependencies {
     implementation('org.apache.logging.log4j:log4j-core:2.8')
     implementation('org.apache.logging.log4j:log4j-slf4j-impl:2.13.3')
 
-    //joda-time
-    implementation('joda-time:joda-time:2.10.6')
-
-    //maths
-    implementation('net.objecthunter:exp4j:exp4j-0.4.3.BETA-1')
-
     //palantir
     implementation('com.palantir.roboslack:roboslack-webhook-api:1.3.0')
     implementation('com.palantir.roboslack:roboslack-api:1.3.0')
@@ -75,10 +60,12 @@ dependencies {
     //github
     implementation('com.github.javafaker:javafaker:1.0.2')
 
+    //appium
+    implementation 'io.appium:java-client:7.5.1'
+
     //testvagrant
-    implementation('com.testvagrant.optimuscloud:java-client:1.1.0')
-    implementation('com.testvagrant.optimuscloud:testng-dashboard:1.0.3')
-    implementation('com.testvagrant.optimuscloud:remote-drivers:0.0.2')
+    implementation 'com.testvagrant.optimuscloud:remote-drivers:0.0.3'
+    implementation('com.testvagrant.optimus:optimus-lite:0.0.4-beta')
 
     //selenium
     implementation('org.seleniumhq.selenium:selenium-java:3.141.59')
@@ -86,8 +73,6 @@ dependencies {
 
     implementation('org.postgresql:postgresql:42.2.1')
     implementation('commons-dbutils:commons-dbutils:1.7')
-    compile('com.fasterxml.jackson.core:jackson-databind:2.11.0')
-    compile('com.googlecode.json-simple:json-simple:1.1.1')
     implementation('org.jeasy:easy-random:4.2.0')
     implementation('org.jdbi:jdbi:2.78')
     implementation("javax.annotation:javax.annotation-api:1.3.2")
@@ -108,12 +93,17 @@ allure {
 
 tasks.withType(Test) {
     systemProperties = [
-            env       : System.getProperty('env', 'staging'),
-            tags      : System.getProperty('tags', 'smoke'),
-            browser   : System.getProperty('browser', 'chrome'),
-            runMode   : System.getProperty('runMode', 'headless'),
-            timeline  : System.getProperty('timeline', 'true'),
-            slackNotif: System.getProperty('slackNotif', 'false'), //Global => On Failures
+            env                   : System.getProperty('env', 'staging'),
+            tags                  : System.getProperty('tags', 'smoke'),
+            browser               : System.getProperty('browser', 'chrome'),
+            runMode               : System.getProperty('runMode', 'headless'),
+            logs                  : System.getProperty('logs', 'false'),
+            timeline              : System.getProperty('timeline', 'true'),
+            //mobile
+            testFeed              : System.getProperty('testFeed', 'calculator'),
+            hub                   : System.getProperty('hub', 'browserstack'),
+            target                : System.getProperty('target', 'local'),
+            slackNotif            : System.getProperty('slackNotif', 'false'), //Global => On Failures
             slackNotifyMeEverytime: System.getProperty('slackNotifyMeEverytime', 'false')
     ]
 }
@@ -127,7 +117,7 @@ task runWebTests(type: Test) {
         includeGroups System.getProperty("tags", "web")
         testLogging.showStandardStreams = true
         useDefaultListeners true
-        listeners << 'com.testvagrant.ekam.web.listeners.WebSiteListener'
+        listeners << 'com.testvagrant.ekam.commons.listeners.LogListener'
         listeners << 'com.testvagrant.ekam.web.listeners.WebDriverListener'
         listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
         listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
@@ -138,12 +128,13 @@ task runWebTests(type: Test) {
 task runMobileTests(type: Test) {
     outputs.upToDateWhen { false }
     useTestNG {
-        parallel = "classes"
+        parallel = "methods"
         threadCount = 1
         includeGroups System.getProperty("tags", "mobile")
         testLogging.showStandardStreams = true
         useDefaultListeners true
         listeners << 'com.testvagrant.ekam.mobile.listeners.MobileDriverListener'
+        listeners << 'com.testvagrant.ekam.commons.listeners.LogListener'
         listeners << 'com.testvagrant.ekam.commons.listeners.ReportListener'
         listeners << 'com.testvagrant.ekam.integrations.slack.SlackListener'
         outputDirectory = file("$buildDir/" + System.getProperty('tags', 'NONE'))

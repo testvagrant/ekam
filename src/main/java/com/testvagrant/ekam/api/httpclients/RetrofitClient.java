@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class RetrofitClient implements HttpClient<Retrofit> {
+public class RetrofitClient  {
 
   Retrofit retrofit;
 
@@ -26,8 +26,7 @@ public class RetrofitClient implements HttpClient<Retrofit> {
 
   @Inject Gson gson;
 
-  @Override
-  public HttpClient<Retrofit> build(String baseUrl) {
+  public Retrofit build(String baseUrl) {
     HttpLoggingInterceptor interceptor = getHttpLoggingInterceptor();
     OkHttpClient okHttpClient = getOkHttpBuilder(interceptor).build();
     GsonConverterFactory converterFactory = GsonConverterFactory.create(new Gson());
@@ -39,11 +38,10 @@ public class RetrofitClient implements HttpClient<Retrofit> {
             .addConverterFactory(converterFactory)
             .build();
 
-    return this;
+    return retrofit;
   }
 
-  @Override
-  public HttpClient<Retrofit> build(String baseUrl, Interceptor... interceptors) {
+  public Retrofit build(String baseUrl, Interceptor... interceptors) {
     HttpLoggingInterceptor interceptor = getHttpLoggingInterceptor();
     GsonConverterFactory converterFactory = GsonConverterFactory.create(new Gson());
 
@@ -60,7 +58,7 @@ public class RetrofitClient implements HttpClient<Retrofit> {
             .addConverterFactory(converterFactory)
             .build();
 
-    return this;
+    return retrofit;
   }
 
   private OkHttpClient.Builder getOkHttpBuilder(Interceptor... interceptors) {
@@ -75,7 +73,6 @@ public class RetrofitClient implements HttpClient<Retrofit> {
     return interceptor;
   }
 
-  @Override
   public <Type> Type execute(Call<Type> call) {
     Response<Type> execute = executeAsResponse(call);
     if (callTypeFinder.getType(call).equals(Response.class)) {
@@ -90,12 +87,10 @@ public class RetrofitClient implements HttpClient<Retrofit> {
     }
   }
 
-  @Override
   public <Type> Type executeAsObj(Call<Type> call) {
     return execute(call);
   }
 
-  @Override
   public <Type> Response<Type> executeAsResponse(Call<Type> call) {
     try {
       return call.execute();
