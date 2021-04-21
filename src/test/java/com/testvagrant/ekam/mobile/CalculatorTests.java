@@ -1,6 +1,6 @@
 package com.testvagrant.ekam.mobile;
 
-import com.testvagrant.ekam.mobile.screens.calculator.CalculatorScreen;
+import com.testvagrant.ekam.mobile.screens.CalculatorScreen;
 import com.testvagrant.ekam.testbase.EkamMobileTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;

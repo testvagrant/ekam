@@ -64,7 +64,8 @@ dependencies {
     implementation 'io.appium:java-client:7.5.1'
 
     //testvagrant
-    implementation('com.testvagrant.optimus:optimus-lite:0.0.5-beta')
+    implementation('com.testvagrant.optimus:optimus-lite:0.0.6-beta')
+    implementation('com.testvagrant.ekam:ekam-api:0.0.1-alpha')
 
     //selenium
     implementation('org.seleniumhq.selenium:selenium-java:3.141.59')
@@ -92,7 +93,9 @@ allure {
 
 tasks.withType(Test) {
     systemProperties = [
-            env                   : System.getProperty('env', 'staging'),
+            apiConfig             : System.getProperty('apiConfig', 'apiConfig'),
+            dbConfig              : System.getProperty('dbConfig', 'dbConfig'),
+            websiteConfig         : System.getProperty('websiteConfig', 'websiteConfig'),
             tags                  : System.getProperty('tags', 'smoke'),
             browser               : System.getProperty('browser', 'chrome'),
             runMode               : System.getProperty('runMode', 'headless'),

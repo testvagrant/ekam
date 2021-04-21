@@ -5,8 +5,7 @@ import org.testng.Assert;
 import retrofit2.Response;
 
 public class BaseApiAssertions {
-
-  protected void assertThatStatusIsOK(Response response) {
+  protected <T> void assertThatStatusIsOK(Response<T> response) {
     Assert.assertEquals(response.code(), HttpStatus.SC_OK);
   }
 }

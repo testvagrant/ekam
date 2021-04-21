@@ -1,14 +1,13 @@
 package com.testvagrant.ekam.db;
 
 public interface DBConfig {
+  String getHost();
 
-    String getHost();
+  String getPort();
 
-    String getPort();
+  String getUsername();
 
-    String getUsername();
+  String getPassword();
 
-    String getPassword();
-
-    String getDatabase();
+  String getDatabase();
 }

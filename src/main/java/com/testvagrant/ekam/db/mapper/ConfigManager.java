@@ -1,56 +1,65 @@
 package com.testvagrant.ekam.db.mapper;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.db.DBConfig;
 import com.testvagrant.ekam.db.configuration.DBConfiguration;
 import com.testvagrant.ekam.db.entities.ConfigDetails;
 import com.testvagrant.ekam.db.exceptions.InvalidConnectionException;
+import com.testvagrant.optimus.commons.filehandlers.FileFinder;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.testvagrant.optimus.commons.filehandlers.ResourcePaths.MAIN_RESOURCES;
+import static com.testvagrant.optimus.commons.filehandlers.ResourcePaths.TEST_RESOURCES;
 
 public class ConfigManager {
 
-  public DBConfig getConfiguration(ConfigDetails configDetails) throws InvalidConnectionException {
+  public DBConfig getConfiguration(ConfigDetails configDetails) {
     return getConfiguration(configDetails.getConfigName());
   }
 
-  public DBConfig getConfiguration(String configName) throws InvalidConnectionException {
+  public DBConfig getConfiguration(String configName) {
     return getDBConfiguration(configName);
   }
 
-  private DBConfig getDBConfiguration(String name) throws InvalidConnectionException {
-    String env = SystemProperties.ENV;
-    InputStream resourceAsStream =
-        getClass().getClassLoader().getResourceAsStream("dbconfig/" + env + ".yaml");
-    if (resourceAsStream == null)
-      resourceAsStream =
-          getClass().getClassLoader().getResourceAsStream("dbconfig/" + env + ".yml");
-    if (resourceAsStream == null)
-      throw new RuntimeException("Cannot find db property file for env " + env);
-    Yaml yaml = new Yaml();
-    HashMap<String, Object> parse =
-        yaml.loadAs(new InputStreamReader(resourceAsStream), LinkedHashMap.class);
-    Optional<Map.Entry<String, Object>> optionalEntry =
-        parse.entrySet().stream()
-            .filter(entry -> entry.getKey().toLowerCase().equals(name.toLowerCase()))
-            .findFirst();
+  private DBConfig getDBConfiguration(String name) {
+    try {
+      AtomicReference<String> configFilePath = new AtomicReference<>("");
 
-    if (optionalEntry.isPresent()) {
-      Map.Entry<String, Object> stringObjectEntry = optionalEntry.get();
+      for (String path : validPaths) {
+        File file = FileFinder.fileFinder(path).find(SystemProperties.DB_CONFIG, ".yaml");
+        if (file != null && file.exists()) {
+          configFilePath.set(file.getPath());
+          break;
+        }
+      }
+
+      if (configFilePath.get().isEmpty()) {
+        throw new RuntimeException("Cannot find file " + name);
+      }
+
+      LinkedHashMap<String, Object> parse =
+          new Yaml().loadAs(new FileReader(new File(configFilePath.get())), LinkedHashMap.class);
+
+      Map.Entry<String, Object> stringObjectEntry =
+          parse.entrySet().stream()
+              .filter(entry -> entry.getKey().toLowerCase().equals(name.toLowerCase()))
+              .findFirst()
+              .orElseThrow(() -> new InvalidConnectionException(SystemProperties.DB_CONFIG, name));
+
       Gson gson = new Gson();
       String json = gson.toJson(stringObjectEntry.getValue());
       return gson.fromJson(json, DBConfiguration.class);
-    } else {
-      throw new InvalidConnectionException(env, name);
+    } catch (Exception ex) {
+      throw new RuntimeException(ex.getMessage());
     }
   }
+
+  private static final String[] validPaths = new String[] {TEST_RESOURCES, MAIN_RESOURCES};
 }
