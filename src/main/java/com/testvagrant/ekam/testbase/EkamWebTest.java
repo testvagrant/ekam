@@ -4,6 +4,6 @@ import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
 /** TestBase for web tests alone */
-@Guice(modules = {})
+@Guice()
 @Test(groups = "web")
 public class EkamWebTest {}

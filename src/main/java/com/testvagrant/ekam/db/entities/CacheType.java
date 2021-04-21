@@ -1,14 +1,15 @@
 package com.testvagrant.ekam.db.entities;
 
 public enum CacheType {
-    REDIS("redis");
+  REDIS("redis");
 
-    private String cacheName;
-    CacheType(String cacheName) {
-        this.cacheName = cacheName;
-    }
+  private final String cacheName;
 
-    public String getCacheName() {
-        return cacheName;
-    }
+  CacheType(String cacheName) {
+    this.cacheName = cacheName;
+  }
+
+  public String getCacheName() {
+    return cacheName;
+  }
 }

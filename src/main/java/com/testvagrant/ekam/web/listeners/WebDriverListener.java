@@ -3,8 +3,11 @@ package com.testvagrant.ekam.web.listeners;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.Injectors;
 import com.testvagrant.ekam.commons.ModulesLibrary;
+import com.testvagrant.ekam.commons.SystemProperties;
+import com.testvagrant.ekam.commons.Target;
 import com.testvagrant.ekam.internal.Launcher;
-import org.openqa.selenium.WebDriver;
+import com.testvagrant.optimus.core.remote.RemoteDriverManager;
+import com.testvagrant.optimus.core.web.WebDriverManager;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -55,11 +58,13 @@ public class WebDriverListener implements ITestListener {
   public void onFinish(ITestContext context) {}
 
   public void quit(ITestResult result) {
-    Injector driver = (Injector) result.getAttribute(Injectors.DRIVER_INJECTOR.getInjector());
-    WebDriver driverInstance = driver.getInstance(WebDriver.class);
+    if (SystemProperties.TARGET == Target.REMOTE) {
+      RemoteDriverManager.dispose();
+    } else {
+      WebDriverManager.dispose();
+    }
     addDivider();
     Reporter.log(String.format("Test %s has ended", result.getName().toLowerCase()), true);
-    driverInstance.quit();
   }
 
   private void addDivider() {

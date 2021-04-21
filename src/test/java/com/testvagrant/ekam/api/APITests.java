@@ -12,9 +12,9 @@ import java.util.List;
 
 public class APITests extends EkamApiTest {
 
-  @Inject AnimalFactsClient animalFactsClient;
+  @Inject private AnimalFactsClient animalFactsClient;
 
-  @Inject AnimalFactsAssertions animalFactsAssertions;
+  @Inject private AnimalFactsAssertions animalFactsAssertions;
 
   @Test(groups = "api")
   public void getAnimalFacts() {
