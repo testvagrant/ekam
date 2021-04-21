@@ -7,8 +7,8 @@ import io.appium.java_client.MobileElement;
 
 public class IOSDeviceDriver extends DeviceDriver {
 
-  @Inject
-  public IOSDeviceDriver(AppiumDriver<MobileElement> driver) {
-    super(driver);
-  }
+    @Inject
+    public IOSDeviceDriver(AppiumDriver<MobileElement> driver) {
+        super(driver);
+    }
 }

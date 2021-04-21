@@ -12,6 +12,6 @@ public class GooglePage extends WebPage {
   @Step("Search")
   @Screenshot
   public void search(String searchKey) {
-    TextBox(searchTextBox).setText(searchKey);
+    textbox(searchTextBox).setText(searchKey);
   }
 }

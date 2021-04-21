@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class ElementCollection {
 
   @Inject private WebDriver driver;
+
   @Inject private FluentWait<WebDriver> wait;
 
   private By locator;

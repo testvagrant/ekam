@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.atoms.mobile;
 
 import com.google.inject.Inject;
-import com.testvagrant.ekam.commons.annotations.Screenshot;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
@@ -10,24 +9,23 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionFactory;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
 public class EkamMobileElement {
-
   private final AppiumDriver<MobileElement> driver;
   private final ConditionFactory wait;
   private By locator;
-  private final TouchAction<?> touchAction;
+  private final TouchAction touchAction;
 
   @Inject
   public EkamMobileElement(AppiumDriver<MobileElement> driver) {
     this.driver = driver;
-    this.wait = buildFluentWait(Duration.ofSeconds(30)); // TODO: Read default timeout from config
-    this.touchAction = new TouchAction<>(driver);
+    this.wait = buildFluentWait(Duration.ofSeconds(30)); // Default Timeout
+    this.touchAction = new TouchAction(driver);
   }
 
   public String getTextValue() {
@@ -43,7 +41,6 @@ public class EkamMobileElement {
     return getElement().getAttribute(attribute);
   }
 
-  @Screenshot // TODO: Take screenshot for specific actions
   public void click() {
     waitUntilPresent();
     wait.until(
@@ -74,7 +71,7 @@ public class EkamMobileElement {
     waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
   }
 
-  private void waitUntilCondition(ExpectedCondition<?> webElementExpectedCondition) {
+  private void waitUntilCondition(ExpectedCondition webElementExpectedCondition) {
     wait.until(() -> webElementExpectedCondition.apply(driver) != null);
   }
 
@@ -101,6 +98,7 @@ public class EkamMobileElement {
   }
 
   public void tap(MobileElement mobileElement) {
+    AndroidTouchAction touchAction = new AndroidTouchAction(driver);
     touchAction.tap(ElementOption.element(getElement())).perform();
   }
 
@@ -113,12 +111,6 @@ public class EkamMobileElement {
   }
 
   private ConditionFactory buildFluentWait(Duration duration) {
-    return Awaitility.await()
-        .atMost(duration)
-        .ignoreException(NoSuchElementException.class)
-        .ignoreException(ElementNotInteractableException.class)
-        .ignoreException(TimeoutException.class)
-        .ignoreException(StaleElementReferenceException.class)
-        .ignoreException(ElementClickInterceptedException.class);
+    return Awaitility.await().atMost(duration).ignoreExceptions();
   }
 }

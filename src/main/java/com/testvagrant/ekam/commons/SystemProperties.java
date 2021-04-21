@@ -1,12 +1,11 @@
 package com.testvagrant.ekam.commons;
 
-import com.testvagrant.ekam.web.RunMode;
-import com.testvagrant.ekam.web.drivers.Browser;
+import com.testvagrant.optimus.core.models.OptimusSupportedPlatforms;
 
 public final class SystemProperties {
 
   public static final String DEFAULT_ENV = System.getProperty("defaultEnv", "staging");
-  public static final String TESTFEED = System.getProperty("testFeed", "calculator");
+  public static final String TEST_FEED = System.getProperty("testFeed", "calculator");
   public static final String ENV = System.getProperty("env", DEFAULT_ENV);
   public static final String LOCALE = System.getProperty("locale", "en");
   public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "false"));
@@ -15,8 +14,6 @@ public final class SystemProperties {
   public static final String HUB = System.getProperty("hub", "kobiton").toUpperCase();
   public static final Target TARGET =
       Target.valueOf(System.getProperty("target", "local").toUpperCase());
-  public static final RunMode RUN_MODE =
-      RunMode.valueOf(System.getProperty("runMode", "headless").toUpperCase());
   public static final Boolean SWITCH_VIEW =
       Boolean.valueOf(System.getProperty("switchView", "false"));
   public static final String CLIENT = System.getProperty("client", "retrofit").toUpperCase();
@@ -29,5 +26,5 @@ public final class SystemProperties {
   public static final boolean SLACK_NOTIFY_ME_EVERYTIME =
       Boolean.parseBoolean(System.getProperty("notifyMeEverytime", String.valueOf(false)));
   public static final String BROWSER =
-      System.getProperty("browser", Browser.CHROME.name().toLowerCase());
+      System.getProperty("browser", OptimusSupportedPlatforms.CHROME.name().toLowerCase());
 }

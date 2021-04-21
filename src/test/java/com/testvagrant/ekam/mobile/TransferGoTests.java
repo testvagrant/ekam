@@ -24,17 +24,17 @@ public class TransferGoTests extends EkamMobileTest {
     Assert.assertEquals(receivingAmount, 8800, 100);
   }
 
-  @Test(groups = {"mobile", "transfergo"})
-  public void shouldValidateRatesMatchInRangeDuplicate() {
+//  @Test(groups = {"mobile","transfergo"})
+  public void shouldValidateRatesMatchInRange1() {
     LaunchScreen launchScreen = Activity().getInstance(LaunchScreen.class);
     Double receivingAmount =
-        launchScreen
-            //
-            .checkRates()
-            .selectSendingFromCountry("France")
-            .setSendingFrom("100.00")
-            .selectReceivingInCountry("India")
-            .getReceivingInAmount();
+            launchScreen
+                    //
+                    .checkRates()
+                    .selectSendingFromCountry("France")
+                    .setSendingFrom("100.00")
+                    .selectReceivingInCountry("India")
+                    .getReceivingInAmount();
 
     Assert.assertEquals(receivingAmount, 8800, 100);
   }
