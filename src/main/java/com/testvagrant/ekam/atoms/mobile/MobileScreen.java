@@ -14,7 +14,6 @@ import org.openqa.selenium.By;
 import static com.testvagrant.ekam.commons.ActivityInitiator.Activity;
 
 public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFunctions {
-
   @Inject
   @Named("persona")
   private String persona;
@@ -37,7 +36,7 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
     ReportLogger.log(persona, message);
   }
 
-  protected <T extends MobileScreen> T createInstance(Class<T> tClazz) {
-    return Activity().getInstance(tClazz);
+  protected <T extends MobileScreen> T createInstance(Class<T> clazz) {
+    return Activity().getInstance(clazz);
   }
 }

@@ -37,6 +37,7 @@ build:
 
 web_tests:
   stage: test
+  when: manual
   variables:
     TASK: runWebTests
   image: krishnanandb/chromeheadless
@@ -45,6 +46,7 @@ web_tests:
 
 api_tests:
   stage: test
+  when: manual
   variables:
     TASK: runApiTests
   <<: *test_template
@@ -52,6 +54,7 @@ api_tests:
 
 db_tests:
   stage: test
+  when: manual
   variables:
     TASK: runDBTests
   <<: *test_template
@@ -59,7 +62,7 @@ db_tests:
 
 pages:
   stage: deploy
-  when: always
+  when: manual
   dependencies:
     - web_tests
   script:
