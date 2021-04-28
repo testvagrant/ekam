@@ -7,7 +7,8 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
-import static com.testvagrant.ekam.commons.PageInitiator.Page;
+import static com.testvagrant.ekam.commons.PageInitiator.WebPage;
+
 
 public class WebTests extends EkamWebTest {
 
@@ -16,7 +17,7 @@ public class WebTests extends EkamWebTest {
     @Feature("Hello")
     @Epic("APC")
     public void searchTest() {
-        GooglePage googlePage = Page().getInstance(GooglePage.class);
+        GooglePage googlePage = WebPage(GooglePage.class);
         googlePage.search("Calling from Ekam");
     }
 }

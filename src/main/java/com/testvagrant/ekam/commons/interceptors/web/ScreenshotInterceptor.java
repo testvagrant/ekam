@@ -10,8 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ScreenshotInterceptor extends SiteInterceptor implements MethodInterceptor {
 
-  @Inject private ScreenshotTaker screenshotTaker;
-
+  @Inject ScreenshotTaker screenshotTaker;
   @Override
   public Object invoke(MethodInvocation invocation) {
     AtomicReference<Object> proceed = invokeMethod(invocation);
