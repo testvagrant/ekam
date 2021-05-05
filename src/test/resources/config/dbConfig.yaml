@@ -1,6 +1,6 @@
-ekam_pg:
-  host: "topsy.db.elephantsql.com"
-  port: "5432"
-  username: "krcrvjif"
-  password: "YnXx1oXVzE3HYW7IBFx35SUs3ODx1KTr"
-  database: "krcrvjif"
+sample_db:
+  host: "<host>"
+  port: "<port>"
+  username: "<username>"
+  password: "<password>"
+  database: "<database>"

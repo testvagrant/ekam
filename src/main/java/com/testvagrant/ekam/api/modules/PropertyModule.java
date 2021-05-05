@@ -5,6 +5,7 @@ import com.google.inject.name.Names;
 import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.parsers.PropertyParser;
 
+import java.nio.file.Paths;
 import java.util.Properties;
 
 public class PropertyModule extends AbstractModule {

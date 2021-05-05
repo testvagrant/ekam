@@ -1,9 +1,9 @@
 package com.testvagrant.ekam.commons;
 
-public final class SystemProperties {
+public class SystemProperties {
   // configs
   public static final String DB_CONFIG = System.getProperty("dbConfig", "dbConfig");
-  public static final String API_CONFIG = System.getProperty("apiConfig", "apiConfig");
+  public static String API_CONFIG = System.getProperty("apiConfig", "apiConfig");
 
   // Toggles
   public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "true"));
