@@ -1,16 +1,22 @@
 {
-  "app": "calculator.apk",
-  "platform": "android",
-  "desiredCapabilities": {
-    "newCommandTimeout": 300,
-    "autoGrantPermissions": true,
-    "noReset": true,
-    "avdLaunchTimeout": 300,
-    "autoAcceptAlerts": true,
-    "useKeystore": false
-  },
+  "targets": [
+    {
+      "app": "calculator.apk",
+      "platform": "android",
+      "desiredCapabilities": {
+        "newCommandTimeout": 300,
+        "autoGrantPermissions": true,
+        "noReset": true,
+        "avdLaunchTimeout": 300,
+        "autoAcceptAlerts": true,
+        "useKeystore": false
+      }
+    }
+  ],
   "serverArguments": [
-    "--log-level info"
+    "--log-level info",
+    "--relaxed-security",
+    "--enable-console-logs"
   ],
   "executables": {
     "appiumJSPath": "",

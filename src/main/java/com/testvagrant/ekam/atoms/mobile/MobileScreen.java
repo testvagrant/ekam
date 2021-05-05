@@ -14,9 +14,6 @@ import org.openqa.selenium.By;
 import static com.testvagrant.ekam.commons.ActivityInitiator.Activity;
 
 public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFunctions {
-  @Inject
-  @Named("persona")
-  private String persona;
 
   @Inject protected AppiumDriver<MobileElement> driver;
 
@@ -33,7 +30,7 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
   }
 
   public void log(String message) {
-    ReportLogger.log(persona, message);
+    ReportLogger.log(message);
   }
 
   protected <T extends MobileScreen> T createInstance(Class<T> clazz) {

@@ -1,14 +1,39 @@
 {
-  "desiredCapabilities": {
-    "pageLoadStrategy": "eager"
+  "siteConfig": {
+    "url": "http://google.com/",
+    "title": "Google",
+    "wait": 30
   },
-  "arguments": [
-  ],
-  "preferences": {
-    "managed_default_content_settings.cookies": 2
-  },
-  "extensions": [
-  ],
-  "experimentalOptions": {
-  }
+  "targets": [
+    {
+      "target": "chrome",
+      "desiredCapabilities": {
+        "pageLoadStrategy": "eager"
+      },
+      "arguments": [
+        "--kiosk"
+      ],
+      "preferences": {
+      },
+      "extensions": [
+      ],
+      "experimentalOptions": {
+      }
+    },
+    {
+      "target": "firefox",
+      "desiredCapabilities": {
+        "pageLoadStrategy": "eager"
+      },
+      "arguments": [
+        "--kiosk"
+      ],
+      "preferences": {
+      },
+      "extensions": [
+      ],
+      "experimentalOptions": {
+      }
+    }
+  ]
 }

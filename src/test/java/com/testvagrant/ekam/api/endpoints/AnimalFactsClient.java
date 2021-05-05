@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.testvagrant.ekam.api.models.CatFacts;
 import com.testvagrant.ekam.api.retrofit.RetrofitBaseClient;
-import com.testvagrant.ekam.api.retrofit.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -15,8 +14,8 @@ public class AnimalFactsClient extends RetrofitBaseClient {
   private final AnimalFactsService animalFactsService;
 
   @Inject
-  public AnimalFactsClient(RetrofitClient httpClient, @Named("catFactsHost") String baseUrl) {
-    super(httpClient, baseUrl);
+  public AnimalFactsClient(@Named("catFactsHost") String baseUrl) {
+    super(baseUrl);
     animalFactsService = httpClient.getService(AnimalFactsService.class);
   }
 

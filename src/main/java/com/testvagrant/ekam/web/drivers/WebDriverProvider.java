@@ -1,34 +1,21 @@
 package com.testvagrant.ekam.web.drivers;
 
+import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.testvagrant.ekam.commons.SystemProperties;
-import com.testvagrant.ekam.commons.Target;
-import com.testvagrant.optimus.core.models.CloudConfig;
-import com.testvagrant.optimus.core.parser.WebTestFeedParser;
-import com.testvagrant.optimus.core.remote.CloudConfigBuilder;
-import com.testvagrant.optimus.core.remote.RemoteDriverManager;
-import com.testvagrant.optimus.core.web.WebDriverManager;
+import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class WebDriverProvider implements Provider<WebDriver> {
 
-    @Override
-    public WebDriver get() {
-        return createDriver();
-    }
+  private final WebDriverDetails webDriverDetails;
 
-    private WebDriver createDriver() {
-        return SystemProperties.TARGET == Target.REMOTE ?
-                createRemoteDriver() :
-                new WebDriverManager().createDriver();
-    }
+  @Inject
+  public WebDriverProvider(WebDriverDetails webDriverDetails) {
+    this.webDriverDetails = webDriverDetails;
+  }
 
-    private WebDriver createRemoteDriver() {
-        WebTestFeedParser testFeedParser = new WebTestFeedParser(SystemProperties.TEST_FEED);
-        DesiredCapabilities desiredCapabilities = testFeedParser.getDesiredCapabilities();
-        CloudConfig build = new CloudConfigBuilder().build();
-        return new RemoteDriverManager().createDriver(build, desiredCapabilities);
-    }
+  @Override
+  public WebDriver get() {
+    return webDriverDetails.getDriver();
+  }
 }
-

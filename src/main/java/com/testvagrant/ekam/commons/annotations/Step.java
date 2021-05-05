@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Screenshot {
-    String name() default "screenshot";
+public @interface Step {
+    String keyword() default "Given";
+    String description();
 }
