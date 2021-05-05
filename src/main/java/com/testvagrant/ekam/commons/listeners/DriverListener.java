@@ -1,9 +1,6 @@
 package com.testvagrant.ekam.commons.listeners;
 
-import com.google.inject.Injector;
-import com.testvagrant.ekam.api.modules.PropertyModule;
 import com.testvagrant.ekam.commons.Injectors;
-import com.testvagrant.ekam.commons.annotations.Log;
 import com.testvagrant.ekam.commons.logs.LogWriter;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
 import org.testng.ISuite;

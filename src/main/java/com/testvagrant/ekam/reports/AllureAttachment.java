@@ -10,11 +10,11 @@ import java.nio.file.Path;
 
 public class AllureAttachment {
 
-    public void attachScreenshot(String name, Path path) {
-        try (InputStream is = Files.newInputStream(path)) {
-            Allure.addAttachment(name, is);
-        } catch (IOException e) {
-            throw new RuntimeException(ExceptionUtils.getStackTrace(e));
-        }
+  public void attachScreenshot(String name, Path path) {
+    try (InputStream is = Files.newInputStream(path)) {
+      Allure.addAttachment(name, is);
+    } catch (IOException e) {
+      throw new RuntimeException(ExceptionUtils.getStackTrace(e));
     }
+  }
 }
