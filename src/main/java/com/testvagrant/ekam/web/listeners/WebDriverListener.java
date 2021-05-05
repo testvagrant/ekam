@@ -3,52 +3,51 @@ package com.testvagrant.ekam.web.listeners;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.Injectors;
 import com.testvagrant.ekam.commons.ModulesLibrary;
-import com.testvagrant.ekam.commons.SystemProperties;
-import com.testvagrant.ekam.commons.Target;
-import com.testvagrant.ekam.internal.Launcher;
-import com.testvagrant.optimus.core.remote.RemoteDriverManager;
+import com.testvagrant.ekam.commons.listeners.DriverListener;
+import com.testvagrant.ekam.commons.logs.LogWriter;
+import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
+import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import com.testvagrant.optimus.core.web.WebDriverManager;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
-import org.testng.Reporter;
+import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
+import com.testvagrant.optimus.dashboard.StepRecorder;
+import org.testng.*;
 
-public class WebDriverListener implements ITestListener {
+public class WebDriverListener extends DriverListener implements ITestListener {
 
   @Override
   public void onTestStart(ITestResult result) {
-    Reporter.log(String.format("Test %s has started", result.getName().toLowerCase()), true);
+    Reporter.log(String.format("Test %s has started", result.getName().toLowerCase()));
     addDivider();
-    Injector driverInjector =
-        result
-            .getTestContext()
-            .getSuite()
-            .getParentInjector()
-            .createChildInjector(new ModulesLibrary().webModules());
 
-    result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
-    result.setAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector(), driverInjector);
-    driverInjector.getInstance(Launcher.class).launch();
+    Injector parentInjector = result.getTestContext().getSuite().getParentInjector();
+    Injector driverInjector = parentInjector.createChildInjector(new ModulesLibrary().webModules());
+
+    WebDriverDetails driverDetails = driverInjector.getInstance(WebDriverDetails.class);
+    Injector childInjector =
+        driverInjector.createChildInjector(
+            new OptimusRunTargetModule(driverDetails.getDriver(), result, driverDetails.getTargetDetails()));
+    result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), childInjector);
+    result.setAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector(), childInjector);
   }
 
   @Override
   public void onTestSuccess(ITestResult result) {
-    quit(result);
+    quit(result, "passed");
   }
 
   @Override
   public void onTestFailure(ITestResult result) {
-    quit(result);
+    quit(result, "failed");
   }
 
   @Override
   public void onTestSkipped(ITestResult result) {
-    quit(result);
+    quit(result, "skipped");
   }
 
   @Override
   public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-    quit(result);
+    quit(result, "passed");
   }
 
   @Override
@@ -57,12 +56,14 @@ public class WebDriverListener implements ITestListener {
   @Override
   public void onFinish(ITestContext context) {}
 
-  public void quit(ITestResult result) {
-    if (SystemProperties.TARGET == Target.REMOTE) {
-      RemoteDriverManager.dispose();
-    } else {
-      WebDriverManager.dispose();
-    }
+  public void quit(ITestResult result, String status) {
+    OptimusTestNGBuildGenerator buildGenerator =
+        (OptimusTestNGBuildGenerator)
+            result.getTestContext().getSuite().getAttribute("buildGenerator");
+    buildGenerator.addTestCase(result, status);
+    Injector runInjector = (Injector) result.getAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector());
+    runInjector.getInstance(StepRecorder.class).generateSteps();
+    WebDriverManager.dispose();
     addDivider();
     Reporter.log(String.format("Test %s has ended", result.getName().toLowerCase()), true);
   }
@@ -70,4 +71,5 @@ public class WebDriverListener implements ITestListener {
   private void addDivider() {
     Reporter.log("==================================================", true);
   }
+
 }

@@ -8,15 +8,15 @@ import io.appium.java_client.MobileElement;
 
 public class AppiumDriverProvider implements Provider<AppiumDriver<MobileElement>> {
 
-    private final MobileDriverDetails mobileDriverDetails;
+  private final MobileDriverDetails mobileDriverDetails;
 
-    @Inject
-    public AppiumDriverProvider(MobileDriverDetails mobileDriverDetails) {
-        this.mobileDriverDetails = mobileDriverDetails;
-    }
+  @Inject
+  public AppiumDriverProvider(MobileDriverDetails mobileDriverDetails) {
+    this.mobileDriverDetails = mobileDriverDetails;
+  }
 
-    @Override
-    public AppiumDriver<MobileElement> get() {
-        return mobileDriverDetails.getDriver();
-    }
+  @Override
+  public AppiumDriver<MobileElement> get() {
+    return mobileDriverDetails.getDriver();
+  }
 }

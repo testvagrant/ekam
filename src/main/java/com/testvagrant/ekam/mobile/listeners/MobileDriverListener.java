@@ -3,16 +3,16 @@ package com.testvagrant.ekam.mobile.listeners;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.Injectors;
 import com.testvagrant.ekam.commons.ModulesLibrary;
-import com.testvagrant.ekam.commons.SystemProperties;
-import com.testvagrant.ekam.commons.Target;
-import com.testvagrant.optimus.core.appium.LocalDriverManager;
+import com.testvagrant.ekam.commons.listeners.DriverListener;
+import com.testvagrant.ekam.commons.logs.LogWriter;
+import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
+import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
-import org.testng.Reporter;
+import com.testvagrant.optimus.core.screenshots.OptimusRunTarget;
+import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
+import org.testng.*;
 
-public class MobileDriverListener implements ITestListener {
+public class MobileDriverListener extends DriverListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -23,29 +23,31 @@ public class MobileDriverListener implements ITestListener {
                 parentInjector.createChildInjector(new ModulesLibrary().mobileModules());
 
         MobileDriverDetails mobileDriverDetails = driverInjector.getInstance(MobileDriverDetails.class);
-        result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), driverInjector);
-        result.setAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector(), driverInjector);
-        result.setAttribute(Injectors.MOBILE_DRIVER.getInjector(), mobileDriverDetails);
+        Injector childInjector =
+                driverInjector.createChildInjector(
+                        new OptimusRunTargetModule(mobileDriverDetails.getDriver(), result, mobileDriverDetails.getTargetDetails()));
+        result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), childInjector);
+        result.setAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector(), childInjector);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        quit(result);
+        quit(result, "passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        quit(result);
+        quit(result, "failed");
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        quit(result);
+        quit(result, "skipped");
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        quit(result);
+        quit(result, "failed");
     }
 
     @Override
@@ -57,22 +59,21 @@ public class MobileDriverListener implements ITestListener {
     }
 
     public void onTestFailedWithTimeout(ITestResult result) {
-        quit(result);
+        quit(result, "failed");
     }
 
-    public void quit(ITestResult result) {
+    public void quit(ITestResult result, String status) {
+        OptimusTestNGBuildGenerator buildGenerator =
+                (OptimusTestNGBuildGenerator)
+                        result.getTestContext().getSuite().getAttribute("buildGenerator");
+        buildGenerator.addTestCase(result, status);
         addDivider();
         Reporter.log(String.format("Test %s has ended", result.getName().toLowerCase()));
-        Injector driver = (Injector) result.getAttribute(Injectors.DRIVER_INJECTOR.getInjector());
-        MobileDriverDetails driverInstance = driver.getInstance(MobileDriverDetails.class);
-        if (SystemProperties.TARGET == Target.REMOTE) {
-            driverInstance.getDriver().quit();
-        } else {
-            LocalDriverManager.dispose(driverInstance);
-        }
+        MobileDriverManager.dispose();
     }
 
     private void addDivider() {
         Reporter.log("==================================================");
     }
+
 }

@@ -1,17 +1,19 @@
 package com.testvagrant.ekam.commons.interceptors.web;
 
-import com.google.inject.Inject;
+import com.testvagrant.ekam.commons.PageInitiator;
+import com.testvagrant.ekam.reports.AllureAttachment;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Attachment;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ScreenshotTaker {
 
-  @Inject private WebDriver webDriver;
-
-  @Attachment(value = "Screenshot", type = "image/png")
-  public byte[] saveScreenshot() {
-    return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
-  }
+    public void saveScreenshot() {
+        PageInitiator.getInstance().captureScreenshot();
+    }
 }

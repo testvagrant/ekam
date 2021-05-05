@@ -6,12 +6,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class SiteInterceptor {
 
-  protected AtomicReference<Object> invokeMethod(MethodInvocation invocation) {
+  protected Throwable throwable;
+
+  protected AtomicReference<Object> invokeMethod(MethodInvocation invocation) throws Throwable {
     AtomicReference<Object> proceed = new AtomicReference<>();
     try {
       proceed.set(invocation.proceed());
     } catch (Throwable throwable) {
+      this.throwable = throwable;
       throwable.printStackTrace();
+      throw throwable;
     }
     return proceed;
   }

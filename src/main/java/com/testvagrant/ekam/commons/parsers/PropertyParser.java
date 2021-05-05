@@ -35,7 +35,7 @@ public class PropertyParser {
       envProps.load(new FileReader(new File(propertiesFilePath.get())));
       return envProps;
     } catch (IOException | NullPointerException e) {
-      throw new InvalidPropertyFileException(SystemProperties.WEBSITE_CONFIG);
+      throw new InvalidPropertyFileException(fileName);
     }
   }
 

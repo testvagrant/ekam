@@ -4,7 +4,6 @@ import com.google.inject.Module;
 import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
-import com.testvagrant.ekam.web.modules.SiteModule;
 import com.testvagrant.ekam.web.modules.WebModule;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ public class ModulesLibrary {
   public List<Module> webModules() {
     List<Module> webModules = new ArrayList<>(baseModules());
     webModules.add(new WebModule());
-    webModules.add(new SiteModule());
     return webModules;
   }
 

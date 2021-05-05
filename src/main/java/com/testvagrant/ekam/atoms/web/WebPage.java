@@ -8,10 +8,6 @@ import org.openqa.selenium.WebDriver;
 
 public class WebPage implements QueryFunctions {
 
-  @Inject
-  @Named("persona")
-  private String persona;
-
   @Inject protected BrowserDriver browserDriver;
 
   @Inject protected WebDriver driver;
@@ -28,6 +24,6 @@ public class WebPage implements QueryFunctions {
   }
 
   public void log(String message) {
-    ReportLogger.log(persona, message);
+    ReportLogger.log( message);
   }
 }

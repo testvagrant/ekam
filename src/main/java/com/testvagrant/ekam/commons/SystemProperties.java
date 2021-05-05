@@ -2,16 +2,11 @@ package com.testvagrant.ekam.commons;
 
 public final class SystemProperties {
   // configs
-  public static final String TEST_FEED = System.getProperty("testFeed", "calculator");
-  public static final String WEBSITE_CONFIG = System.getProperty("websiteConfig", "websiteConfig");
   public static final String DB_CONFIG = System.getProperty("dbConfig", "dbConfig");
   public static final String API_CONFIG = System.getProperty("apiConfig", "apiConfig");
-  public static final Target TARGET =
-      Target.valueOf(System.getProperty("target", "local").toUpperCase());
-  public static final String HUB = System.getProperty("hub", "browserstack").toUpperCase();
 
   // Toggles
-  public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "false"));
+  public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "true"));
   public static final Boolean MOCK = Boolean.valueOf(System.getProperty("mock", "false"));
   public static final Boolean LOGS = Boolean.valueOf(System.getProperty("logs", "false"));
   public static final Boolean SWITCH_VIEW =
@@ -28,4 +23,6 @@ public final class SystemProperties {
       Boolean.parseBoolean(System.getProperty("slackNotif", String.valueOf(false)));
   public static final boolean SLACK_NOTIFY_ME_EVERYTIME =
       Boolean.parseBoolean(System.getProperty("notifyMeEverytime", String.valueOf(false)));
+
+  public static final String OPTIMUS_SERVER_URL = System.getProperty("optimusServerUrl", "http://localhost:8090/");
 }
