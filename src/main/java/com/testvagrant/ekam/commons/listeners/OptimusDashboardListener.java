@@ -9,9 +9,12 @@ import org.testng.xml.XmlSuite;
 import java.util.List;
 
 public class OptimusDashboardListener implements IReporter {
-    @Override
-    public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-        OptimusReportPublisher optimusReportPublisher = new OptimusReportPublisher(SystemProperties.OPTIMUS_SERVER_URL);
-        optimusReportPublisher.publish();
-    }
+
+  @Override
+  public void generateReport(
+      List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+    OptimusReportPublisher optimusReportPublisher =
+        new OptimusReportPublisher(SystemProperties.OPTIMUS_SERVER_URL);
+    optimusReportPublisher.publish();
+  }
 }

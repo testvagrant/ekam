@@ -4,13 +4,15 @@ import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.Injectors;
 import com.testvagrant.ekam.commons.ModulesLibrary;
 import com.testvagrant.ekam.commons.listeners.DriverListener;
-import com.testvagrant.ekam.commons.logs.LogWriter;
 import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
 import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import com.testvagrant.optimus.core.web.WebDriverManager;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
 import com.testvagrant.optimus.dashboard.StepRecorder;
-import org.testng.*;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 public class WebDriverListener extends DriverListener implements ITestListener {
 
@@ -25,7 +27,8 @@ public class WebDriverListener extends DriverListener implements ITestListener {
     WebDriverDetails driverDetails = driverInjector.getInstance(WebDriverDetails.class);
     Injector childInjector =
         driverInjector.createChildInjector(
-            new OptimusRunTargetModule(driverDetails.getDriver(), result, driverDetails.getTargetDetails()));
+            new OptimusRunTargetModule(
+                driverDetails.getDriver(), result, driverDetails.getTargetDetails()));
     result.setAttribute(Injectors.DRIVER_INJECTOR.getInjector(), childInjector);
     result.setAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector(), childInjector);
   }
@@ -61,7 +64,8 @@ public class WebDriverListener extends DriverListener implements ITestListener {
         (OptimusTestNGBuildGenerator)
             result.getTestContext().getSuite().getAttribute("buildGenerator");
     buildGenerator.addTestCase(result, status);
-    Injector runInjector = (Injector) result.getAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector());
+    Injector runInjector =
+        (Injector) result.getAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector());
     runInjector.getInstance(StepRecorder.class).generateSteps();
     WebDriverManager.dispose();
     addDivider();
@@ -71,5 +75,4 @@ public class WebDriverListener extends DriverListener implements ITestListener {
   private void addDivider() {
     Reporter.log("==================================================", true);
   }
-
 }
