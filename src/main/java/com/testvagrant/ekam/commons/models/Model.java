@@ -8,7 +8,7 @@ public interface Model<Model> {
    * Creates entity with random date for test parallelism. Implement only for entities that needs
    * radomness;
    *
-   * @return
+   * @return this
    */
   default Model random() {
     throw new UnsupportedOperationException();

@@ -11,6 +11,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +41,7 @@ public class StepInterceptor extends SiteInterceptor implements MethodIntercepto
                 .build();
         PageInitiator.getInstance().addStep(step);
         Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
-        recordAllureStep(stepAnnotation.keyword(), stepAnnotation.description(), screenshot);
+        recordAllureStep(stepAnnotation.keyword(),stepAnnotation.persona(), stepAnnotation.description(), screenshot);
     }
 
     private String getMessage() {
@@ -57,11 +59,12 @@ public class StepInterceptor extends SiteInterceptor implements MethodIntercepto
     }
 
 
-    @io.qameta.allure.Step("{keyword} {description}")
-    public void recordAllureStep(String keyword, String description, Screenshot screenshot) throws Throwable {
-        if((Objects.nonNull(screenshot) && Toggles.TIMELINE.isOn()) || Objects.nonNull(throwable)) {
+    @io.qameta.allure.Step("{keyword} {persona} {description}")
+    public void recordAllureStep(String keyword, String persona, String description, Screenshot screenshot) throws Throwable {
+        if(Toggles.TIMELINE.isOn() || Objects.nonNull(throwable)) {
             Path path = PageInitiator.getInstance().captureScreenshot();
-            new AllureAttachment().attachScreenshot(screenshot.name(), path);
+            String screenShotName = Objects.isNull(screenshot)? LocalDateTime.now().toString() : screenshot.name();
+            new AllureAttachment().attachScreenshot(screenShotName, path);
         }
         if(Objects.nonNull(throwable)) {
             throw throwable;

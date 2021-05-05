@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Step {
     String keyword() default "Given";
+    String persona() default "User";
     String description();
 }
