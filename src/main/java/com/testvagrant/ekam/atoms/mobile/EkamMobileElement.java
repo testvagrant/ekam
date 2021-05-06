@@ -1,10 +1,12 @@
 package com.testvagrant.ekam.atoms.mobile;
 
 import com.google.inject.Inject;
+import com.testvagrant.ekam.commons.SystemProperties;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidTouchAction;
+import io.appium.java_client.ios.IOSTouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.ElementOption;
 import org.awaitility.Awaitility;
@@ -19,13 +21,16 @@ public class EkamMobileElement {
   private final AppiumDriver<MobileElement> driver;
   private final ConditionFactory wait;
   private By locator;
-  private final TouchAction touchAction;
+  private final TouchAction<?> touchAction;
 
   @Inject
   public EkamMobileElement(AppiumDriver<MobileElement> driver) {
     this.driver = driver;
     this.wait = buildFluentWait(Duration.ofSeconds(30)); // Default Timeout
-    this.touchAction = new TouchAction(driver);
+    this.touchAction =
+        SystemProperties.TARGET.equalsIgnoreCase("ios")
+            ? new IOSTouchAction(driver)
+            : new AndroidTouchAction(driver);
   }
 
   public String getTextValue() {
@@ -71,10 +76,6 @@ public class EkamMobileElement {
     waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
   }
 
-  private void waitUntilCondition(ExpectedCondition webElementExpectedCondition) {
-    wait.until(() -> webElementExpectedCondition.apply(driver) != null);
-  }
-
   public void waitUntilTextToBePresent(String text) {
     waitUntilCondition(ExpectedConditions.textToBePresentInElementLocated(locator, text));
   }
@@ -91,23 +92,28 @@ public class EkamMobileElement {
         });
   }
 
-  // TODO: Add global support for wait duration
   public MobileElement getElement() {
-    wait.until(() -> driver.findElement(locator) != null);
-    return driver.findElement(locator);
+    try {
+      wait.atMost(Duration.ofSeconds(5)).until(() -> driver.findElement(locator) != null);
+      return driver.findElement(locator);
+    } catch (Exception ex) {
+      throw new RuntimeException("Unable to find Element: " + locator);
+    }
   }
 
-  public void tap(MobileElement mobileElement) {
-    AndroidTouchAction touchAction = new AndroidTouchAction(driver);
+  public void tap() {
     touchAction.tap(ElementOption.element(getElement())).perform();
   }
 
   public void longPress() {
-    AndroidTouchAction touchAction = new AndroidTouchAction(driver);
     touchAction
         .longPress(ElementOption.element(getElement()))
         .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
         .perform();
+  }
+
+  private <T> void waitUntilCondition(ExpectedCondition<T> webElementExpectedCondition) {
+    wait.until(() -> webElementExpectedCondition.apply(driver) != null);
   }
 
   private ConditionFactory buildFluentWait(Duration duration) {
