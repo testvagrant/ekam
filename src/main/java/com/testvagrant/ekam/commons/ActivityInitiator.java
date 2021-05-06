@@ -10,7 +10,11 @@ public class ActivityInitiator {
     return new ActivityInitiator();
   }
 
-  public <Activity extends MobileScreen> Activity getInstance(Class<Activity> tActivity) {
+  public static <Activity extends MobileScreen> Activity Activity(Class<Activity> tActivity) {
+    return Activity().getInstance(tActivity);
+  }
+
+  private  <Activity extends MobileScreen> Activity getInstance(Class<Activity> tActivity) {
     Injector activityInjector =
         (Injector)
             Reporter.getCurrentTestResult()

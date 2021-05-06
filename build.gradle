@@ -9,7 +9,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    mavenLocal()
+//    mavenLocal()
     jcenter()
     maven { url "http://palantir.bintray.com/releases" }
 }
@@ -70,8 +70,7 @@ dependencies {
     implementation('io.appium:java-client:7.5.1')
 
     //testvagrant
-    implementation('com.testvagrant.optimuscloud:remote-drivers:0.0.3')
-    implementation('com.testvagrant.optimus:optimus-lite:0.1.1-beta')
+    implementation('com.testvagrant.optimus:optimus-lite:0.1.2-beta')
     implementation('com.testvagrant.optimus:optimus-dashboard-lite:0.0.2-alpha')
     implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
 
