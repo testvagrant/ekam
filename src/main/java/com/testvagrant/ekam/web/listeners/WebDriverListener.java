@@ -11,7 +11,6 @@ import com.testvagrant.optimus.core.models.web.WebDriverDetails;
 import com.testvagrant.optimus.core.web.WebDriverManager;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
 import com.testvagrant.optimus.dashboard.StepRecorder;
-import com.testvagrant.optimus.dashboard.models.Step;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -44,20 +43,7 @@ public class WebDriverListener extends DriverListener implements ITestListener {
 
   @Override
   public void onTestFailure(ITestResult result) {
-    Step step = Step.builder().name("Failed Step")
-            .status("failed")
-            .error_message(ExceptionUtils.getStackTrace(result.getThrowable()))
-            .duration(0L)
-            .keyword("Failure")
-            .build();
-    PageInitiator.getInstance().addStep(step);
-    try {
-      new StepInterceptor().recordAllureStep("","", "Failed Step", null);
-    } catch (Throwable throwable) {
-
-    }
     quit(result, "failed");
-
   }
 
   @Override
