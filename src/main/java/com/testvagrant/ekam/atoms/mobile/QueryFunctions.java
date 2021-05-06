@@ -16,6 +16,10 @@ public interface QueryFunctions {
     return By.id(id);
   }
 
+  default By queryByContentDesc(String value) {
+    return queryByAttribute("content-desc", value);
+  }
+
   default By queryByName(String name) {
     return By.name(name);
   }
@@ -37,7 +41,7 @@ public interface QueryFunctions {
   }
 
   default By queryByAttribute(String tagName, String attributeName, String value) {
-    return query(String.format("//%s[@%s=%s]", tagName, attributeName, value));
+    return query(String.format("//%s[@%s='%s']", tagName, attributeName, value));
   }
 
   default By queryByIgnoreSpaceAndCase(String attribute, String value) {
