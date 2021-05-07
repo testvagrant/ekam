@@ -10,7 +10,7 @@ public class ActivityInitiator {
     return new ActivityInitiator();
   }
 
-  public static <Activity extends MobileScreen> Activity Activity(Class<Activity> tActivity) {
+  public static <Activity extends MobileScreen> Activity Screen(Class<Activity> tActivity) {
     return Activity().getInstance(tActivity);
   }
 

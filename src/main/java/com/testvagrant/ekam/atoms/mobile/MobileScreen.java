@@ -10,7 +10,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.openqa.selenium.By;
 
-import static com.testvagrant.ekam.commons.ActivityInitiator.Activity;
+import static com.testvagrant.ekam.commons.ActivityInitiator.Screen;
 
 public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFunctions {
 
@@ -33,6 +33,6 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
   }
 
   protected <T extends MobileScreen> T createInstance(Class<T> clazz) {
-    return Activity(clazz);
+    return Screen(clazz);
   }
 }

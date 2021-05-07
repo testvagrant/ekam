@@ -7,7 +7,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.Method;
 
-import static com.testvagrant.ekam.commons.ActivityInitiator.Activity;
+import static com.testvagrant.ekam.commons.ActivityInitiator.Screen;
 
 public class SwitchViewAspect implements MethodInterceptor {
 
@@ -20,6 +20,6 @@ public class SwitchViewAspect implements MethodInterceptor {
     return annotation
         .view()
         .getDeclaredMethod(method.getName(), method.getParameterTypes())
-        .invoke(Activity(annotation.view()), methodInvocation.getArguments());
+        .invoke(Screen(annotation.view()), methodInvocation.getArguments());
   }
 }
