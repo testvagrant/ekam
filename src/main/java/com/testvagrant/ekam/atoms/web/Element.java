@@ -54,58 +54,154 @@ public class Element {
     return getElement().isEnabled();
   }
 
+  public boolean isPresent(Duration duration) {
+    try {
+      waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator), duration);
+      return true;
+    } catch (Exception ex) {
+      return false;
+    }
+  }
+
+  public boolean isDisplayed() {
+    try {
+      return getElement().isDisplayed();
+    } catch (Exception ex) {
+      return false;
+    }
+  }
+
   public void waitUntilDisplayed() {
-    waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator));
+    try {
+      waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element with selector: %s to be displayed.", locator));
+    }
+  }
+
+  public void waitUntilDisplayed(Duration duration) {
+    try {
+      waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator), duration);
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element with selector: %s to be displayed.", locator));
+    }
   }
 
   public void waitUntilInvisible() {
-    waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator));
+    try {
+      waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element with selector: %s to be invisible.", locator));
+    }
+  }
+
+  public void waitUntilInvisible(Duration duration) {
+    try {
+      waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator), duration);
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element with selector: %s to be invisible.", locator));
+    }
   }
 
   public void waitUntilPresent() {
-    waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
+    try {
+      waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element presence with selector: %s.", locator));
+    }
   }
 
-  private void waitUntilCondition(ExpectedCondition webElementExpectedCondition) {
-    wait.until(
-        () -> {
-          Object value = webElementExpectedCondition.apply(driver);
-          System.out.println(value);
-          return value != null;
-        });
+  public void waitUntilPresent(Duration duration) {
+    try {
+      waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator), duration);
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format("Error waiting for element presence with selector: %s.", locator));
+    }
   }
 
   public void waitUntilTextToBePresent(String text) {
-    waitUntilCondition(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+    try {
+      waitUntilCondition(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text: '%s' to be present in element with selector: %s",
+              text, locator));
+    }
+  }
+
+  public void waitUntilTextToBePresent(String text, Duration duration) {
+    try {
+      waitUntilCondition(
+          ExpectedConditions.textToBePresentInElementLocated(locator, text), duration);
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text: '%s' to be present in element with selector: %s",
+              text, locator));
+    }
   }
 
   public void waitUntilTextToBePresent() {
-    wait.until(() -> !getTextValue().trim().isEmpty());
+    try {
+      wait.until(() -> !getTextValue().trim().isEmpty());
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text to be present in element with selector: %s.", locator));
+    }
   }
 
-  public void waitUntilTextNotToBe(String text) {
-    wait.until(
-        () -> {
-          String textValue = getTextValue();
-          return !textValue.contains(text);
-        });
+  public void waitUntilTextToBePresent(Duration duration) {
+    try {
+      wait.atMost(duration).until(() -> !getTextValue().trim().isEmpty());
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text to be present in element with selector: %s.", locator));
+    }
   }
 
-  public void waitUntilAttributeNotToBe(String attribute, String value) {
-    wait.until(
-        () -> {
-          String attributeValue = getAttributeValue(attribute);
-          return !attributeValue.contains(value);
-        });
+  public void waitUntilTextNotToBe(String text, boolean partial) {
+    try {
+      wait.until(
+          () ->
+              partial
+                  ? !getTextValue().toLowerCase().contains(text.toLowerCase())
+                  : !getTextValue().toLowerCase().contentEquals(text.toLowerCase()));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text not to be '%s' in element with selector: %s.",
+              text, locator));
+    }
   }
 
-  // TODO: Add global support for wait duration
-  public WebElement getElement() {
-    wait.until(() -> driver.findElement(locator) != null);
-    return driver.findElement(locator);
+  protected WebElement getElement() {
+    try {
+      wait.atMost(Duration.ofSeconds(5)).until(() -> driver.findElement(locator) != null);
+      return driver.findElement(locator);
+    } catch (Exception ex) {
+      throw new RuntimeException(String.format("Element with selector: %s not found", locator));
+    }
   }
 
   private ConditionFactory buildFluentWait(Duration duration) {
     return Awaitility.await().atMost(duration).ignoreExceptions();
+  }
+
+  private <T> void waitUntilCondition(ExpectedCondition<T> webElementExpectedCondition) {
+    wait.until(() -> webElementExpectedCondition.apply(driver) != null);
+  }
+
+  private <T> void waitUntilCondition(
+      ExpectedCondition<T> webElementExpectedCondition, Duration duration) {
+    wait.atMost(duration).until(() -> webElementExpectedCondition.apply(driver) != null);
   }
 }

@@ -20,6 +20,6 @@ public class SwitchViewAspect implements MethodInterceptor {
     return annotation
         .view()
         .getDeclaredMethod(method.getName(), method.getParameterTypes())
-        .invoke(Activity().getInstance(annotation.view()), methodInvocation.getArguments());
+        .invoke(Activity(annotation.view()), methodInvocation.getArguments());
   }
 }

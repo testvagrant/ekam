@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.atoms.mobile;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.testvagrant.ekam.atoms.mobile.android.AndroidDeviceDriver;
 import com.testvagrant.ekam.atoms.mobile.android.AndroidQueryFunctions;
 import com.testvagrant.ekam.atoms.mobile.ios.IOSDeviceDriver;
@@ -34,6 +33,6 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
   }
 
   protected <T extends MobileScreen> T createInstance(Class<T> clazz) {
-    return Activity().getInstance(clazz);
+    return Activity(clazz);
   }
 }

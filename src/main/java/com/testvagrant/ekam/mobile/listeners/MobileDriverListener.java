@@ -7,7 +7,6 @@ import com.testvagrant.ekam.commons.listeners.DriverListener;
 import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
 import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
-import com.testvagrant.optimus.core.screenshots.OptimusRunTarget;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
 import org.testng.ITestContext;
 import org.testng.ITestListener;

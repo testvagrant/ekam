@@ -29,6 +29,7 @@ public class ConfigManager {
     return getDBConfiguration(configName);
   }
 
+  @SuppressWarnings("unchecked")
   private DBConfig getDBConfiguration(String name) {
     try {
       AtomicReference<String> configFilePath = new AtomicReference<>("");
