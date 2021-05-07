@@ -183,6 +183,32 @@ public class Element {
     }
   }
 
+  public void waitUntilAttributeNotToBe(String attribute, String text, boolean partial) {
+    try {
+      wait.until(
+          () ->
+              partial
+                  ? !getAttributeValue(attribute).toLowerCase().contains(text.toLowerCase())
+                  : !getAttributeValue(attribute).toLowerCase().contentEquals(text.toLowerCase()));
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text not to be '%s' in element with selector: %s.",
+              text, locator));
+    }
+  }
+
+  public void waitUntilAttributeNotToBe(String attribute, String value) {
+    try {
+      waitUntilAttributeNotToBe(attribute, value, false);
+    } catch (Exception ex) {
+      throw new RuntimeException(
+          String.format(
+              "Error waiting for text not to be '%s' in element with selector: %s.",
+              value, locator));
+    }
+  }
+
   protected WebElement getElement() {
     try {
       wait.atMost(Duration.ofSeconds(5)).until(() -> driver.findElement(locator) != null);
