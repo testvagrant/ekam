@@ -8,6 +8,7 @@ import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
 import com.testvagrant.optimus.core.mobile.MobileDriverManager;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
+import com.testvagrant.optimus.dashboard.StepRecorder;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -67,6 +68,9 @@ public class MobileDriverListener extends DriverListener implements ITestListene
         (OptimusTestNGBuildGenerator)
             result.getTestContext().getSuite().getAttribute("buildGenerator");
     buildGenerator.addTestCase(result, status);
+    Injector runInjector =
+            (Injector) result.getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
+    runInjector.getInstance(StepRecorder.class).generateSteps();
     addDivider();
     Reporter.log(String.format("Test %s has ended", result.getName().toLowerCase()));
     MobileDriverManager.dispose();

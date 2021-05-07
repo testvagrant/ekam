@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.commons.interceptors;
 
 
-import com.testvagrant.ekam.commons.PageInitiator;
+import com.testvagrant.ekam.commons.LayoutInitiator;
 import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.annotations.Screenshot;
 import com.testvagrant.ekam.commons.annotations.Step;
@@ -12,7 +12,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +38,7 @@ public class StepInterceptor extends SiteInterceptor implements MethodIntercepto
                 .error_message(getMessage())
                 .status(getStatus())
                 .build();
-        PageInitiator.getInstance().addStep(step);
+        LayoutInitiator.getInstance().addStep(step);
         Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
         recordAllureStep(stepAnnotation.keyword(),stepAnnotation.persona(), stepAnnotation.description(), screenshot);
     }
@@ -62,7 +61,7 @@ public class StepInterceptor extends SiteInterceptor implements MethodIntercepto
     @io.qameta.allure.Step("{keyword} {persona} {description}")
     public void recordAllureStep(String keyword, String persona, String description, Screenshot screenshot) throws Throwable {
         if(Toggles.TIMELINE.isOn() || Objects.nonNull(throwable)) {
-            Path path = PageInitiator.getInstance().captureScreenshot();
+            Path path = LayoutInitiator.getInstance().captureScreenshot();
             String screenShotName = Objects.isNull(screenshot)? LocalDateTime.now().toString() : screenshot.name();
             new AllureAttachment().attachScreenshot(screenShotName, path);
         }

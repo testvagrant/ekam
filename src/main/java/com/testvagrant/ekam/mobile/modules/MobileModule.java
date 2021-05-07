@@ -3,7 +3,9 @@ package com.testvagrant.ekam.mobile.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.testvagrant.ekam.commons.annotations.Screenshot;
-import com.testvagrant.ekam.commons.interceptors.mobile.ScreenshotInterceptor;
+import com.testvagrant.ekam.commons.annotations.Step;
+import com.testvagrant.ekam.commons.interceptors.ScreenshotInterceptor;
+import com.testvagrant.ekam.commons.interceptors.StepInterceptor;
 import com.testvagrant.ekam.mobile.driver.AppiumDriverProvider;
 import com.testvagrant.ekam.mobile.driver.MobileDriverDetailsProvider;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
@@ -24,10 +26,5 @@ public class MobileModule extends AbstractModule {
     bind(new TypeLiteral<AppiumDriver<MobileElement>>() {})
         .toProvider(AppiumDriverProvider.class)
         .asEagerSingleton();
-
-    // bind screenshot listener
-    ScreenshotInterceptor screenshotInterceptor = new ScreenshotInterceptor();
-    requestInjection(screenshotInterceptor);
-    binder().bindInterceptor(any(), annotatedWith(Screenshot.class), screenshotInterceptor);
   }
 }

@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Module;
+import com.testvagrant.ekam.commons.modules.InterceptorModule;
 import com.testvagrant.ekam.commons.modules.LocaleModule;
 import com.testvagrant.ekam.commons.modules.SwitchViewModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
@@ -15,12 +16,14 @@ public class ModulesLibrary {
   public List<Module> webModules() {
     List<Module> webModules = new ArrayList<>(baseModules());
     webModules.add(new WebModule());
+    webModules.add(new InterceptorModule());
     return webModules;
   }
 
   public List<Module> mobileModules() {
     List<Module> mobileModules = new ArrayList<>(baseModules());
     mobileModules.add(new MobileModule());
+    mobileModules.add(new InterceptorModule());
     mobileModules.add(new SwitchViewModule());
     return mobileModules;
   }

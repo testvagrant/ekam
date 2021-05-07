@@ -19,9 +19,11 @@ public class LogWriter {
     String runName = now.format(formatter).replace(":", "-").replaceAll(" ", "-").trim();
     String folderName = String.format("%s/%s", ROOT_FOLDER, runName);
     File f = new File(folderName);
-    boolean mkdir = f.mkdirs();
-    if (!mkdir) {
-      throw new RuntimeException(String.format("%s not created", folderName));
+    if(!f.exists()) {
+      boolean mkdir = f.mkdirs();
+      if (!mkdir) {
+        throw new RuntimeException(String.format("%s not created", folderName));
+      }
     }
     return folderName;
   }
