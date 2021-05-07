@@ -1,14 +1,24 @@
 package com.testvagrant.ekam.commons;
 
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.testvagrant.ekam.atoms.mobile.MobileScreen;
 import com.testvagrant.ekam.atoms.web.WebPage;
 import com.testvagrant.optimus.core.screenshots.OptimusRunTarget;
+import com.testvagrant.optimus.dashboard.App;
 import com.testvagrant.optimus.dashboard.StepRecorder;
 import com.testvagrant.optimus.dashboard.models.Step;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.testng.Reporter;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Objects;
 
 public class LayoutInitiator {
@@ -37,11 +47,18 @@ public class LayoutInitiator {
 
   private <Page extends WebPage> Page createWebLayout(Class<Page> tPage) {
     Injector pageInjector = getInjector(Injectors.WEB_PAGE_INJECTOR);
-    return pageInjector.getInstance(tPage);
+    WebDriver webDriver = pageInjector.getInstance(WebDriver.class);
+    Page instance = pageInjector.getInstance(tPage);
+    PageFactory.initElements(webDriver, instance);
+    return instance;
   }
 
+  @SuppressWarnings("unchecked")
   private <Activity extends MobileScreen> Activity createMobileLayout(Class<Activity> tActivity) {
     Injector activityInjector = getInjector(Injectors.MOBILE_PAGE_INJECTOR);
+    AppiumDriver<MobileElement> appiumDriver = activityInjector.getInstance(AppiumDriver.class);
+    FieldDecorator fieldDecorator = new AppiumFieldDecorator(appiumDriver, Duration.ofSeconds(30));
+    PageFactory.initElements(fieldDecorator, this);
     return activityInjector.getInstance(tActivity);
   }
 
