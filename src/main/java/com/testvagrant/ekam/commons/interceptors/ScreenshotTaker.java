@@ -4,7 +4,7 @@ import com.testvagrant.ekam.commons.LayoutInitiator;
 
 public class ScreenshotTaker {
 
-    public void saveScreenshot() {
-        LayoutInitiator.getInstance().captureScreenshot();
-    }
+  public void saveScreenshot() {
+    LayoutInitiator.getInstance().captureScreenshot();
+  }
 }

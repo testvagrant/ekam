@@ -9,10 +9,10 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ScreenshotInterceptor extends SiteInterceptor implements MethodInterceptor {
+public class ScreenshotInterceptor extends InvocationInterceptor implements MethodInterceptor {
 
-  @Inject
-  ScreenshotTaker screenshotTaker;
+  @Inject ScreenshotTaker screenshotTaker;
+
   @Override
   public Object invoke(MethodInvocation invocation) throws Throwable {
     try {

@@ -69,7 +69,7 @@ public class MobileDriverListener extends DriverListener implements ITestListene
             result.getTestContext().getSuite().getAttribute("buildGenerator");
     buildGenerator.addTestCase(result, status);
     Injector runInjector =
-            (Injector) result.getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
+        (Injector) result.getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
     runInjector.getInstance(StepRecorder.class).generateSteps();
     addDivider();
     Reporter.log(String.format("Test %s has ended", result.getName().toLowerCase()));

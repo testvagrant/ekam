@@ -1,6 +1,5 @@
 package com.testvagrant.ekam.commons.interceptors;
 
-
 import com.testvagrant.ekam.commons.LayoutInitiator;
 import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.annotations.Screenshot;
@@ -15,59 +14,63 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class StepInterceptor extends SiteInterceptor implements MethodInterceptor {
+public class StepInterceptor extends InvocationInterceptor implements MethodInterceptor {
 
-
-    @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        try {
-            AtomicReference<Object> proceed = invokeMethod(invocation);
-            addStep(invocation);
-            return proceed.get();
-        } catch (Throwable e) {
-            addStep(invocation);
-            throw e;
-        }
+  @Override
+  public Object invoke(MethodInvocation invocation) throws Throwable {
+    try {
+      AtomicReference<Object> proceed = invokeMethod(invocation);
+      addStep(invocation);
+      return proceed.get();
+    } catch (Throwable e) {
+      addStep(invocation);
+      throw e;
     }
+  }
 
-    private void addStep(MethodInvocation invocation) throws Throwable {
-        Step stepAnnotation = invocation.getMethod().getAnnotation(Step.class);
-        com.testvagrant.optimus.dashboard.models.Step step = com.testvagrant.optimus.dashboard.models.Step.builder()
-                .name(stepAnnotation.description())
-                .keyword(stepAnnotation.keyword())
-                .error_message(getMessage())
-                .status(getStatus())
-                .build();
-        LayoutInitiator.getInstance().addStep(step);
-        Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
-        recordAllureStep(stepAnnotation.keyword(),stepAnnotation.persona(), stepAnnotation.description(), screenshot);
+  private void addStep(MethodInvocation invocation) throws Throwable {
+    Step stepAnnotation = invocation.getMethod().getAnnotation(Step.class);
+    com.testvagrant.optimus.dashboard.models.Step step =
+        com.testvagrant.optimus.dashboard.models.Step.builder()
+            .name(stepAnnotation.description())
+            .keyword(stepAnnotation.keyword())
+            .error_message(getMessage())
+            .status(getStatus())
+            .build();
+    LayoutInitiator.getInstance().addStep(step);
+    Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
+    recordAllureStep(
+        stepAnnotation.keyword(),
+        stepAnnotation.persona(),
+        stepAnnotation.description(),
+        screenshot);
+  }
+
+  private String getMessage() {
+    if (Objects.isNull(throwable)) {
+      return "";
     }
+    return ExceptionUtils.getStackTrace(throwable);
+  }
 
-    private String getMessage() {
-        if(Objects.isNull(throwable)) {
-            return "";
-        }
-        return ExceptionUtils.getStackTrace(throwable);
+  private String getStatus() {
+    if (Objects.isNull(throwable)) {
+      return "passed";
     }
+    return "failed";
+  }
 
-    private String getStatus() {
-        if(Objects.isNull(throwable)) {
-            return "passed";
-        }
-        return "failed";
+  @io.qameta.allure.Step("{keyword} {persona} {description}")
+  public void recordAllureStep(
+      String keyword, String persona, String description, Screenshot screenshot) throws Throwable {
+    if (Toggles.TIMELINE.isOn() || Objects.nonNull(throwable)) {
+      Path path = LayoutInitiator.getInstance().captureScreenshot();
+      String screenShotName =
+          Objects.isNull(screenshot) ? LocalDateTime.now().toString() : screenshot.name();
+      new AllureAttachment().attachScreenshot(screenShotName, path);
     }
-
-
-    @io.qameta.allure.Step("{keyword} {persona} {description}")
-    public void recordAllureStep(String keyword, String persona, String description, Screenshot screenshot) throws Throwable {
-        if(Toggles.TIMELINE.isOn() || Objects.nonNull(throwable)) {
-            Path path = LayoutInitiator.getInstance().captureScreenshot();
-            String screenShotName = Objects.isNull(screenshot)? LocalDateTime.now().toString() : screenshot.name();
-            new AllureAttachment().attachScreenshot(screenShotName, path);
-        }
-        if(Objects.nonNull(throwable)) {
-            throw throwable;
-        }
-
+    if (Objects.nonNull(throwable)) {
+      throw throwable;
     }
+  }
 }

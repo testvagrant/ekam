@@ -1,12 +1,9 @@
 package com.testvagrant.ekam.commons;
 
-import com.google.gson.reflect.TypeToken;
 import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
 import com.testvagrant.ekam.atoms.mobile.MobileScreen;
 import com.testvagrant.ekam.atoms.web.WebPage;
 import com.testvagrant.optimus.core.screenshots.OptimusRunTarget;
-import com.testvagrant.optimus.dashboard.App;
 import com.testvagrant.optimus.dashboard.StepRecorder;
 import com.testvagrant.optimus.dashboard.models.Step;
 import io.appium.java_client.AppiumDriver;
@@ -63,15 +60,17 @@ public class LayoutInitiator {
   }
 
   private Injector getInjector() {
-    Injector webInjector = (Injector)
+    Injector webInjector =
+        (Injector)
             Reporter.getCurrentTestResult().getAttribute(Injectors.WEB_PAGE_INJECTOR.getInjector());
-    Injector mobileInjector = (Injector)
-            Reporter.getCurrentTestResult().getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
-    return Objects.isNull(webInjector)? mobileInjector: webInjector;
+    Injector mobileInjector =
+        (Injector)
+            Reporter.getCurrentTestResult()
+                .getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
+    return Objects.isNull(webInjector) ? mobileInjector : webInjector;
   }
 
   private Injector getInjector(Injectors injector) {
-    return (Injector)
-            Reporter.getCurrentTestResult().getAttribute(injector.getInjector());
+    return (Injector) Reporter.getCurrentTestResult().getAttribute(injector.getInjector());
   }
 }

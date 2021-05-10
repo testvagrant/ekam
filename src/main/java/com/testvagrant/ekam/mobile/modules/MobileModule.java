@@ -2,18 +2,11 @@ package com.testvagrant.ekam.mobile.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.testvagrant.ekam.commons.annotations.Screenshot;
-import com.testvagrant.ekam.commons.annotations.Step;
-import com.testvagrant.ekam.commons.interceptors.ScreenshotInterceptor;
-import com.testvagrant.ekam.commons.interceptors.StepInterceptor;
 import com.testvagrant.ekam.mobile.driver.AppiumDriverProvider;
 import com.testvagrant.ekam.mobile.driver.MobileDriverDetailsProvider;
 import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-
-import static com.google.inject.matcher.Matchers.annotatedWith;
-import static com.google.inject.matcher.Matchers.any;
 
 public class MobileModule extends AbstractModule {
 

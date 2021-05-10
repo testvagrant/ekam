@@ -4,7 +4,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class SiteInterceptor {
+public abstract class InvocationInterceptor {
 
   protected Throwable throwable;
 

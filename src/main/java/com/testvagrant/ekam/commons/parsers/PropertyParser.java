@@ -1,13 +1,11 @@
 package com.testvagrant.ekam.commons.parsers;
 
-import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.exceptions.InvalidPropertyFileException;
 import com.testvagrant.optimus.commons.filehandlers.FileFinder;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -40,5 +38,5 @@ public class PropertyParser {
     }
   }
 
-  private static final String[] validPaths = new String[] {TEST_RESOURCES,  MAIN_RESOURCES};
+  private static final String[] validPaths = new String[] {TEST_RESOURCES, MAIN_RESOURCES};
 }

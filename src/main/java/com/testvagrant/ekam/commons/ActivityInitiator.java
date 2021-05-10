@@ -29,16 +29,18 @@ public class ActivityInitiator {
 
   public Path captureScreenshot() {
     Injector pageInjector =
-            (Injector)
-                    Reporter.getCurrentTestResult().getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
+        (Injector)
+            Reporter.getCurrentTestResult()
+                .getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
     OptimusRunTarget optimusRunTarget = pageInjector.getInstance(OptimusRunTarget.class);
     return optimusRunTarget.captureScreenshot();
   }
 
   public void addStep(Step step) {
     Injector pageInjector =
-            (Injector)
-                    Reporter.getCurrentTestResult().getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
+        (Injector)
+            Reporter.getCurrentTestResult()
+                .getAttribute(Injectors.MOBILE_PAGE_INJECTOR.getInjector());
     StepRecorder stepRecorder = pageInjector.getInstance(StepRecorder.class);
     stepRecorder.addStep(step);
   }
