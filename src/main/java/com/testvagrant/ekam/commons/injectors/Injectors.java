@@ -1,11 +1,9 @@
-package com.testvagrant.ekam.commons;
+package com.testvagrant.ekam.commons.injectors;
 
 public enum Injectors {
-  MOBILE_DRIVER("optimusCloudMobileDriver"),
-  DRIVER_INJECTOR("driver_injector"),
   WEB_PAGE_INJECTOR("web_page_injector"),
   MOBILE_PAGE_INJECTOR("mobile_page_injector"),
-  DRIVER("driver"),
+  API_INJECTOR("api_injector"),
   LOG_FOLDER("logFolder");
 
   private final String injector;
@@ -16,5 +14,13 @@ public enum Injectors {
 
   public String getInjector() {
     return injector;
+  }
+
+  public String getInjector(String uniqueRef) {
+    return injector + "_" + uniqueRef;
+  }
+
+  public String getInjector(int uniqueRef) {
+    return getInjector(String.valueOf(uniqueRef));
   }
 }

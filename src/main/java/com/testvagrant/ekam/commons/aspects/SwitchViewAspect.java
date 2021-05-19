@@ -7,7 +7,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.Method;
 
-import static com.testvagrant.ekam.commons.ActivityInitiator.Screen;
+import static com.testvagrant.ekam.commons.LayoutInitiator.Screen;
 
 public class SwitchViewAspect implements MethodInterceptor {
 
