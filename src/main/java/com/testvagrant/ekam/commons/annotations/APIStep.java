@@ -7,6 +7,12 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Screenshot {
-  String name() default "screenshot";
+public @interface APIStep {
+    String keyword() default "Given";
+
+    String persona() default "User";
+
+    String platform() default "Api";
+
+    String description();
 }

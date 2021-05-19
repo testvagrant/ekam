@@ -1,6 +1,6 @@
 package com.testvagrant.ekam.commons.annotations;
 
-import com.testvagrant.ekam.commons.Injectors;
+import com.testvagrant.ekam.commons.injectors.Injectors;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
