@@ -39,8 +39,9 @@ public class StepInterceptor extends InvocationInterceptor implements MethodInte
             .status(getStatus())
             .build();
     LayoutInitiator.getInstance().addStep(step);
-    Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
-    recordAllureStep(screenshot);
+    recordAllureStep(stepAnnotation.keyword(),
+            stepAnnotation.persona(),
+            stepAnnotation.description());
   }
 
   protected String getMessage() {
@@ -57,17 +58,24 @@ public class StepInterceptor extends InvocationInterceptor implements MethodInte
     return "failed";
   }
 
-  @io.qameta.allure.Step("{keyword} {persona} {description}")
-  protected void recordAllureStep(Screenshot screenshot) throws Throwable {
-    recordAllureStep(screenshot, Injectors.WEB_PAGE_INJECTOR);
+
+  protected void recordAllureStep(String keyword,
+                                  String persona,
+                                  String description) throws Throwable {
+    recordAllureStep(keyword,
+            persona,
+            description,
+            Injectors.WEB_PAGE_INJECTOR);
   }
 
   @io.qameta.allure.Step("{keyword} {persona} {description}")
-  protected void recordAllureStep(Screenshot screenshot, Injectors injectors) throws Throwable {
+  protected void recordAllureStep(String keyword,
+                                  String persona,
+                                  String description,
+                                  Injectors injectors) throws Throwable {
     if (Toggles.TIMELINE.isOn() || Objects.nonNull(throwable)) {
       Path path = getScreenshotPath(injectors);
-      String screenShotName =
-          Objects.isNull(screenshot) ? LocalDateTime.now().toString() : screenshot.name();
+      String screenShotName = LocalDateTime.now().toString();
       new AllureAttachment().attachScreenshot(screenShotName, path);
     }
     if (Objects.nonNull(throwable)) {
@@ -75,12 +83,6 @@ public class StepInterceptor extends InvocationInterceptor implements MethodInte
     }
   }
 
-  @io.qameta.allure.Step("{keyword} {persona} {description}")
-  protected void recordAllureStep(String keyword, String persona, String description) throws Throwable {
-    if (Objects.nonNull(throwable)) {
-      throw throwable;
-    }
-  }
 
   private Path getScreenshotPath(Injectors injectors) {
     switch (injectors) {

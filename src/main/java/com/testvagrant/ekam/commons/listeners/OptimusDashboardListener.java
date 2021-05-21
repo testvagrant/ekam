@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.commons.listeners;
 
 import com.testvagrant.ekam.commons.SystemProperties;
+import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.cache.TestContextCacheProvider;
 import com.testvagrant.ekam.commons.exceptions.NoSuchKeyException;
 import com.testvagrant.optimus.dashboard.models.dashboard.BuildOptions;
@@ -17,9 +18,10 @@ public class OptimusDashboardListener implements IReporter {
   @Override
   public void generateReport(
       List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+    if(Toggles.PUBLISH_TO_DASHBOARD.isOff()) return;
     getBuildOptions();
     OptimusReportPublisher optimusReportPublisher =
-        new OptimusReportPublisher(SystemProperties.OPTIMUS_SERVER_URL, getBuildOptions());
+        new OptimusReportPublisher(SystemProperties.EKAM_SERVER_URL, getBuildOptions());
     optimusReportPublisher.publish();
   }
 

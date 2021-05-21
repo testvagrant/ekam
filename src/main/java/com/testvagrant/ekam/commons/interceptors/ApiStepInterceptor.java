@@ -27,7 +27,9 @@ public class ApiStepInterceptor extends StepInterceptor implements MethodInterce
     APIStep stepAnnotation = invocation.getMethod().getAnnotation(APIStep.class);
     com.testvagrant.optimus.dashboard.models.Step step = buildStep(stepAnnotation);
     LayoutInitiator.getInstance().addStep(step, Injectors.API_INJECTOR);
-    recordAllureStep(stepAnnotation.keyword(), stepAnnotation.persona(), stepAnnotation.description());
+    recordAllureStep(stepAnnotation.keyword(),
+            stepAnnotation.persona(),
+            stepAnnotation.description());
   }
 
   private com.testvagrant.optimus.dashboard.models.Step buildStep(APIStep stepAnnotation) {

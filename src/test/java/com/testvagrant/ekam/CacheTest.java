@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 
+@SuppressWarnings("unchecked")
 public class CacheTest {
 
     @Test

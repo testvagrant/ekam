@@ -14,7 +14,6 @@ public abstract class InvocationInterceptor {
       proceed.set(invocation.proceed());
     } catch (Throwable throwable) {
       this.throwable = throwable;
-      throwable.printStackTrace();
       throw throwable;
     }
     return proceed;

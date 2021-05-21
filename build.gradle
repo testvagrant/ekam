@@ -9,7 +9,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    mavenLocal()
+//    mavenLocal()
     jcenter()
     maven { url "http://palantir.bintray.com/releases" }
 }
@@ -110,7 +110,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.0.3-alpha'
+            version '0.0.4-alpha'
 
             from components.java
 

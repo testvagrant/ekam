@@ -26,8 +26,10 @@ public class MobileStepInterceptor extends StepInterceptor implements MethodInte
     MobileStep stepAnnotation = invocation.getMethod().getAnnotation(MobileStep.class);
     com.testvagrant.optimus.dashboard.models.Step step = buildStep(stepAnnotation);
     LayoutInitiator.getInstance().addStep(step, Injectors.MOBILE_PAGE_INJECTOR);
-    Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
-    recordAllureStep(screenshot, Injectors.MOBILE_PAGE_INJECTOR);
+    recordAllureStep(stepAnnotation.keyword(),
+            stepAnnotation.persona(),
+            stepAnnotation.description(),
+            Injectors.MOBILE_PAGE_INJECTOR);
   }
 
   private com.testvagrant.optimus.dashboard.models.Step buildStep(MobileStep stepAnnotation) {

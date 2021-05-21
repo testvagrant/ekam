@@ -1,5 +1,6 @@
 package com.testvagrant.ekam.commons.listeners;
 
+import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
 import com.testvagrant.ekam.commons.cache.TestContextCacheProvider;
 import com.testvagrant.ekam.commons.exceptions.NoSuchKeyException;
@@ -24,6 +25,7 @@ public class BuildListener implements ISuiteListener {
   @Override
   @SuppressWarnings("unchecked")
   public void onStart(ISuite suite) {
+    if(Toggles.PUBLISH_TO_DASHBOARD.isOff()) return;
     OptimusTestNGBuildGenerator testNGBuildGenerator = new OptimusTestNGBuildGenerator();
     testNGBuildGenerator.startBuild();
     TestContextCacheProvider.getInstance().put("buildGenerator", testNGBuildGenerator);
@@ -35,6 +37,7 @@ public class BuildListener implements ISuiteListener {
   @Override
   @SuppressWarnings("unchecked")
   public void onFinish(ISuite suite) {
+    if(Toggles.PUBLISH_TO_DASHBOARD.isOff()) return;
     OptimusTestNGBuildGenerator testNGBuildGenerator = null;
     try {
       testNGBuildGenerator =
@@ -49,6 +52,7 @@ public class BuildListener implements ISuiteListener {
   }
 
   protected void updateBuild(ITestResult result, String status, Injectors injector) {
+    if(Toggles.PUBLISH_TO_DASHBOARD.isOff()) return;
     OptimusTestNGBuildGenerator buildGenerator = getBuildGenerator();
     buildGenerator.addTestCase(result, status);
     StepRecorder stepRecorder =

@@ -24,6 +24,8 @@ public class SystemProperties {
       Boolean.parseBoolean(System.getProperty("slackNotif", String.valueOf(false)));
   public static final boolean SLACK_NOTIFY_ME_EVERYTIME =
       Boolean.parseBoolean(System.getProperty("notifyMeEverytime", String.valueOf(false)));
-  public static final String OPTIMUS_SERVER_URL =
-      System.getProperty("optimusServerUrl", "http://localhost:8090/");
+  public static final String EKAM_SERVER_URL =
+      System.getProperty("ekamServerUrl", "http://localhost:8090/");
+  public static final boolean PUBLISH_TO_DASHBOARD =
+          Boolean.parseBoolean(System.getProperty("publishToDashboard", String.valueOf(false)));
 }

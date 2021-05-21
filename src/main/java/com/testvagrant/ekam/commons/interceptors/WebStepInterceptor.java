@@ -26,8 +26,10 @@ public class WebStepInterceptor extends StepInterceptor implements MethodInterce
     WebStep stepAnnotation = invocation.getMethod().getAnnotation(WebStep.class);
     com.testvagrant.optimus.dashboard.models.Step step = buildStep(stepAnnotation);
     LayoutInitiator.getInstance().addStep(step, Injectors.WEB_PAGE_INJECTOR);
-    Screenshot screenshot = invocation.getMethod().getAnnotation(Screenshot.class);
-    recordAllureStep(screenshot, Injectors.WEB_PAGE_INJECTOR);
+    recordAllureStep(stepAnnotation.keyword(),
+            stepAnnotation.persona(),
+            stepAnnotation.description(),
+            Injectors.WEB_PAGE_INJECTOR);
   }
 
   private com.testvagrant.optimus.dashboard.models.Step buildStep(WebStep stepAnnotation) {
