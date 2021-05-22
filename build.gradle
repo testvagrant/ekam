@@ -70,7 +70,7 @@ dependencies {
     implementation('io.appium:java-client:7.5.1')
 
     //testvagrant
-    implementation('com.testvagrant.optimus:optimus-lite:0.1.3-beta')
+    implementation('com.testvagrant.optimus:optimus-lite:0.1.4-beta')
     implementation('com.testvagrant.optimus:optimus-dashboard-lite:0.0.3-alpha')
     implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
 
