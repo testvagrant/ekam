@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -26,15 +27,14 @@ public class DataSetsClient {
         this.dataSetsCache = dataSetsCache;
     }
 
-    public <T> List<T> getValue(String key, Class<T> tClass) throws NoSuchKeyException {
-        if(key.contains(".json")) {
-            String value = getJsonString(key);
-            T unboxedValue = deserialize(value, tClass);
-            return Collections.singletonList(unboxedValue);
-        }
-        String value = getJsonString(key);
-        Type type = TypeToken.getParameterized(List.class, tClass).getType();
-        return (List<T>) deserialize(value, type);
+    public <T> T getValue(String key, Class<T> tClass) throws NoSuchKeyException {
+        return getValue(key, tClass, false);
+    }
+
+    public <T> T getValue(String key, Class<T> tClass, boolean lock) throws NoSuchKeyException {
+        String value = getJsonString(key, lock);
+        T unboxedValue = deserialize(value, tClass);
+        return unboxedValue;
     }
 
     public <T> T findFirst(List<T> dataList) {
@@ -56,15 +56,26 @@ public class DataSetsClient {
         return key.contains(".json");
     }
 
+    public void release(String key, Predicate<Map.Entry<String, LinkedTreeMap>> entryPredicate) {
+        dataSetsCache.release(key, entryPredicate);
+    }
+
+    public void release(Predicate<Map.Entry<String, LinkedTreeMap>> entryPredicate) {
+        dataSetsCache.release(entryPredicate);
+    }
+
     private <T> String getJsonString(T type) {
         return GsonParser.toInstance().serialize(type);
     }
 
     private <T> String getJsonString(String key) throws NoSuchKeyException {
-        T type = (T) dataSetsCache.get(key);
-        return GsonParser.toInstance().serialize(type);
+        return getJsonString(key, false);
     }
 
+    private <T> String getJsonString(String key, boolean lock) throws NoSuchKeyException {
+        T type = (T) dataSetsCache.get(key, lock);
+        return GsonParser.toInstance().serialize(type);
+    }
 
     private <T> T deserialize(String value, Class<T> tClass) {
         return GsonParser.toInstance().deserialize(value, tClass);

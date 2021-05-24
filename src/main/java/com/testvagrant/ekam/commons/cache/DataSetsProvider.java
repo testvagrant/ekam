@@ -14,9 +14,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 public class DataSetsProvider implements Provider<DataSetsCache> {
 
@@ -35,18 +37,25 @@ public class DataSetsProvider implements Provider<DataSetsCache> {
         return dataSetsCache;
     }
 
-    private void transformAsMap(DataSetsCache dataSetsCache, File file) throws FileNotFoundException {
-        Map<String, LinkedTreeMap> dataSetMap = GsonParser.toInstance().deserialize(new FileReader(file), Map.class);
-        dataSetMap.entrySet().parallelStream().forEach((entry) -> {
-            dataSetsCache.put(entry.getKey(), entry.getValue());
+    private <T> void transformAsMap(DataSetsCache dataSetsCache, File file) throws FileNotFoundException {
+        Map<String, T> dataSetMap = GsonParser.toInstance().deserialize(new FileReader(file), Map.class);
+        dataSetMap.forEach((key, value) -> {
+            if (value instanceof ArrayList) {
+                List a = (List) value;
+                IntStream.range(0, a.size()).forEach(range -> {
+                    dataSetsCache.put(key + "_" + range, (LinkedTreeMap) a.get(range));
+                });
+            } else {
+                dataSetsCache.put(key, (LinkedTreeMap) value);
+            }
         });
     }
 
     private void transformAsList(DataSetsCache dataSetsCache, File file) {
         try {
            List<LinkedTreeMap> dataListMap = GsonParser.toInstance().deserialize(new FileReader(file), List.class);
-            dataListMap.parallelStream().forEach((entry) -> {
-                dataSetsCache.put(file.getName(), entry);
+            IntStream.range(0, dataListMap.size()).forEach(range -> {
+                dataSetsCache.put(file.getName()+"_"+range, dataListMap.get(range));
             });
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();

@@ -18,7 +18,7 @@ public class DataSetsTest {
     @Test
     public void loadDataFromDataSets() {
         Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
-        Assert.assertEquals(kycVerifiedUser.getEmail(), "qa6testt@gmail.com");
+        Assert.assertEquals(kycVerifiedUser.getEmail(), "qa7testt@gmail.com");
         Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
     }
 
