@@ -1,7 +1,9 @@
 package com.testvagrant.ekam.commons.cache;
 
+import javax.inject.Provider;
+
 @SuppressWarnings("rawtypes")
-public class TestContextCacheProvider {
+public class TestContextCacheProvider implements Provider<TestContextCache> {
   private static TestContextCache testContextCacheProvider;
 
   private TestContextCacheProvider() {}

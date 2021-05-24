@@ -1,0 +1,27 @@
+{
+  "debitCards": [
+    {
+      "cardNumber": "",
+      "expiry": {
+      },
+      "nameOnCard": "",
+      "cvv": ""
+    },
+    {
+      "cardNumber": "",
+      "expiry": {
+      },
+      "nameOnCard": "",
+      "cvv": ""
+    }
+  ],
+  "creditCards": [
+    {
+      "cardNumber": "",
+      "expiry": {
+      },
+      "nameOnCard": "",
+      "cvv": ""
+    }
+  ]
+}

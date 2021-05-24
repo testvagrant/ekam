@@ -14,6 +14,7 @@ public class SystemProperties {
       Boolean.valueOf(System.getProperty("switchView", "false"));
 
   // others
+  public static final String ENV = System.getProperty("env", "qa");
   public static final String TAGS = System.getProperty("tags", "smoke");
   public static final String LOCALE = System.getProperty("locale", "en");
   public static final String CLIENT = System.getProperty("client", "retrofit").toUpperCase();
