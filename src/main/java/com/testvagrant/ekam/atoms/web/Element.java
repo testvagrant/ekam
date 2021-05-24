@@ -50,6 +50,14 @@ public class Element {
     return value != null;
   }
 
+  public void setText(CharSequence value) {
+    getElement().sendKeys(value);
+  }
+
+  public void clear() {
+    getElement().clear();
+  }
+
   public boolean isEnabled() {
     return getElement().isEnabled();
   }

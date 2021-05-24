@@ -64,6 +64,19 @@ public class EkamMobileElement {
     return getElement().isEnabled();
   }
 
+  public void setText(CharSequence value) {
+    setText(value, false);
+  }
+
+  public void setText(CharSequence value, boolean clear) {
+    if (clear) clear();
+    getElement().sendKeys(value.toString());
+  }
+
+  public void clear() {
+    getElement().clear();
+  }
+
   public boolean isPresent(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator), duration);

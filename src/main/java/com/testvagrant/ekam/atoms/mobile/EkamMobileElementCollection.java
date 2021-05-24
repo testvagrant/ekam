@@ -1,31 +1,31 @@
-package com.testvagrant.ekam.atoms.web;
+package com.testvagrant.ekam.atoms.mobile;
 
 import com.google.inject.Inject;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import org.awaitility.Awaitility;
 import org.awaitility.core.ConditionFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ElementCollection {
-
-  private final WebDriver driver;
+public class EkamMobileElementCollection {
+  private final AppiumDriver<MobileElement> driver;
 
   private final ConditionFactory wait;
 
   private By locator;
 
   @Inject
-  public ElementCollection(WebDriver driver) {
+  public EkamMobileElementCollection(AppiumDriver<MobileElement> driver) {
     this.driver = driver;
     this.wait = buildFluentWait(Duration.ofSeconds(10)); // Default Timeout
   }
 
-  public ElementCollection locate(By locator) {
+  public EkamMobileElementCollection locate(By locator) {
     this.locator = locator;
     return this;
   }
@@ -40,10 +40,10 @@ public class ElementCollection {
         .collect(Collectors.toList());
   }
 
-  public List<WebElement> get() {
+  public List<MobileElement> get() {
     wait.until(
         () -> {
-          List<WebElement> elements = driver.findElements(locator);
+          List<MobileElement> elements = driver.findElements(locator);
           return !elements.isEmpty();
         });
 

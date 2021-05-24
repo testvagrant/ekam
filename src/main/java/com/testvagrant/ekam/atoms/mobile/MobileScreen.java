@@ -12,7 +12,6 @@ import org.openqa.selenium.By;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.Screen;
 
-
 public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFunctions {
 
   @Inject protected AppiumDriver<MobileElement> driver;
@@ -25,8 +24,8 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
     return new EkamMobileElement(driver).locate(locator);
   }
 
-  protected Textbox textbox(By locator) {
-    return (Textbox) new Textbox(driver).locate(locator);
+  protected EkamMobileElementCollection elementCollection(By locator) {
+    return new EkamMobileElementCollection(driver).locate(locator);
   }
 
   public void log(String message) {
