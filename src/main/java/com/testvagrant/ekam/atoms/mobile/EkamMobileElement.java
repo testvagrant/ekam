@@ -46,13 +46,14 @@ public class EkamMobileElement {
     return getElement().getAttribute(attribute);
   }
 
-  public void click() {
+  public EkamMobileElement click() {
     waitUntilPresent();
     wait.until(
         () -> {
           getElement().click();
           return true;
         });
+    return this;
   }
 
   public boolean hasAttribute(String attribute) {
@@ -62,19 +63,6 @@ public class EkamMobileElement {
 
   public boolean isEnabled() {
     return getElement().isEnabled();
-  }
-
-  public void setText(CharSequence value) {
-    setText(value, false);
-  }
-
-  public void setText(CharSequence value, boolean clear) {
-    if (clear) clear();
-    getElement().sendKeys(value.toString());
-  }
-
-  public void clear() {
-    getElement().clear();
   }
 
   public boolean isPresent(Duration duration) {
@@ -94,63 +82,70 @@ public class EkamMobileElement {
     }
   }
 
-  public void waitUntilDisplayed() {
+  public EkamMobileElement waitUntilDisplayed() {
     try {
       waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be displayed.", locator));
     }
   }
 
-  public void waitUntilDisplayed(Duration duration) {
+  public EkamMobileElement waitUntilDisplayed(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be displayed.", locator));
     }
   }
 
-  public void waitUntilInvisible() {
+  public EkamMobileElement waitUntilInvisible() {
     try {
       waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be invisible.", locator));
     }
   }
 
-  public void waitUntilInvisible(Duration duration) {
+  public EkamMobileElement waitUntilInvisible(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be invisible.", locator));
     }
   }
 
-  public void waitUntilPresent() {
+  public EkamMobileElement waitUntilPresent() {
     try {
       waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element presence with selector: %s.", locator));
     }
   }
 
-  public void waitUntilPresent(Duration duration) {
+  public EkamMobileElement waitUntilPresent(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element presence with selector: %s.", locator));
     }
   }
 
-  public void waitUntilTextToBePresent(String text) {
+  public EkamMobileElement waitUntilTextToBePresent(String text) {
     try {
       waitUntilCondition(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -159,10 +154,11 @@ public class EkamMobileElement {
     }
   }
 
-  public void waitUntilTextToBePresent(String text, Duration duration) {
+  public EkamMobileElement waitUntilTextToBePresent(String text, Duration duration) {
     try {
       waitUntilCondition(
           ExpectedConditions.textToBePresentInElementLocated(locator, text), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -171,9 +167,10 @@ public class EkamMobileElement {
     }
   }
 
-  public void waitUntilTextToBePresent() {
+  public EkamMobileElement waitUntilTextToBePresent() {
     try {
       wait.until(() -> !getTextValue().trim().isEmpty());
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -181,9 +178,10 @@ public class EkamMobileElement {
     }
   }
 
-  public void waitUntilTextToBePresent(Duration duration) {
+  public EkamMobileElement waitUntilTextToBePresent(Duration duration) {
     try {
       wait.atMost(duration).until(() -> !getTextValue().trim().isEmpty());
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -191,13 +189,14 @@ public class EkamMobileElement {
     }
   }
 
-  public void waitUntilTextNotToBe(String text, boolean partial) {
+  public EkamMobileElement waitUntilTextNotToBe(String text, boolean partial) {
     try {
       wait.until(
           () ->
               partial
                   ? !getTextValue().toLowerCase().contains(text.toLowerCase())
                   : !getTextValue().toLowerCase().contentEquals(text.toLowerCase()));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -206,15 +205,18 @@ public class EkamMobileElement {
     }
   }
 
-  public void tap() {
+  public EkamMobileElement tap() {
     touchAction.tap(ElementOption.element(getElement())).perform();
+    return this;
   }
 
-  public void longPress() {
+  public EkamMobileElement longPress() {
     touchAction
         .longPress(ElementOption.element(getElement()))
         .waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
         .perform();
+
+    return this;
   }
 
   protected MobileElement getElement() {

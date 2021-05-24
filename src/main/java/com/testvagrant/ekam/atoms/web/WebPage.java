@@ -17,6 +17,10 @@ public class WebPage implements QueryFunctions {
     return new Element(driver).locate(locator);
   }
 
+  protected Textbox textbox(By locator) {
+    return (Textbox) new Textbox(driver).locate(locator);
+  }
+
   protected ElementCollection elementCollection(By locator) {
     return new ElementCollection(driver).locate(locator);
   }

@@ -22,7 +22,7 @@ public class EkamMobileElementCollection {
   @Inject
   public EkamMobileElementCollection(AppiumDriver<MobileElement> driver) {
     this.driver = driver;
-    this.wait = buildFluentWait(Duration.ofSeconds(10)); // Default Timeout
+    this.wait = buildFluentWait(Duration.ofSeconds(30)); // Default Timeout
   }
 
   public EkamMobileElementCollection locate(By locator) {
@@ -41,11 +41,12 @@ public class EkamMobileElementCollection {
   }
 
   public List<MobileElement> get() {
-    wait.until(
-        () -> {
-          List<MobileElement> elements = driver.findElements(locator);
-          return !elements.isEmpty();
-        });
+    wait.atMost(Duration.ofSeconds(10))
+        .until(
+            () -> {
+              List<MobileElement> elements = driver.findElements(locator);
+              return !elements.isEmpty();
+            });
 
     return driver.findElements(locator);
   }

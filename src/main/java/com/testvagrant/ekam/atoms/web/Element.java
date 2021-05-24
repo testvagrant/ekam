@@ -36,26 +36,20 @@ public class Element {
     return getElement().getAttribute(attribute);
   }
 
-  public void click() {
+  public Element click() {
     waitUntilPresent();
     wait.until(
         () -> {
           getElement().click();
           return true;
         });
+
+    return this;
   }
 
   public boolean hasAttribute(String attribute) {
     String value = getElement().getAttribute(attribute);
     return value != null;
-  }
-
-  public void setText(CharSequence value) {
-    getElement().sendKeys(value);
-  }
-
-  public void clear() {
-    getElement().clear();
   }
 
   public boolean isEnabled() {
@@ -79,63 +73,70 @@ public class Element {
     }
   }
 
-  public void waitUntilDisplayed() {
+  public Element waitUntilDisplayed() {
     try {
       waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be displayed.", locator));
     }
   }
 
-  public void waitUntilDisplayed(Duration duration) {
+  public Element waitUntilDisplayed(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.visibilityOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be displayed.", locator));
     }
   }
 
-  public void waitUntilInvisible() {
+  public Element waitUntilInvisible() {
     try {
       waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be invisible.", locator));
     }
   }
 
-  public void waitUntilInvisible(Duration duration) {
+  public Element waitUntilInvisible(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.invisibilityOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element with selector: %s to be invisible.", locator));
     }
   }
 
-  public void waitUntilPresent() {
+  public Element waitUntilPresent() {
     try {
       waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element presence with selector: %s.", locator));
     }
   }
 
-  public void waitUntilPresent(Duration duration) {
+  public Element waitUntilPresent(Duration duration) {
     try {
       waitUntilCondition(ExpectedConditions.presenceOfElementLocated(locator), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format("Error waiting for element presence with selector: %s.", locator));
     }
   }
 
-  public void waitUntilTextToBePresent(String text) {
+  public Element waitUntilTextToBePresent(String text) {
     try {
       waitUntilCondition(ExpectedConditions.textToBePresentInElementLocated(locator, text));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -144,10 +145,11 @@ public class Element {
     }
   }
 
-  public void waitUntilTextToBePresent(String text, Duration duration) {
+  public Element waitUntilTextToBePresent(String text, Duration duration) {
     try {
       waitUntilCondition(
           ExpectedConditions.textToBePresentInElementLocated(locator, text), duration);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -156,9 +158,10 @@ public class Element {
     }
   }
 
-  public void waitUntilTextToBePresent() {
+  public Element waitUntilTextToBePresent() {
     try {
       wait.until(() -> !getTextValue().trim().isEmpty());
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -166,9 +169,10 @@ public class Element {
     }
   }
 
-  public void waitUntilTextToBePresent(Duration duration) {
+  public Element waitUntilTextToBePresent(Duration duration) {
     try {
       wait.atMost(duration).until(() -> !getTextValue().trim().isEmpty());
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -176,13 +180,14 @@ public class Element {
     }
   }
 
-  public void waitUntilTextNotToBe(String text, boolean partial) {
+  public Element waitUntilTextNotToBe(String text, boolean partial) {
     try {
       wait.until(
           () ->
               partial
                   ? !getTextValue().toLowerCase().contains(text.toLowerCase())
                   : !getTextValue().toLowerCase().contentEquals(text.toLowerCase()));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -191,13 +196,14 @@ public class Element {
     }
   }
 
-  public void waitUntilAttributeNotToBe(String attribute, String text, boolean partial) {
+  public Element waitUntilAttributeNotToBe(String attribute, String text, boolean partial) {
     try {
       wait.until(
           () ->
               partial
                   ? !getAttributeValue(attribute).toLowerCase().contains(text.toLowerCase())
                   : !getAttributeValue(attribute).toLowerCase().contentEquals(text.toLowerCase()));
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(
@@ -206,9 +212,10 @@ public class Element {
     }
   }
 
-  public void waitUntilAttributeNotToBe(String attribute, String value) {
+  public Element waitUntilAttributeNotToBe(String attribute, String value) {
     try {
       waitUntilAttributeNotToBe(attribute, value, false);
+      return this;
     } catch (Exception ex) {
       throw new RuntimeException(
           String.format(

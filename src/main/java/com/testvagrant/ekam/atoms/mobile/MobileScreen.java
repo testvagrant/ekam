@@ -24,6 +24,10 @@ public abstract class MobileScreen implements AndroidQueryFunctions, IOSQueryFun
     return new EkamMobileElement(driver).locate(locator);
   }
 
+  protected Textbox textbox(By locator) {
+    return (Textbox) new Textbox(driver).locate(locator);
+  }
+
   protected EkamMobileElementCollection elementCollection(By locator) {
     return new EkamMobileElementCollection(driver).locate(locator);
   }
