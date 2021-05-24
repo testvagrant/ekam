@@ -27,15 +27,30 @@ public class DataSetsProvider implements Provider<DataSetsCache> {
         DataSetsCache dataSetsCache = new DataSetsCache();
         files.forEach(file -> {
             try {
-                Map<String, LinkedTreeMap> dataSetMap = GsonParser.toInstance().deserialize(new FileReader(file), Map.class);
-                dataSetMap.entrySet().parallelStream().forEach((entry) -> {
-                    dataSetsCache.put(entry.getKey(), entry.getValue());
-                });
+                transformAsMap(dataSetsCache, file);
             } catch (Exception e) {
-                e.printStackTrace();
+                transformAsList(dataSetsCache, file);
             }
         });
         return dataSetsCache;
+    }
+
+    private void transformAsMap(DataSetsCache dataSetsCache, File file) throws FileNotFoundException {
+        Map<String, LinkedTreeMap> dataSetMap = GsonParser.toInstance().deserialize(new FileReader(file), Map.class);
+        dataSetMap.entrySet().parallelStream().forEach((entry) -> {
+            dataSetsCache.put(entry.getKey(), entry.getValue());
+        });
+    }
+
+    private void transformAsList(DataSetsCache dataSetsCache, File file) {
+        try {
+           List<LinkedTreeMap> dataListMap = GsonParser.toInstance().deserialize(new FileReader(file), List.class);
+            dataListMap.parallelStream().forEach((entry) -> {
+                dataSetsCache.put(file.getName(), entry);
+            });
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
     }
 
     @Override

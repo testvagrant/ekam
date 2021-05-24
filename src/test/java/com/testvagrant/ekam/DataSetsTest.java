@@ -1,10 +1,8 @@
 package com.testvagrant.ekam;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.testvagrant.ekam.commons.exceptions.NoSuchKeyException;
 import com.testvagrant.ekam.commons.modules.CacheModule;
-import com.testvagrant.ekam.dataClients.LoginDataClient;
+import com.testvagrant.ekam.dataClients.LoginDataSetsClient;
 import com.testvagrant.ekam.models.customerDetails.Credentials;
 import org.testng.Assert;
 import org.testng.annotations.Guice;
@@ -15,7 +13,7 @@ import org.testng.annotations.Test;
 public class DataSetsTest {
 
     @Inject
-    LoginDataClient loginDataClient;
+    LoginDataSetsClient loginDataClient;
 
     @Test
     public void loadDataFromDataSets() {
@@ -28,6 +26,12 @@ public class DataSetsTest {
     public void loadDefaultDataWhenKeyIsNotPresent() {
         Credentials kycVerifiedUser = loginDataClient.getUser("abracadabra");
         Assert.assertEquals(kycVerifiedUser.getEmail(), "default@email.com");
+    }
+
+    @Test
+    public void loadDataWithoutKey() {
+        Credentials kycVerifiedUser = loginDataClient.getUser("login_credentials_without_key.json");
+        Assert.assertEquals(kycVerifiedUser.getEmail(), "nokeytest@gmail.com");
     }
 
 
