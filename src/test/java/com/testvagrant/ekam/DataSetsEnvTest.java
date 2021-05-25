@@ -10,14 +10,13 @@ import org.testng.annotations.Test;
 @SuppressWarnings("unchecked")
 public class DataSetsEnvTest {
 
-    @Test
-    public void loadDataByEnv() {
-        System.setProperty("env", "dev");
-        Injector cacheInjector = com.google.inject.Guice.createInjector(new CacheModule());
-        LoginDataSetsClient loginDataClient = cacheInjector.getInstance(LoginDataSetsClient.class);
-        Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
-        Assert.assertEquals(kycVerifiedUser.getEmail(), "dev6testt@gmail.com");
-        Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
-    }
-
+  @Test
+  public void loadDataByEnv() {
+    System.setProperty("env", "dev");
+    Injector cacheInjector = com.google.inject.Guice.createInjector(new CacheModule());
+    LoginDataSetsClient loginDataClient = cacheInjector.getInstance(LoginDataSetsClient.class);
+    Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "dev6testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
+  }
 }

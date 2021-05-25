@@ -7,44 +7,43 @@ import com.testvagrant.ekam.commons.cache.DataSetsCache;
 import com.testvagrant.ekam.commons.exceptions.NoSuchKeyException;
 import com.testvagrant.ekam.models.customerDetails.Credentials;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+@SuppressWarnings("rawtypes")
 public class LoginDataSetsClient extends DataSetsClient {
 
-    @Inject
-    public LoginDataSetsClient(DataSetsCache dataSetsCache) {
-        super(dataSetsCache);
-    }
+  @Inject
+  public LoginDataSetsClient(DataSetsCache dataSetsCache) {
+    super(dataSetsCache);
+  }
 
-    public Credentials getKycVerifiedUser() {
-        return getKycVerifiedUser(false);
-    }
+  public Credentials getKycVerifiedUser() {
+    return getKycVerifiedUser(false);
+  }
 
-    public Credentials getKycVerifiedUser(boolean lock) {
-        return getUser("kycVerified", lock);
-    }
+  public Credentials getKycVerifiedUser(boolean lock) {
+    return getUser("kycVerified", lock);
+  }
 
-    public Credentials getUser(String userKey) {
-        return getUser(userKey, false);
-    }
+  public Credentials getUser(String userKey) {
+    return getUser(userKey, false);
+  }
 
-    public Credentials getUser(String userKey, boolean lock) {
-        try {
-            Credentials kycVerified = getValue(userKey, Credentials.class, lock);
-            return kycVerified;
-        } catch (NoSuchKeyException e) {
-            return new Credentials();
-        }
+  public Credentials getUser(String userKey, boolean lock) {
+    try {
+        return getValue(userKey, Credentials.class, lock);
+    } catch (NoSuchKeyException e) {
+      return new Credentials();
     }
+  }
 
-    public void release(Credentials credentials) {
-        super.release(credentialsPredicate(credentials));
-    }
+  public void release(Credentials credentials) {
+    super.release(credentialsPredicate(credentials));
+  }
 
-
-    private <T> Predicate<Map.Entry<String, LinkedTreeMap>> credentialsPredicate(Credentials credentials) {
-        return entry -> entry.getValue().get("email").equals(credentials.getEmail());
-    }
+  private <T> Predicate<Map.Entry<String, LinkedTreeMap>> credentialsPredicate(
+      Credentials credentials) {
+    return entry -> entry.getValue().get("email").equals(credentials.getEmail());
+  }
 }

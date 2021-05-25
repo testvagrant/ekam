@@ -9,10 +9,9 @@ import com.testvagrant.optimus.cache.DataCache;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
+@SuppressWarnings("rawtypes")
 public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
 
   private final LoadingCache<String, LinkedTreeMap> masterTestContextCache;
@@ -68,7 +67,8 @@ public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
     return get(key, false);
   }
 
-  private LinkedTreeMap getObject(LoadingCache<String, LinkedTreeMap> testContextCache, String key) {
+  private LinkedTreeMap getObject(
+      LoadingCache<String, LinkedTreeMap> testContextCache, String key) {
     String finalKey = getFinalKey(testContextCache, key);
     return testContextCache.getIfPresent(finalKey);
   }
@@ -89,10 +89,11 @@ public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
     engagedTestContextCache.invalidate(finalKey);
   }
 
-  public synchronized void release(String key, Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
+  public synchronized void release(
+      String key, Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
     String finalKey = getFinalKey(engagedTestContextCache, key, predicate);
     LinkedTreeMap value = getObject(engagedTestContextCache, finalKey);
-    if(!finalKey.isEmpty()) {
+    if (!finalKey.isEmpty()) {
       availableTestContextCache.put(finalKey, value);
       engagedTestContextCache.invalidate(finalKey);
     }
@@ -101,7 +102,7 @@ public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
   public synchronized void release(Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
     String finalKey = getFinalKey(engagedTestContextCache, predicate);
     LinkedTreeMap value = getObject(engagedTestContextCache, finalKey);
-    if(!finalKey.isEmpty()) {
+    if (!finalKey.isEmpty()) {
       availableTestContextCache.put(finalKey, value);
       engagedTestContextCache.invalidate(finalKey);
     }
@@ -114,7 +115,7 @@ public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
 
   protected boolean anyMatch(LoadingCache<String, LinkedTreeMap> cache, String key) {
     boolean fullFledgedKey = cache.asMap().containsKey(key);
-    if(fullFledgedKey) {
+    if (fullFledgedKey) {
       return true;
     } else {
       return cache.asMap().keySet().stream().anyMatch(k -> k.startsWith(key));
@@ -123,46 +124,54 @@ public class DataSetsCache extends DataCache<String, LinkedTreeMap> {
 
   protected String getFinalKey(LoadingCache<String, LinkedTreeMap> cache, String key) {
     boolean fullFledgedKey = cache.asMap().containsKey(key);
-    if(fullFledgedKey) {
+    if (fullFledgedKey) {
       return key;
     } else {
       return cache.asMap().keySet().stream().filter(k -> k.startsWith(key)).findFirst().orElse(key);
     }
   }
 
-  protected <T> String getFinalKey(LoadingCache<String, LinkedTreeMap> cache, String key, Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
+  protected <T> String getFinalKey(
+      LoadingCache<String, LinkedTreeMap> cache,
+      String key,
+      Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
     boolean fullFledgedKey = cache.asMap().containsKey(key);
-    if(fullFledgedKey) {
+    if (fullFledgedKey) {
       return key;
     } else {
       String finalKey = key;
-      Optional<Map.Entry<String, LinkedTreeMap>> finalEntry = cache.asMap().entrySet().stream().filter(entry -> entry.getKey().startsWith(finalKey))
+      Optional<Map.Entry<String, LinkedTreeMap>> finalEntry =
+          cache.asMap().entrySet().stream()
+              .filter(entry -> entry.getKey().startsWith(finalKey))
               .filter(predicate)
               .findFirst();
-      if(finalEntry.isPresent()) {
+      if (finalEntry.isPresent()) {
         key = finalEntry.get().getKey();
       }
       return key;
     }
   }
 
-  protected <T> String getFinalKey(LoadingCache<String, LinkedTreeMap> cache, Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
+  protected <T> String getFinalKey(
+      LoadingCache<String, LinkedTreeMap> cache,
+      Predicate<Map.Entry<String, LinkedTreeMap>> predicate) {
     String finalKey = "";
-    Optional<Map.Entry<String, LinkedTreeMap>> finalEntry = cache.asMap().entrySet().stream()
-            .filter(predicate)
-            .findFirst();
-    if(finalEntry.isPresent()) {
+    Optional<Map.Entry<String, LinkedTreeMap>> finalEntry =
+        cache.asMap().entrySet().stream().filter(predicate).findFirst();
+    if (finalEntry.isPresent()) {
       finalKey = finalEntry.get().getKey();
     }
     return finalKey;
   }
 
-
-
   private class TestContextCacheLoader extends CacheLoader<String, LinkedTreeMap> {
     @Override
     public LinkedTreeMap load(String key) {
-      String finalKey = availableTestContextCache.asMap().keySet().stream().filter(k -> k.startsWith(key)).findFirst().orElse(key);
+      String finalKey =
+          availableTestContextCache.asMap().keySet().stream()
+              .filter(k -> k.startsWith(key))
+              .findFirst()
+              .orElse(key);
       return availableTestContextCache.getIfPresent(finalKey);
     }
   }

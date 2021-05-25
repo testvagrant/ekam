@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Credentials {
-  private String email ="default@email.com";
+  @Builder.Default private String email = "default@email.com";
   private String password;
 
   private String mobile;
@@ -17,10 +17,18 @@ public class Credentials {
   @Override
   public String toString() {
     return "{"
-            + "\"email\":\"" + email + "\""
-            + ", \"password\":\"" + password + "\""
-            + ", \"mobile\":\"" + mobile + "\""
-            + ", \"otp\":\"" + otp + "\""
-            + "}";
+        + "\"email\":\""
+        + email
+        + "\""
+        + ", \"password\":\""
+        + password
+        + "\""
+        + ", \"mobile\":\""
+        + mobile
+        + "\""
+        + ", \"otp\":\""
+        + otp
+        + "\""
+        + "}";
   }
 }

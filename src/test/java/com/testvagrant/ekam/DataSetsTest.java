@@ -12,27 +12,24 @@ import org.testng.annotations.Test;
 @Guice(modules = {CacheModule.class})
 public class DataSetsTest {
 
-    @Inject
-    LoginDataSetsClient loginDataClient;
+  @Inject LoginDataSetsClient loginDataClient;
 
-    @Test
-    public void loadDataFromDataSets() {
-        Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
-        Assert.assertEquals(kycVerifiedUser.getEmail(), "qa7testt@gmail.com");
-        Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
-    }
+  @Test
+  public void loadDataFromDataSets() {
+    Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "qa7testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
+  }
 
-    @Test
-    public void loadDefaultDataWhenKeyIsNotPresent() {
-        Credentials kycVerifiedUser = loginDataClient.getUser("abracadabra");
-        Assert.assertEquals(kycVerifiedUser.getEmail(), "default@email.com");
-    }
+  @Test
+  public void loadDefaultDataWhenKeyIsNotPresent() {
+    Credentials kycVerifiedUser = loginDataClient.getUser("abracadabra");
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "default@email.com");
+  }
 
-    @Test
-    public void loadDataWithoutKey() {
-        Credentials kycVerifiedUser = loginDataClient.getUser("login_credentials_without_key.json");
-        Assert.assertEquals(kycVerifiedUser.getEmail(), "nokeytest@gmail.com");
-    }
-
-
+  @Test
+  public void loadDataWithoutKey() {
+    Credentials kycVerifiedUser = loginDataClient.getUser("login_credentials_without_key.json");
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "nokeytest@gmail.com");
+  }
 }
