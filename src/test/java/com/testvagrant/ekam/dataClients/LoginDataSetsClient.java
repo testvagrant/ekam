@@ -23,7 +23,7 @@ public class LoginDataSetsClient extends DataSetsClient {
   }
 
   public Credentials getKycVerifiedUser(boolean lock) {
-    return getUser("kycVerified", lock);
+    return getUser("kycverified", lock);
   }
 
   public Credentials getUser(String userKey) {

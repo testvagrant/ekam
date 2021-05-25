@@ -17,23 +17,23 @@ public class SharedDataSetsTest {
   @Test
   public void loadDataAndLock() {
     Credentials kycVerifiedUser7 = loginDataClient.getKycVerifiedUser(true);
-    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa7testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa6testt@gmail.com");
     Assert.assertEquals(kycVerifiedUser7.getPassword(), "12345678");
     Credentials kycVerifiedUser6 = loginDataClient.getKycVerifiedUser(true);
-    Assert.assertEquals(kycVerifiedUser6.getEmail(), "qa6testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser6.getEmail(), "qa7testt@gmail.com");
     Assert.assertEquals(kycVerifiedUser6.getPassword(), "12345678");
     loginDataClient.release(kycVerifiedUser7);
     kycVerifiedUser7 = loginDataClient.getKycVerifiedUser();
-    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa7testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa6testt@gmail.com");
   }
 
   @Test
   public void getDefaultDataWhenReachedMaxUsers() {
     Credentials kycVerifiedUser7 = loginDataClient.getKycVerifiedUser(true);
-    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa7testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser7.getEmail(), "qa6testt@gmail.com");
     Assert.assertEquals(kycVerifiedUser7.getPassword(), "12345678");
     Credentials kycVerifiedUser6 = loginDataClient.getKycVerifiedUser(true);
-    Assert.assertEquals(kycVerifiedUser6.getEmail(), "qa6testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser6.getEmail(), "qa7testt@gmail.com");
     Assert.assertEquals(kycVerifiedUser6.getPassword(), "12345678");
     Credentials defaultUser = loginDataClient.getKycVerifiedUser(true);
     Assert.assertEquals(defaultUser.getEmail(), "default@email.com");
