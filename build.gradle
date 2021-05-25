@@ -110,7 +110,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.0.6-alpha'
+            version '0.0.7-alpha'
 
             from components.java
 
