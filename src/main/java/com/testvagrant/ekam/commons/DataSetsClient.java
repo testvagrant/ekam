@@ -68,7 +68,7 @@ public class DataSetsClient {
     }
 
     private <T> String getJsonString(String key, boolean lock) throws NoSuchKeyException {
-        T type = (T) dataSetsCache.get(key, lock);
+        T type = (T) dataSetsCache.get(key.toLowerCase(), lock);
         return GsonParser.toInstance().serialize(type);
     }
 

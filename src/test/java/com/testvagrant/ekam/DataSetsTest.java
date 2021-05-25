@@ -17,7 +17,7 @@ public class DataSetsTest {
   @Test
   public void loadDataFromDataSets() {
     Credentials kycVerifiedUser = loginDataClient.getKycVerifiedUser();
-    Assert.assertEquals(kycVerifiedUser.getEmail(), "qa7testt@gmail.com");
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "qa6testt@gmail.com");
     Assert.assertEquals(kycVerifiedUser.getPassword(), "12345678");
   }
 
@@ -31,5 +31,11 @@ public class DataSetsTest {
   public void loadDataWithoutKey() {
     Credentials kycVerifiedUser = loginDataClient.getUser("login_credentials_without_key.json");
     Assert.assertEquals(kycVerifiedUser.getEmail(), "nokeytest@gmail.com");
+  }
+
+  @Test
+  public void loadDataWithoutArray() {
+    Credentials kycVerifiedUser = loginDataClient.getUser("kycNotVerified");
+    Assert.assertEquals(kycVerifiedUser.getEmail(), "qaNotVerifiedtestt@gmail.com");
   }
 }

@@ -1,5 +1,6 @@
 package com.testvagrant.ekam.commons.listeners;
 
+import com.testvagrant.ekam.commons.SystemProperties;
 import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
 import com.testvagrant.ekam.commons.cache.TestContextCacheProvider;
@@ -9,10 +10,15 @@ import com.testvagrant.ekam.commons.logs.LogWriter;
 import com.testvagrant.ekam.commons.testContext.EkamTestContextConverter;
 import com.testvagrant.optimus.dashboard.OptimusTestNGBuildGenerator;
 import com.testvagrant.optimus.dashboard.StepRecorder;
+import com.testvagrant.optimus.dashboard.models.dashboard.BuildOptions;
+import com.testvagrant.optimus.dashboard.publishers.OptimusReportPublisher;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.testng.ITestResult;
 import org.testng.Reporter;
+import org.testng.xml.XmlSuite;
+
+import java.util.List;
 
 public class BuildListener implements ISuiteListener {
 
@@ -49,6 +55,7 @@ public class BuildListener implements ISuiteListener {
     }
     testNGBuildGenerator.endBuild();
     testNGBuildGenerator.generate();
+    generateReport();
   }
 
   protected void updateBuild(ITestResult result, String status, Injectors injector) {
@@ -74,5 +81,24 @@ public class BuildListener implements ISuiteListener {
     } catch (NoSuchKeyException e) {
       return new OptimusTestNGBuildGenerator();
     }
+  }
+
+  public void generateReport() {
+    if(Toggles.PUBLISH_TO_DASHBOARD.isOff()) return;
+    getBuildOptions();
+    OptimusReportPublisher optimusReportPublisher =
+            new OptimusReportPublisher(SystemProperties.EKAM_SERVER_URL, getBuildOptions());
+    optimusReportPublisher.publish();
+  }
+
+
+  private BuildOptions getBuildOptions() {
+    String target = "";
+    try {
+      target = (String) TestContextCacheProvider.getInstance().get("target");
+    } catch (NoSuchKeyException e) {
+      target = "mobile";
+    }
+    return new BuildOptions(target);
   }
 }
