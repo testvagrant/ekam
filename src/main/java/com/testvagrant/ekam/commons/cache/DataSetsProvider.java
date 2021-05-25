@@ -42,15 +42,16 @@ public class DataSetsProvider implements Provider<DataSetsCache> {
         GsonParser.toInstance().deserialize(new FileReader(file), Map.class);
     dataSetMap.forEach(
         (key, value) -> {
+          String cacheKey = key.toLowerCase();
           if (value instanceof ArrayList) {
             List a = (List) value;
             IntStream.range(0, a.size())
                 .forEach(
                     range -> {
-                      dataSetsCache.put(key + "_" + range, (LinkedTreeMap) a.get(range));
+                      dataSetsCache.put(cacheKey + "_" + range, (LinkedTreeMap) a.get(range));
                     });
           } else {
-            dataSetsCache.put(key, (LinkedTreeMap) value);
+            dataSetsCache.put(cacheKey, (LinkedTreeMap) value);
           }
         });
   }
@@ -62,7 +63,8 @@ public class DataSetsProvider implements Provider<DataSetsCache> {
       IntStream.range(0, dataListMap.size())
           .forEach(
               range -> {
-                dataSetsCache.put(file.getName() + "_" + range, dataListMap.get(range));
+                dataSetsCache.put(
+                    file.getName().toLowerCase() + "_" + range, dataListMap.get(range));
               });
     } catch (FileNotFoundException fileNotFoundException) {
       fileNotFoundException.printStackTrace();

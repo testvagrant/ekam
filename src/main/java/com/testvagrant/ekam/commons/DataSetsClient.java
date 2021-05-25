@@ -17,10 +17,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class DataSetsClient {
 
-    private DataSetsCache dataSetsCache;
+    private final DataSetsCache dataSetsCache;
 
     @Inject
     public DataSetsClient(DataSetsCache dataSetsCache) {
@@ -33,8 +33,7 @@ public class DataSetsClient {
 
     public <T> T getValue(String key, Class<T> tClass, boolean lock) throws NoSuchKeyException {
         String value = getJsonString(key, lock);
-        T unboxedValue = deserialize(value, tClass);
-        return unboxedValue;
+        return deserialize(value, tClass);
     }
 
     public <T> T findFirst(List<T> dataList) {
@@ -50,10 +49,6 @@ public class DataSetsClient {
     public <T> List<T> findByPredicate(List<T> dataList, Predicate predicate) {
         if(dataList.isEmpty()) return null;
         return (List<T>) dataList.stream().filter(predicate).collect(Collectors.toList());
-    }
-
-    protected boolean isAFile(String key) {
-        return key.contains(".json");
     }
 
     public void release(String key, Predicate<Map.Entry<String, LinkedTreeMap>> entryPredicate) {

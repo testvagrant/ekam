@@ -1,0 +1,11 @@
+{
+  "debitCards": [
+    {
+      "cardNumber": "",
+      "expiry": {
+      },
+      "nameOnCard": "",
+      "cvv": ""
+    }
+  ]
+}
