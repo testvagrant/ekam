@@ -21,10 +21,13 @@ public class ElementCollection {
 
   private By locator;
 
+  private final Duration timeout;
+
   @Inject
   public ElementCollection(WebDriver driver) {
     this.driver = driver;
-    this.wait = buildFluentWait(Duration.ofSeconds(30)); // Default Timeout
+    this.timeout = Duration.ofSeconds(30);
+    this.wait = buildFluentWait(timeout); // Default Timeout
   }
 
   public ElementCollection locate(By locator) {
@@ -166,11 +169,19 @@ public class ElementCollection {
   }
 
   private <T> void waitUntilCondition(ExpectedCondition<T> webElementExpectedCondition) {
-    wait.until(() -> webElementExpectedCondition.apply(driver) != null);
+    waitUntilCondition(webElementExpectedCondition, timeout);
   }
 
   private <T> void waitUntilCondition(
       ExpectedCondition<T> webElementExpectedCondition, Duration duration) {
-    wait.atMost(duration).until(() -> webElementExpectedCondition.apply(driver) != null);
+    wait.atMost(duration)
+        .until(
+            () -> {
+              Object result = webElementExpectedCondition.apply(driver);
+              return result != null
+                      && result.getClass().getTypeName().toLowerCase().contains("boolean")
+                  ? (boolean) result
+                  : result != null;
+            });
   }
 }

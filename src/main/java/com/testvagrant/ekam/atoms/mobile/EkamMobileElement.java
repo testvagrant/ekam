@@ -22,11 +22,13 @@ public class EkamMobileElement {
   private final ConditionFactory wait;
   private By locator;
   private final TouchAction<?> touchAction;
+  private final Duration timeout;
 
   @Inject
   public EkamMobileElement(AppiumDriver<MobileElement> driver) {
     this.driver = driver;
-    this.wait = buildFluentWait(Duration.ofSeconds(30)); // Default Timeout
+    this.timeout = Duration.ofSeconds(30);
+    this.wait = buildFluentWait(timeout); // Default Timeout
     this.touchAction =
         SystemProperties.TARGET.equalsIgnoreCase("ios")
             ? new IOSTouchAction(driver)
@@ -228,13 +230,20 @@ public class EkamMobileElement {
     }
   }
 
-  private <T> void waitUntilCondition(ExpectedCondition<T> webElementExpectedCondition) {
-    wait.until(() -> webElementExpectedCondition.apply(driver) != null);
+  private <T> void waitUntilCondition(ExpectedCondition<T> expectedCondition) {
+    waitUntilCondition(expectedCondition, timeout);
   }
 
-  private <T> void waitUntilCondition(
-      ExpectedCondition<T> webElementExpectedCondition, Duration duration) {
-    wait.atMost(duration).until(() -> webElementExpectedCondition.apply(driver) != null);
+  private <T> void waitUntilCondition(ExpectedCondition<T> expectedCondition, Duration duration) {
+    wait.atMost(duration)
+        .until(
+            () -> {
+              Object result = expectedCondition.apply(driver);
+              return result != null
+                      && result.getClass().getTypeName().toLowerCase().contains("boolean")
+                  ? (boolean) result
+                  : result != null;
+            });
   }
 
   private ConditionFactory buildFluentWait(Duration duration) {
