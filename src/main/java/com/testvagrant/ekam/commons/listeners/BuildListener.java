@@ -20,6 +20,7 @@ import org.testng.xml.XmlSuite;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class BuildListener implements ISuiteListener {
 
   private String target;
