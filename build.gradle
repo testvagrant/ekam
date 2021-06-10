@@ -9,7 +9,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    mavenLocal()
+//    mavenLocal()
     jcenter()
     maven { url "http://palantir.bintray.com/releases" }
 }
@@ -70,7 +70,7 @@ dependencies {
     implementation('io.appium:java-client:7.5.1')
 
     //testvagrant
-    implementation('com.testvagrant.optimus:optimus-lite:0.1.6-beta')
+    implementation('com.testvagrant.optimus:optimus-lite:0.1.7-beta')
     implementation('com.testvagrant.optimus:optimus-dashboard-lite:0.0.3-alpha')
     implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
 
@@ -110,7 +110,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.0.9-alpha'
+            version '0.1.0-alpha'
 
             from components.java
 
