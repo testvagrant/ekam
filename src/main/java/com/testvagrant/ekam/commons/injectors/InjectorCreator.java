@@ -2,23 +2,24 @@ package com.testvagrant.ekam.commons.injectors;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.testvagrant.ekam.api.modules.ApiHostsModule;
 import com.testvagrant.ekam.api.modules.GrpcModule;
-import com.testvagrant.ekam.api.modules.PropertyModule;
 import com.testvagrant.ekam.commons.ModulesLibrary;
 import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
-import com.testvagrant.ekam.commons.modules.OptimusRunTargetModule;
+import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
+import com.testvagrant.ekam.commons.modules.EkamRunTargetModule;
+import com.testvagrant.ekam.commons.runcontext.EkamRunContext;
+import com.testvagrant.ekam.commons.runcontext.EkamRunTarget;
 import com.testvagrant.ekam.commons.testContext.EkamTestContext;
+import com.testvagrant.ekam.devicemanager.models.EkamSupportedPlatforms;
+import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
 import com.testvagrant.ekam.web.modules.WebModule;
-import com.testvagrant.optimus.core.models.TargetDetails;
-import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
-import com.testvagrant.optimus.core.models.web.WebDriverDetails;
-import com.testvagrant.optimus.core.screenshots.OptimusRunContext;
-import com.testvagrant.optimus.core.screenshots.OptimusRunTarget;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class InjectorCreator {
-  private Injector mobileDriverInjector, webDriverInjector;
   private final EkamTestContext ekamTestContext;
 
   public InjectorCreator(EkamTestContext ekamTestContext) {
@@ -37,14 +38,13 @@ public class InjectorCreator {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().mobileModules());
 
     MobileDriverDetails mobileDriverDetails = baseInjector.getInstance(MobileDriverDetails.class);
-    OptimusRunContext mobileContext =
-        getOptimusRunContext(
-            mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
-    OptimusRunTarget optimusRunTarget = new OptimusRunTarget(mobileContext);
+    EkamRunContext mobileContext =
+        getEkamRunContext(mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
+    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
     baseInjector = enableWeb(enableWeb, baseInjector, optimusRunTarget);
-    mobileDriverInjector =
+    Injector mobileDriverInjector =
         baseInjector.createChildInjector(
-            new OptimusRunTargetModule(optimusRunTarget, ekamTestContext));
+            new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
     mobileDriverInjector = createApiInjector(mobileDriverInjector);
     updateInjectors(mobileDriverInjector);
     return this;
@@ -52,71 +52,44 @@ public class InjectorCreator {
 
   public InjectorCreator createWebInjector(boolean enableMobile) {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().webModules());
-    WebDriverDetails webDriverDetails = baseInjector.getInstance(WebDriverDetails.class);
-    OptimusRunContext mobileContext =
-        getOptimusRunContext(webDriverDetails.getDriver(), webDriverDetails.getTargetDetails());
-    OptimusRunTarget optimusRunTarget = new OptimusRunTarget(mobileContext);
+    WebDriver webDriver = baseInjector.getInstance(WebDriver.class);
+    EkamRunContext mobileContext = getEkamRunContext(webDriver, buildTargetDetails(webDriver));
+    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
     baseInjector = enableWeb(enableMobile, baseInjector, optimusRunTarget);
-    webDriverInjector =
+    Injector webDriverInjector =
         baseInjector.createChildInjector(
-            new OptimusRunTargetModule(optimusRunTarget, ekamTestContext));
+            new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
     webDriverInjector = createApiInjector(webDriverInjector);
     updateInjectors(webDriverInjector);
     return this;
   }
 
   private void updateInjectors(Injector baseInjector) {
-    InjectorsCacheProvider.getInstance()
-        .put(
-            Injectors.WEB_PAGE_INJECTOR.getInjector(String.valueOf(ekamTestContext.hashCode())),
-            baseInjector);
-    InjectorsCacheProvider.getInstance()
-        .put(
-            Injectors.MOBILE_PAGE_INJECTOR.getInjector(
-                String.valueOf(ekamTestContext.hashCode())),
-            baseInjector);
-    InjectorsCacheProvider.getInstance()
-            .put(
-                    Injectors.API_INJECTOR.getInjector(
-                            String.valueOf(ekamTestContext.hashCode())),
-                    baseInjector);
+    InjectorsCacheProvider.getInstance().put(baseInjector);
   }
 
   public InjectorCreator createApiInjector() {
-    OptimusRunContext mobileContext =
-            getOptimusRunContext(
-                    null, null);
-    OptimusRunTarget optimusRunTarget = new OptimusRunTarget(mobileContext);
-    Injector apiInjector = createApiInjector(Guice.createInjector(new ModulesLibrary().baseModules()));
-    apiInjector = apiInjector.createChildInjector(new OptimusRunTargetModule(optimusRunTarget, ekamTestContext));
-    InjectorsCacheProvider.getInstance()
-            .put(
-                    Injectors.API_INJECTOR.getInjector(String.valueOf(ekamTestContext.hashCode())),
-                    apiInjector);
+    EkamRunContext mobileContext = getEkamRunContext(null, null);
+    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
+    Injector apiInjector =
+        createApiInjector(Guice.createInjector(new ModulesLibrary().baseModules()));
+    apiInjector =
+        apiInjector.createChildInjector(new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
+    updateInjectors(apiInjector);
     return this;
   }
 
   public Injector createApiInjector(Injector baseInjector) {
-    Injector apiInjector = baseInjector.createChildInjector(new PropertyModule(), new GrpcModule());
+    Injector apiInjector = baseInjector.createChildInjector(new ApiHostsModule(), new GrpcModule());
     return apiInjector;
   }
 
-
-  public Injector getMobileDriverInjector() {
-    return mobileDriverInjector;
-  }
-
-  public Injector getWebDriverInjector() {
-    return webDriverInjector;
-  }
-
   private Injector enableWeb(
-      boolean enableWeb, Injector baseInjector, OptimusRunTarget optimusRunTarget) {
+      boolean enableWeb, Injector baseInjector, EkamRunTarget optimusRunTarget) {
     if (enableWeb) {
       Injector webInjector = baseInjector.createChildInjector(new WebModule());
-      WebDriverDetails webDriverDetails = webInjector.getInstance(WebDriverDetails.class);
-      OptimusRunContext webContext =
-          getOptimusRunContext(webDriverDetails.getDriver(), webDriverDetails.getTargetDetails());
+      WebDriver webDriver = webInjector.getInstance(WebDriver.class);
+      EkamRunContext webContext = getEkamRunContext(webDriver, buildTargetDetails(webDriver));
       optimusRunTarget.addWebContext(webContext);
       return webInjector;
     }
@@ -124,13 +97,13 @@ public class InjectorCreator {
   }
 
   private Injector enableMobile(
-      boolean enableMobile, Injector baseInjector, OptimusRunTarget optimusRunTarget) {
+      boolean enableMobile, Injector baseInjector, EkamRunTarget optimusRunTarget) {
     if (enableMobile) {
       Injector mobileInjector = baseInjector.createChildInjector(new MobileModule());
       MobileDriverDetails mobileDriverDetails =
           mobileInjector.getInstance(MobileDriverDetails.class);
-      OptimusRunContext mobileContext =
-          getOptimusRunContext(
+      EkamRunContext mobileContext =
+          getEkamRunContext(
               mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
       optimusRunTarget.addMobileContext(mobileContext);
       return mobileInjector;
@@ -138,11 +111,20 @@ public class InjectorCreator {
     return baseInjector;
   }
 
-  private OptimusRunContext getOptimusRunContext(WebDriver webDriver, TargetDetails targetDetails) {
-    return OptimusRunContext.builder()
+  private EkamRunContext getEkamRunContext(WebDriver webDriver, TargetDetails targetDetails) {
+    return EkamRunContext.builder()
         .webDriver(webDriver)
         .build()
         .addTarget(targetDetails)
         .testPath(ekamTestContext.getFeatureName(), ekamTestContext.getTestName());
+  }
+
+  public TargetDetails buildTargetDetails(WebDriver webDriver) {
+    Capabilities capabilities = ((RemoteWebDriver) webDriver).getCapabilities();
+    return TargetDetails.builder()
+        .name(capabilities.getBrowserName())
+        .platformVersion(capabilities.getVersion())
+        .platform(EkamSupportedPlatforms.valueOf(capabilities.getBrowserName().toUpperCase()))
+        .build();
   }
 }

@@ -11,5 +11,4 @@ public class DBConfiguration implements DBConfig {
   private String port;
   private String username;
   private String password;
-  private String database;
 }

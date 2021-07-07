@@ -8,6 +8,4 @@ public interface DBConfig {
   String getUsername();
 
   String getPassword();
-
-  String getDatabase();
 }

@@ -13,6 +13,15 @@ public class LogWriter {
 
   private static final String ROOT_FOLDER = "logs";
 
+  public static void writeLog(String logFolder, String testName, List<String> output) {
+    String logFile = String.format("%s/%s.log", logFolder, testName);
+    try {
+      FileUtils.writeLines(new File(logFile), Charset.defaultCharset().displayName(), output);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   public String createLogFolder() {
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -26,14 +35,5 @@ public class LogWriter {
       }
     }
     return folderName;
-  }
-
-  public static void writeLog(String logFolder, String testName, List<String> output) {
-    String logFile = String.format("%s/%s.log", logFolder, testName);
-    try {
-      FileUtils.writeLines(new File(logFile), Charset.defaultCharset().displayName(), output);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 }

@@ -2,8 +2,6 @@ package com.testvagrant.ekam.commons.interceptors;
 
 import com.testvagrant.ekam.commons.LayoutInitiator;
 import com.testvagrant.ekam.commons.annotations.MobileStep;
-import com.testvagrant.ekam.commons.annotations.Screenshot;
-import com.testvagrant.ekam.commons.injectors.Injectors;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -24,18 +22,19 @@ public class MobileStepInterceptor extends StepInterceptor implements MethodInte
 
   private void addStep(MethodInvocation invocation) throws Throwable {
     MobileStep stepAnnotation = invocation.getMethod().getAnnotation(MobileStep.class);
-    com.testvagrant.optimus.dashboard.models.Step step = buildStep(stepAnnotation);
-    LayoutInitiator.getInstance().addStep(step, Injectors.MOBILE_PAGE_INJECTOR);
-    recordAllureStep(stepAnnotation.keyword(),
-            stepAnnotation.persona(),
-            stepAnnotation.description(),
-            Injectors.MOBILE_PAGE_INJECTOR);
+    com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
+    LayoutInitiator.getInstance().addStep(step);
+    recordAllureStep(
+        stepAnnotation.keyword(),
+        stepAnnotation.persona(),
+        stepAnnotation.description(),
+        LayoutInitiator.getInstance().captureMobileScreenshot());
   }
 
-  private com.testvagrant.optimus.dashboard.models.Step buildStep(MobileStep stepAnnotation) {
-    return com.testvagrant.optimus.dashboard.models.Step.builder()
+  private com.testvagrant.ekam.dashboard.models.Step buildStep(MobileStep stepAnnotation) {
+    return com.testvagrant.ekam.dashboard.models.Step.builder()
         .name(stepAnnotation.description())
-        .keyword(stepAnnotation.keyword() + " on " + stepAnnotation.platform() + " ")
+        .keyword(stepAnnotation.keyword())
         .error_message(getMessage())
         .status(getStatus())
         .build();

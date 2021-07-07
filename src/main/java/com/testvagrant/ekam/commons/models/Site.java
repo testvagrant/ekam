@@ -3,7 +3,6 @@ package com.testvagrant.ekam.commons.models;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import lombok.*;
-import org.testng.Assert;
 
 import java.util.Objects;
 
@@ -13,19 +12,15 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Site implements Model<Site> {
-  private String title;
-
   @Inject
   @Named("title")
   String siteTitle;
 
+  private String title;
+
   @Override
   public Site init() {
     return this.toBuilder().title("").build();
-  }
-
-  public void assertThatSiteIsUp() {
-    Assert.assertTrue(title.startsWith(siteTitle));
   }
 
   @Override

@@ -1,7 +1,4 @@
-image: "gradle:5.1-jdk8"
-stages:
-  - build
-  - unit
-  - test
-  - allure
-  - deploy
+image: adoptopenjdk:11-jdk-hotspot
+build:
+  stage: build
+  script: ./gradlew clean build --info

@@ -3,8 +3,9 @@ package com.testvagrant.ekam.commons;
 public class SystemProperties {
   // configs
   public static final String DB_CONFIG = System.getProperty("dbConfig", "dbConfig");
-  public static final String API_CONFIG = System.getProperty("apiConfig", "apiConfig");
+  public static final String API_FEED = System.getProperty("apiFeed");
   public static final String TARGET = System.getProperty("target", "android");
+  public static final String BROWSER = System.getProperty("browser", "mobile");
 
   // Toggles
   public static final Boolean TIMELINE = Boolean.valueOf(System.getProperty("timeline", "true"));
@@ -14,7 +15,7 @@ public class SystemProperties {
       Boolean.valueOf(System.getProperty("switchView", "false"));
 
   // others
-  public static final String ENV = System.getProperty("env", "qa");
+  public static final String ENV = System.getProperty("env", "");
   public static final String TAGS = System.getProperty("tags", "smoke");
   public static final String LOCALE = System.getProperty("locale", "en");
   public static final String CLIENT = System.getProperty("client", "retrofit").toUpperCase();
@@ -28,5 +29,5 @@ public class SystemProperties {
   public static final String EKAM_SERVER_URL =
       System.getProperty("ekamServerUrl", "http://localhost:8090/");
   public static final boolean PUBLISH_TO_DASHBOARD =
-          Boolean.parseBoolean(System.getProperty("publishToDashboard", String.valueOf(false)));
+      Boolean.parseBoolean(System.getProperty("publishToDashboard", String.valueOf(false)));
 }

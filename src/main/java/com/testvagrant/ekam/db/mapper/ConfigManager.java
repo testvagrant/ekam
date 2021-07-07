@@ -1,22 +1,19 @@
 package com.testvagrant.ekam.db.mapper;
 
 import com.google.gson.Gson;
-import com.testvagrant.ekam.commons.SystemProperties;
+import com.testvagrant.ekam.commons.io.FileFinder;
+import com.testvagrant.ekam.commons.io.ResourcePaths;
+import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.db.DBConfig;
 import com.testvagrant.ekam.db.configuration.DBConfiguration;
 import com.testvagrant.ekam.db.entities.ConfigDetails;
 import com.testvagrant.ekam.db.exceptions.InvalidConnectionException;
-import com.testvagrant.optimus.commons.filehandlers.FileFinder;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static com.testvagrant.optimus.commons.filehandlers.ResourcePaths.MAIN_RESOURCES;
-import static com.testvagrant.optimus.commons.filehandlers.ResourcePaths.TEST_RESOURCES;
 
 public class ConfigManager {
 
@@ -31,28 +28,21 @@ public class ConfigManager {
   @SuppressWarnings("unchecked")
   private DBConfig getDBConfiguration(String name) {
     try {
-      AtomicReference<String> configFilePath = new AtomicReference<>("");
+      String env = System.getProperty(ConfigKeys.Env.DB_ENV, System.getProperty("env", ""));
+      String fileName = System.getProperty(ConfigKeys.DB.DRIVERS).replaceAll(".yml", "").trim();
 
-      for (String path : validPaths) {
-        File file = FileFinder.fileFinder(path).find(SystemProperties.DB_CONFIG, ".yaml");
-        if (file != null && file.exists()) {
-          configFilePath.set(file.getPath());
-          break;
-        }
+      File file = new FileFinder(ResourcePaths.TEST_RESOURCES, env).find(fileName, ".yml");
+      if (!file.exists()) {
+        return new DBConfiguration();
       }
-
-      if (configFilePath.get().isEmpty()) {
-        throw new RuntimeException("Cannot find file " + name);
-      }
-
       LinkedHashMap<String, Object> parse =
-          new Yaml().loadAs(new FileReader(new File(configFilePath.get())), LinkedHashMap.class);
+          new Yaml().loadAs(new FileReader(file), LinkedHashMap.class);
 
       Map.Entry<String, Object> stringObjectEntry =
           parse.entrySet().stream()
-              .filter(entry -> entry.getKey().toLowerCase().equals(name.toLowerCase()))
+              .filter(entry -> entry.getKey().equalsIgnoreCase(name))
               .findFirst()
-              .orElseThrow(() -> new InvalidConnectionException(SystemProperties.DB_CONFIG, name));
+              .orElseThrow(() -> new InvalidConnectionException("drivers", name));
 
       Gson gson = new Gson();
       String json = gson.toJson(stringObjectEntry.getValue());
@@ -61,6 +51,4 @@ public class ConfigManager {
       throw new RuntimeException(ex.getMessage());
     }
   }
-
-  private static final String[] validPaths = new String[] {TEST_RESOURCES, MAIN_RESOURCES};
 }
