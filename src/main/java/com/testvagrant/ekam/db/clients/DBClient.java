@@ -9,13 +9,13 @@ import org.skife.jdbi.v2.Handle;
 public abstract class DBClient {
 
   private final Handle handle;
-  protected static ConfigManager configManager = new ConfigManager();
 
-  protected DBClient(DBConfig dbConfig, DBType dbType) {
+  protected DBClient(String database, String driverKey, DBType dbType) {
+    DBConfig dbConfig = new ConfigManager().getConfiguration(driverKey);
     String url =
         String.format(
             "jdbc:%s://%s:%s/%s",
-            dbType.getDbString(), dbConfig.getHost(), dbConfig.getPort(), dbConfig.getDatabase());
+            dbType.getDbString(), dbConfig.getHost(), dbConfig.getPort(), database);
     DBI dbi = new DBI(url, dbConfig.getUsername(), dbConfig.getPassword());
     handle = dbi.open();
   }

@@ -1,0 +1,11 @@
+postgresql:
+  host: "qa"
+  port: "qa"
+  username: "qa"
+  password: "qa"
+
+ekam_pg:
+  host: "qa"
+  port: "qa"
+  username: "qa"
+  password: "qa"

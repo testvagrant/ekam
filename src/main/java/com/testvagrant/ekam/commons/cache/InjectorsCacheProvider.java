@@ -16,17 +16,6 @@ public class InjectorsCacheProvider {
     return injectorsCacheProvider;
   }
 
-  public static <T> T getInstance(String injector, Class<T> tClass) {
-    if (injectorsCacheProvider == null) {
-      synchronized (InjectorsCacheProvider.class) {
-        if (injectorsCacheProvider == null) {
-          injectorsCacheProvider = new InjectorsCacheProvider().get();
-        }
-      }
-    }
-    return injectorsCacheProvider.get(injector).getInstance(tClass);
-  }
-
   public InjectorsCache get() {
     return new InjectorsCache();
   }

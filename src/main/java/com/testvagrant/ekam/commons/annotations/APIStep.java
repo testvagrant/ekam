@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface APIStep {
-    String keyword() default "Given";
+  String keyword() default "";
 
-    String persona() default "User";
+  String persona() default "User";
 
-    String platform() default "Api";
+  String platform() default "Api";
 
-    String description();
+  String description();
 }

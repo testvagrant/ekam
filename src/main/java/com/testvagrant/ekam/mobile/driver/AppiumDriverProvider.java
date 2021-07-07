@@ -2,7 +2,7 @@ package com.testvagrant.ekam.mobile.driver;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.testvagrant.optimus.core.models.mobile.MobileDriverDetails;
+import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 

@@ -7,8 +7,8 @@ public class EkamTestContextConverter {
   // TESTNG Converter
   public static EkamTestContext convert(ITestResult testResult) {
     return EkamTestContext.builder()
-        .featureName(testResult.getTestClass().getName())
-        .testName(testResult.getName())
+        .featureName(testResult.getMethod().getTestClass().getName())
+        .testName(testResult.getMethod().getMethodName())
         .build();
   }
 }

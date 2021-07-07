@@ -1,6 +1,5 @@
 package com.testvagrant.ekam.commons.workflows;
 
-
 public abstract class WorkflowDefinition implements Workflow {
 
   protected UseCase useCase;
@@ -13,8 +12,9 @@ public abstract class WorkflowDefinition implements Workflow {
     this.useCase = useCase;
   }
 
-  protected <Current, Next> Next proceedToNext(FulfillCondition<Current> fulfillCondition, Next whereTo) {
-    if(!useCase.isACompletedState(this)) {
+  protected <Current, Next> Next proceedToNext(
+      FulfillCondition<Current> fulfillCondition, Next whereTo) {
+    if (!useCase.isACompletedState(this)) {
       fulfillCondition.apply();
       useCase.persistState(this);
     }

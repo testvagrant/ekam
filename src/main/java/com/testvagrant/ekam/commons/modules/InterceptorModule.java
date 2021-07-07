@@ -1,8 +1,14 @@
 package com.testvagrant.ekam.commons.modules;
 
 import com.google.inject.AbstractModule;
-import com.testvagrant.ekam.commons.annotations.*;
-import com.testvagrant.ekam.commons.interceptors.*;
+import com.testvagrant.ekam.commons.annotations.APIStep;
+import com.testvagrant.ekam.commons.annotations.MobileStep;
+import com.testvagrant.ekam.commons.annotations.Screenshot;
+import com.testvagrant.ekam.commons.annotations.WebStep;
+import com.testvagrant.ekam.commons.interceptors.ApiStepInterceptor;
+import com.testvagrant.ekam.commons.interceptors.MobileStepInterceptor;
+import com.testvagrant.ekam.commons.interceptors.ScreenshotInterceptor;
+import com.testvagrant.ekam.commons.interceptors.WebStepInterceptor;
 
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.any;

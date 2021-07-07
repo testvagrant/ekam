@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface MobileStep {
-  String keyword() default "Given";
+  String keyword() default "";
 
   String persona() default "User";
 

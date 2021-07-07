@@ -27,11 +27,11 @@ public class UseCase {
   }
 
   public WorkflowDefinition persistState(WorkflowDefinition currentState) {
-      this.completedStates.add(currentState.getClass());
-      return currentState;
+    this.completedStates.add(currentState.getClass());
+    return currentState;
   }
 
-  public boolean isACompletedState(WorkflowDefinition workflowDefinition){
+  public boolean isACompletedState(WorkflowDefinition workflowDefinition) {
     return completedStates.contains(workflowDefinition.getClass());
   }
 }

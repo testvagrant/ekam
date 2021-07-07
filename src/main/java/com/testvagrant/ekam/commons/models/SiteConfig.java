@@ -1,0 +1,20 @@
+package com.testvagrant.ekam.commons.models;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Builder
+public class SiteConfig {
+  @Builder.Default private String url = "";
+
+  @Builder.Default private String title = "";
+
+  @Builder.Default private int wait = 30;
+
+  public boolean isMobileWeb() {
+    return !url.isEmpty();
+  }
+}

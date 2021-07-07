@@ -1,0 +1,11 @@
+postgresql:
+  host: "staging"
+  port: "staging"
+  username: "staging"
+  password: "staging"
+
+ekam_pg:
+  host: "staging"
+  port: "staging"
+  username: "staging"
+  password: "staging"
