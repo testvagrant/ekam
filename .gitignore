@@ -16,5 +16,3 @@ allure-results/
 logs/
 *.log
 *.DS_Store
-app/
-*.apk
