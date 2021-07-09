@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.testvagrant.ekam.commons.config.CloudConfig;
 import com.testvagrant.ekam.commons.parsers.testfeed.WebConfigParser;
+import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.commons.random.FindOne;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
 import com.testvagrant.ekam.config.models.EkamConfig;
@@ -47,7 +48,9 @@ public class WebDriverProvider implements Provider<WebDriver> {
       browser = getRandomBrowser();
       ekam.getWeb().setTarget(browser.trim());
     }
-    return browser;
+    return browser.equalsIgnoreCase("responsive")
+        ? EkamSupportedPlatforms.CHROME.name().toLowerCase()
+        : browser;
   }
 
   private void launchSite(WebDriver webDriver) {

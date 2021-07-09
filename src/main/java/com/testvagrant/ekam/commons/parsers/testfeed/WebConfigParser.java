@@ -1,10 +1,10 @@
 package com.testvagrant.ekam.commons.parsers.testfeed;
 
 import com.testvagrant.ekam.commons.models.web.WebTestFeed;
+import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.config.models.WebConfig;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
@@ -22,12 +22,12 @@ public class WebConfigParser extends TestConfigParser {
 
   public DesiredCapabilities getDesiredCapabilities() {
     Map<String, Object> capabilitiesMap = webTestFeed.getDesiredCapabilities();
-    capabilitiesMap.put(CapabilityType.BROWSER_NAME, getBrowserName());
     return new DesiredCapabilities(capabilitiesMap);
   }
 
   public String getBrowserName() {
-    return webConfig.getTarget();
+    String target = webConfig.getTarget();
+    return target.equalsIgnoreCase("responsive") ? EkamSupportedPlatforms.CHROME.name() : target;
   }
 
   public List<String> getArguments() {
