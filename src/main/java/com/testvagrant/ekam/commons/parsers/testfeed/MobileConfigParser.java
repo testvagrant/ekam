@@ -12,6 +12,7 @@ import com.testvagrant.ekam.commons.random.FindOne;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.config.models.MobileConfig;
+import com.testvagrant.ekam.devicemanager.models.DeviceFilter;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
 import com.testvagrant.ekam.mobile.AppFinder;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
@@ -22,6 +23,7 @@ import org.apache.commons.exec.OS;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +105,18 @@ public class MobileConfigParser extends TestConfigParser {
     if (mobileConfig.isDeviceFiltersProvided()) {
       return new DeviceFiltersParser(mobileConfig.getDeviceFilters()).getDeviceFilters();
     }
-    return new DeviceFilters();
+
+    Map<String, Object> desiredCapabilities = getDesiredCapabilities().asMap();
+    String udid = String.valueOf(desiredCapabilities.getOrDefault(MobileCapabilityType.UDID, ""));
+    String model =
+        String.valueOf(desiredCapabilities.getOrDefault(MobileCapabilityType.DEVICE_NAME, ""));
+
+    DeviceFilter udidFilter =
+        new DeviceFilter().toBuilder().include(Collections.singletonList(udid)).build();
+
+    DeviceFilter modelFilter =
+        new DeviceFilter().toBuilder().include(Collections.singletonList(model)).build();
+    return new DeviceFilters().toBuilder().model(modelFilter).udid(udidFilter).build();
   }
 
   private AndroidOnlyCapabilities getAndroidCapabilities() {

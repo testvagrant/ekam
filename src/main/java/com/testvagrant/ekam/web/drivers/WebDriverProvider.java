@@ -36,10 +36,14 @@ public class WebDriverProvider implements Provider<WebDriver> {
 
   private WebDriver createDriver() {
     String browser = updateBrowserIfAny();
-    if (ekam.getWeb().isRemote()) {
-      return new RemoteDriverManager(getRemoteBrowserConfig(browser)).launchDriver();
-    }
-    return new LocalDriverManager(browser, getLocalBrowserConfig()).launchDriver();
+    browser =
+        browser.equalsIgnoreCase("responsive")
+            ? EkamSupportedPlatforms.CHROME.name().toLowerCase()
+            : browser;
+
+    return ekam.getWeb().isRemote()
+        ? new RemoteDriverManager(getRemoteBrowserConfig(browser)).launchDriver()
+        : new LocalDriverManager(browser, getLocalBrowserConfig()).launchDriver();
   }
 
   private String updateBrowserIfAny() {
@@ -72,6 +76,7 @@ public class WebDriverProvider implements Provider<WebDriver> {
         .browser(browser)
         .url(remoteUrl)
         .desiredCapabilities(browserConfig.getDesiredCapabilities())
+        .experimentalOptions(browserConfig.getExperimentalOptions())
         .build();
   }
 

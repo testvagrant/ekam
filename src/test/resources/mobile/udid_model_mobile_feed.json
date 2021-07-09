@@ -1,0 +1,10 @@
+{
+  "desiredCapabilities": [
+    {
+      "app": "sample.apk",
+      "platformName": "ios",
+      "udid": "c6dbe58c21d23487e7ec19d894749494e8b26019",
+      "name": "Iphone"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     jcenter()
 }
 
@@ -53,7 +54,7 @@ dependencies {
     implementation('io.appium:java-client:7.5.1')
 
     //testvagrant
-    implementation('com.testvagrant.ekam:ekam-drivers:1.0.1')
+    implementation('com.testvagrant.ekam:ekam-drivers:1.0.2')
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.0.2-alpha')
     implementation('com.testvagrant.ekam:ekam-commons:0.0.6-beta')
@@ -110,7 +111,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.1.3-beta'
+            version '0.1.4-beta'
 
             from components.java
 
