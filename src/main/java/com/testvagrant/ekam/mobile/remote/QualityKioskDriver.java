@@ -5,7 +5,6 @@ import com.testvagrant.ekam.commons.parsers.testfeed.MobileConfigParser;
 import com.testvagrant.ekam.devicemanager.devicefinder.PCloudyDeviceFinder;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
-import com.testvagrant.ekam.devicemanager.remote.CapabilityMapper;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.commons.lang3.tuple.Triple;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -37,8 +36,7 @@ public class QualityKioskDriver {
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
     String appUrl = uploadApp();
-    Map<String, Object> qualityKioskCaps =
-        new CapabilityMapper().mapToQualityKioskCaps(appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target) ;
+    Map<String, Object> qualityKioskCaps = mapToQualityKioskCaps(appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target) ;
     return Triple.of(getUrl(), mergeCaps(qualityKioskCaps), target);
   }
 
@@ -72,5 +70,19 @@ public class QualityKioskDriver {
     boolean isAppPresent = !Objects.isNull(app) && !app.isEmpty();
     if (!mobileConfigParser.getMobileConfig().isUploadApp() || !isAppPresent)  return desiredCapabilities.getCapability("app").toString();
     return RemoteDriverUploadFactory.uploadUrl(mobileConfigParser.getMobileConfig().getHub(), app);
+  }
+
+  private Map<String, Object> mapToQualityKioskCaps(String appUrl, String userName, String accessKey, TargetDetails targetDetails) {
+    Map<String, Object> pcloudyCaps = mapToQualtyKioskCaps(userName, accessKey, targetDetails);
+    if (!appUrl.isEmpty()) pcloudyCaps.put("Capability_ApplicationName", appUrl);
+    return pcloudyCaps;
+  }
+
+  private Map<String, Object> mapToQualtyKioskCaps(String userName, String accessKey, TargetDetails targetDetails) {
+    Map<String, Object> capsMap = new HashMap<>();
+    capsMap.put("Capability_Username", userName);
+    capsMap.put("Capability_ApiKey", accessKey);
+    capsMap.put("Capability_DeviceFullName", targetDetails.getName());
+    return capsMap;
   }
 }

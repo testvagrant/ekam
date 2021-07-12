@@ -25,12 +25,15 @@ public class DeviceCacheDisposeFactory {
     switch (hub) {
       case "pcloudy":
       case "qualitykiosk":
-        PCloudyDeviceManagerProvider.deviceManager(cloudConfig.getApiHost(), cloudConfig.getUsername(), cloudConfig.getAccessKey())
-                .releaseDevice(targetDetails);
+        PCloudyDeviceManagerProvider.deviceManager(
+                cloudConfig.getApiHost(), cloudConfig.getUsername(), cloudConfig.getAccessKey())
+            .releaseDevice(targetDetails);
+        break;
       default:
         BrowserStackDeviceManagerProvider.deviceManager(
                 cloudConfig.getUsername(), cloudConfig.getAccessKey())
             .releaseDevice(targetDetails);
+        break;
     }
   }
 }

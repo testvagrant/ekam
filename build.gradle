@@ -7,7 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    mavenLocal()
+//    mavenLocal()
     jcenter()
 }
 
@@ -111,7 +111,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.1.5-beta'
+            version '0.1.6-beta'
 
             from components.java
 
@@ -129,8 +129,8 @@ publishing {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             credentials {
-                username System.getenv("sonatypeUsername")
-                password System.getenv("sonatypePassword")
+                username sonatypeUsername
+                password sonatypePassword
             }
         }
     }

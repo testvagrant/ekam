@@ -142,11 +142,11 @@ public class MobileConfigParser extends TestConfigParser {
       Map<String, Object> desiredCapabilitiesMap) {
     desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name().trim());
 
-    String appPath = getAppPath();
-
-    desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
-
-    if (getPlatform().equals(EkamSupportedPlatforms.ANDROID)) {
+    if(desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
+      String appPath = getAppPath();
+      desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
+    }
+    if (!mobileConfig.isRemote() && getPlatform().equals(EkamSupportedPlatforms.ANDROID)) {
       desiredCapabilitiesMap.put(
           AndroidMobileCapabilityType.SYSTEM_PORT,
           PortGenerator.aRandomOpenPortOnAllLocalInterfaces());
@@ -161,6 +161,7 @@ public class MobileConfigParser extends TestConfigParser {
               () -> new RuntimeException("Cannot find any app in app folder please add one"))
           .getAbsolutePath();
     String app = getAppCapability();
+    if(app.isEmpty()) return app;
     return app.contains(":")
         ? app
         : new FileFinder(ResourcePaths.APP_DIR).find(app).getAbsolutePath();
