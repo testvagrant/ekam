@@ -14,6 +14,10 @@ public class RemoteMobileDriverFactory {
     switch (hub) {
       case "browserstack":
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();
+      case "pcloudy":
+        return new PCloudyDriver(mobileConfigParser).buildRemoteMobileConfig();
+      case "qualitykiosk":
+        return new QualityKioskDriver(mobileConfigParser).buildRemoteMobileConfig();
       case "kobiton":
       case "saucelabs":
       default:

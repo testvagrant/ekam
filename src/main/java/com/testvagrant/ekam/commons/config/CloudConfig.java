@@ -11,27 +11,19 @@ public class CloudConfig {
   private String username;
   private String accessKey;
   private String hub;
+  @Builder.Default private String apiHost = "";
   @Builder.Default private String url = "";
   @Builder.Default private String protocol = "https";
 
   @Override
   public String toString() {
     return "{"
-        + "\"username\":\""
-        + username
-        + "\""
-        + ", \"accessKey\":\""
-        + accessKey
-        + "\""
-        + ", \"hub\":\""
-        + hub
-        + "\""
-        + ", \"url\":\""
-        + url
-        + "\""
-        + ", \"protocol\":\""
-        + protocol
-        + "\""
-        + "}}";
+            + "\"username\":\"" + username + "\""
+            + ", \"accessKey\":\"" + accessKey + "\""
+            + ", \"hub\":\"" + hub + "\""
+            + ", \"apiHost\":\"" + apiHost + "\""
+            + ", \"url\":\"" + url + "\""
+            + ", \"protocol\":\"" + protocol + "\""
+            + "}}";
   }
 }
