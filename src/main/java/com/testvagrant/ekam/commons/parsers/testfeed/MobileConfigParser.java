@@ -142,7 +142,7 @@ public class MobileConfigParser extends TestConfigParser {
       Map<String, Object> desiredCapabilitiesMap) {
     desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name().trim());
 
-    if(desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
+    if(!desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
       String appPath = getAppPath();
       desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
     }
