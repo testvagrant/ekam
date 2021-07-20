@@ -21,6 +21,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class InjectorCreator {
   private final EkamTestContext ekamTestContext;
+  private Injector mobileDriverInjector, webDriverInjector;
 
   public InjectorCreator(EkamTestContext ekamTestContext) {
     this.ekamTestContext = ekamTestContext;

@@ -1,0 +1,15 @@
+{
+  "addresses": [
+    {
+      "pinCode": "",
+      "firstName": "",
+      "lastName": "",
+      "city": "",
+      "address": "",
+      "state": "",
+      "landmark": "",
+      "phoneNumber": "",
+      "defaultAddress": ""
+    }
+  ]
+}
