@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.Page;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class WebSwitchViewAspect implements MethodInterceptor {
   @Override
   public Object invoke(MethodInvocation invocation) {
@@ -18,14 +18,13 @@ public class WebSwitchViewAspect implements MethodInterceptor {
       }
 
       Method method = invocation.getMethod();
-      WebSwitchView switchView = method.getAnnotation(WebSwitchView.class);
+      Class view = method.getAnnotation(WebSwitchView.class).view();
 
-      return switchView
-          .view()
-          .getDeclaredMethod(method.getName(), method.getParameterTypes())
-          .invoke(Page(switchView.view()), invocation.getArguments());
+      return view.getDeclaredMethod(method.getName(), method.getParameterTypes())
+          .invoke(Page(view), invocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(throwable.getMessage());
+      throw new RuntimeException(
+          "Unable to switch to Responsive View.\nError Message:\n" + throwable.getMessage());
     }
   }
 }

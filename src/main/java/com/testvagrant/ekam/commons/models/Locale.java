@@ -11,6 +11,7 @@ import java.util.Map;
 
 @Getter
 @Setter
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class Locale {
 
   private LinkedTreeMap en;

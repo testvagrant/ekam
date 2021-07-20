@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public class ServerArgumentParser {
 
-  private List<String> serverArgs;
+  private final List<String> serverArgs;
 
   public ServerArgumentParser(String serverArgsName) {
     File file = new FileFinder(ResourcePaths.TEST_RESOURCES, "").find(serverArgsName, ".json");

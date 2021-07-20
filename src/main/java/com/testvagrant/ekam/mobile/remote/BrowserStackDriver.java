@@ -16,22 +16,19 @@ import java.util.Objects;
 
 public class BrowserStackDriver {
 
-  private DesiredCapabilities desiredCapabilities;
-  private CloudConfig cloudConfig;
-  private DeviceFilters deviceFilters;
+  private final DesiredCapabilities desiredCapabilities;
+  private final CloudConfig cloudConfig;
   private MobileConfigParser mobileConfigParser;
 
   public BrowserStackDriver(MobileConfigParser mobileConfigParser) {
     this.mobileConfigParser = mobileConfigParser;
     this.cloudConfig = new ConfigLoader().loadConfig("browserstack");
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-    this.deviceFilters = mobileConfigParser.getDeviceFilters();
   }
 
   public BrowserStackDriver(MobileConfigParser mobileConfigParser, CloudConfig cloudConfig) {
     this.cloudConfig = cloudConfig;
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-    this.deviceFilters = mobileConfigParser.getDeviceFilters();
   }
 
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {

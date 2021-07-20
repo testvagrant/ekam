@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EkamRunContext {
+
   private WebDriver webDriver;
   private String testFolder;
 

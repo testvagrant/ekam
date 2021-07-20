@@ -14,8 +14,8 @@ import static com.testvagrant.ekam.internal.EkamAssetsProvider.ekamAssets;
 
 public class EkamExecutionHooks {
 
-  private EkamConfig ekam;
-  private MobileConfigParser mobileConfigParser;
+  private final EkamConfig ekam;
+  private final MobileConfigParser mobileConfigParser;
 
   public EkamExecutionHooks() {
     this.ekam = Guice.createInjector(new EkamConfigModule()).getInstance(EkamConfig.class);

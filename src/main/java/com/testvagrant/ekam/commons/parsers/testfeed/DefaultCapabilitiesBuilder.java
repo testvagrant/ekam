@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DefaultCapabilitiesBuilder {
+
   public List<Map<String, Object>> defaultCapsList(String platform) {
     Map<String, Object> defaultCaps = new HashMap<>();
     defaultCaps.put(MobileCapabilityType.PLATFORM_NAME, platform);

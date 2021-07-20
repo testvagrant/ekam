@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.commons.cache;
 
 public class InjectorsCacheProvider {
+
   private static InjectorsCache injectorsCacheProvider;
 
   private InjectorsCacheProvider() {}

@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.Screen;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class IOSSwitchViewAspect implements MethodInterceptor {
 
   @Override
@@ -19,14 +19,14 @@ public class IOSSwitchViewAspect implements MethodInterceptor {
       }
 
       Method method = invocation.getMethod();
-      IOSSwitchView iosSwitchView = method.getAnnotation(IOSSwitchView.class);
+      Class iosSwitchView = method.getAnnotation(IOSSwitchView.class).view();
 
       return iosSwitchView
-          .view()
           .getDeclaredMethod(method.getName(), method.getParameterTypes())
-          .invoke(Screen(iosSwitchView.view()), invocation.getArguments());
+          .invoke(Screen(iosSwitchView), invocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(throwable.getMessage());
+      throw new RuntimeException(
+          "Unable to switch view to IOS.\nError Message:\n" + throwable.getMessage());
     }
   }
 }

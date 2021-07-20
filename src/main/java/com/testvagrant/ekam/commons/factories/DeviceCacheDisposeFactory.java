@@ -8,6 +8,9 @@ import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyDeviceManagerProvider;
 import com.testvagrant.ekam.mobile.remote.ConfigLoader;
 
+import static com.testvagrant.ekam.commons.constants.Hubs.P_CLOUDY;
+import static com.testvagrant.ekam.commons.constants.Hubs.QUALITY_KIOSK;
+
 public class DeviceCacheDisposeFactory {
 
   public static void dispose(TargetDetails targetDetails, MobileConfig mobileConfig) {
@@ -23,8 +26,8 @@ public class DeviceCacheDisposeFactory {
   private static void releaseRemoteDevice(
       TargetDetails targetDetails, String hub, CloudConfig cloudConfig) {
     switch (hub) {
-      case "pcloudy":
-      case "qualitykiosk":
+      case P_CLOUDY:
+      case QUALITY_KIOSK:
         PCloudyDeviceManagerProvider.deviceManager(
                 cloudConfig.getApiHost(), cloudConfig.getUsername(), cloudConfig.getAccessKey())
             .releaseDevice(targetDetails);

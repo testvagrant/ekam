@@ -34,14 +34,12 @@ public class EkamRunTarget {
     saveTargetDetails();
   }
 
-  public EkamRunTarget addWebContext(EkamRunContext optimusRunWebContext) {
+  public void addWebContext(EkamRunContext optimusRunWebContext) {
     this.ekamWebContext = optimusRunWebContext;
-    return this;
   }
 
-  public EkamRunTarget addMobileContext(EkamRunContext optimusRunWebContext) {
+  public void addMobileContext(EkamRunContext optimusRunWebContext) {
     this.ekamMobileContext = optimusRunWebContext;
-    return this;
   }
 
   public Path captureScreenshot() {

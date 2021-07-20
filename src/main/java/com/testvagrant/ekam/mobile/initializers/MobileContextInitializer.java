@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class MobileContextInitializer {
 
-  private EkamTestContext ekamTestContext;
+  private final EkamTestContext ekamTestContext;
 
   public MobileContextInitializer(EkamTestContext ekamTestContext) {
     this.ekamTestContext = ekamTestContext;
@@ -27,7 +27,6 @@ public class MobileContextInitializer {
     Injector injector = getInjector();
     EkamConfig ekamConfig = injector.getInstance(EkamConfig.class);
     try {
-
       mobileDriverDetails = injector.getInstance(MobileDriverDetails.class);
       mobileDriverDetails.getDriver().quit();
       if (Objects.nonNull(mobileDriverDetails.getService())) {

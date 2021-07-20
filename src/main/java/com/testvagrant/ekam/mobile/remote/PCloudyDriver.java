@@ -17,29 +17,28 @@ import java.util.Objects;
 
 public class PCloudyDriver {
 
-  private DesiredCapabilities desiredCapabilities;
-  private CloudConfig cloudConfig;
-  private DeviceFilters deviceFilters;
+  private final DesiredCapabilities desiredCapabilities;
+  private final CloudConfig cloudConfig;
   private MobileConfigParser mobileConfigParser;
 
   public PCloudyDriver(MobileConfigParser mobileConfigParser) {
     this.mobileConfigParser = mobileConfigParser;
     this.cloudConfig = new ConfigLoader().loadConfig(mobileConfigParser.getMobileConfig().getHub());
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-    this.deviceFilters = mobileConfigParser.getDeviceFilters();
   }
 
   public PCloudyDriver(MobileConfigParser mobileConfigParser, CloudConfig cloudConfig) {
     this.cloudConfig = cloudConfig;
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-    this.deviceFilters = mobileConfigParser.getDeviceFilters();
   }
 
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
     String appUrl = uploadApp();
     Map<String, Object> pCloudyCaps =
-        new CapabilityMapper().mapToPCloudyCaps(appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target);
+        new CapabilityMapper()
+            .mapToPCloudyCaps(
+                appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target);
     return Triple.of(getUrl(), mergeCaps(pCloudyCaps), target);
   }
 
@@ -66,12 +65,14 @@ public class PCloudyDriver {
   }
 
   public String uploadApp() {
-    if (!mobileConfigParser.getMobileConfig().isRemote()) return desiredCapabilities.getCapability("app").toString();
+    if (!mobileConfigParser.getMobileConfig().isRemote())
+      return desiredCapabilities.getCapability("app").toString();
     String app =
         (String)
             mobileConfigParser.getDesiredCapabilities().getCapability(MobileCapabilityType.APP);
     boolean isAppPresent = !Objects.isNull(app) && !app.isEmpty();
-    if (!mobileConfigParser.getMobileConfig().isUploadApp() || !isAppPresent)  return desiredCapabilities.getCapability("app").toString();
+    if (!mobileConfigParser.getMobileConfig().isUploadApp() || !isAppPresent)
+      return desiredCapabilities.getCapability("app").toString();
     return RemoteDriverUploadFactory.uploadUrl(mobileConfigParser.getMobileConfig().getHub(), app);
   }
 }

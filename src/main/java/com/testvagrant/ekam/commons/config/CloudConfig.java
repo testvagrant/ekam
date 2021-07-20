@@ -18,12 +18,24 @@ public class CloudConfig {
   @Override
   public String toString() {
     return "{"
-            + "\"username\":\"" + username + "\""
-            + ", \"accessKey\":\"" + accessKey + "\""
-            + ", \"hub\":\"" + hub + "\""
-            + ", \"apiHost\":\"" + apiHost + "\""
-            + ", \"url\":\"" + url + "\""
-            + ", \"protocol\":\"" + protocol + "\""
-            + "}}";
+        + "\"username\":\""
+        + username
+        + "\""
+        + ", \"accessKey\":\""
+        + accessKey
+        + "\""
+        + ", \"hub\":\""
+        + hub
+        + "\""
+        + ", \"apiHost\":\""
+        + apiHost
+        + "\""
+        + ", \"url\":\""
+        + url
+        + "\""
+        + ", \"protocol\":\""
+        + protocol
+        + "\""
+        + "}}";
   }
 }

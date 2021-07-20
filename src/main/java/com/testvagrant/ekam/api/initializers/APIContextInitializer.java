@@ -5,7 +5,7 @@ import com.testvagrant.ekam.commons.testContext.EkamTestContext;
 
 public class APIContextInitializer {
 
-  private EkamTestContext ekamTestContext;
+  private final EkamTestContext ekamTestContext;
 
   public APIContextInitializer(EkamTestContext ekamTestContext) {
     this.ekamTestContext = ekamTestContext;

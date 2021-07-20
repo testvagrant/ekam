@@ -7,19 +7,21 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
+import static com.testvagrant.ekam.commons.constants.Hubs.*;
+
 public class RemoteMobileDriverFactory {
 
   public static Triple<URL, DesiredCapabilities, TargetDetails> getInstance(
       String hub, MobileConfigParser mobileConfigParser) {
     switch (hub) {
-      case "browserstack":
+      case BROWSERSTACK:
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();
-      case "pcloudy":
+      case P_CLOUDY:
         return new PCloudyDriver(mobileConfigParser).buildRemoteMobileConfig();
-      case "qualitykiosk":
+      case QUALITY_KIOSK:
         return new QualityKioskDriver(mobileConfigParser).buildRemoteMobileConfig();
-      case "kobiton":
-      case "saucelabs":
+      case KOBITON:
+      case SAUCE_LABS:
       default:
         throw new UnsupportedOperationException("Yet to support other remote clouds");
     }

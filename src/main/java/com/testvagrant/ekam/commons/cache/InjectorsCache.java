@@ -10,6 +10,6 @@ public class InjectorsCache extends DataCache<Injector> {
 
   public Injector get() {
     return get(String.valueOf(Thread.currentThread().getId()))
-        .orElseThrow(() -> new RuntimeException("Cannot find injector"));
+        .orElseThrow(() -> new RuntimeException("Cannot get injector"));
   }
 }

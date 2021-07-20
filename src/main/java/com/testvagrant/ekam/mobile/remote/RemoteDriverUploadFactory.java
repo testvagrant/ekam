@@ -2,26 +2,26 @@ package com.testvagrant.ekam.mobile.remote;
 
 import com.testvagrant.ekam.commons.config.CloudConfig;
 import com.testvagrant.ekam.devicemanager.remote.browserstack.BrowserStackUploadManager;
-import com.testvagrant.ekam.devicemanager.remote.browserstack.clients.responses.AppUploadResponse;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;
-import com.testvagrant.ekam.devicemanager.remote.pcloudy.clients.responses.PCloudyResponse;
+
+import static com.testvagrant.ekam.commons.constants.Hubs.*;
 
 public class RemoteDriverUploadFactory {
   public static String uploadUrl(String hub, String appPath) {
     CloudConfig cloudConfig = new ConfigLoader().loadConfig(hub);
     switch (hub.toLowerCase()) {
-      case "browserstack":
-        AppUploadResponse upload =
-            BrowserStackUploadManager.getInstance(
-                    cloudConfig.getUsername(), cloudConfig.getAccessKey())
-                .upload(appPath);
-        return upload.getAppUrl();
-      case "qualitykiosk":
-      case "pcloudy":
-        PCloudyResponse pCloudyResponse = PCloudyUploadManager.getInstance(
+      case BROWSERSTACK:
+        return BrowserStackUploadManager.getInstance(
+                cloudConfig.getUsername(), cloudConfig.getAccessKey())
+            .upload(appPath)
+            .getAppUrl();
+      case QUALITY_KIOSK:
+      case P_CLOUDY:
+        return PCloudyUploadManager.getInstance(
                 cloudConfig.getApiHost(), cloudConfig.getUsername(), cloudConfig.getAccessKey())
-                .upload(appPath);
-        return pCloudyResponse.getResult().getFile();
+            .upload(appPath)
+            .getResult()
+            .getFile();
       default:
         return "";
     }

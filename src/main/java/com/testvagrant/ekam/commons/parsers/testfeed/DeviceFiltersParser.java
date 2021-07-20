@@ -9,7 +9,7 @@ import java.io.File;
 
 public class DeviceFiltersParser {
 
-  private DeviceFilters deviceFilters;
+  private final DeviceFilters deviceFilters;
 
   public DeviceFiltersParser(String deviceFiltersName) {
     File file = new FileFinder(ResourcePaths.TEST_RESOURCES, "").find(deviceFiltersName, ".json");

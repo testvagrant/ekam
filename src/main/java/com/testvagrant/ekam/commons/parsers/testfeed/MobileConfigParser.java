@@ -142,7 +142,7 @@ public class MobileConfigParser extends TestConfigParser {
       Map<String, Object> desiredCapabilitiesMap) {
     desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name().trim());
 
-    if(!desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
+    if (!desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
       String appPath = getAppPath();
       desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
     }
@@ -161,7 +161,7 @@ public class MobileConfigParser extends TestConfigParser {
               () -> new RuntimeException("Cannot find any app in app folder please add one"))
           .getAbsolutePath();
     String app = getAppCapability();
-    if(app.isEmpty()) return app;
+    if (app.isEmpty()) return app;
     return app.contains(":")
         ? app
         : new FileFinder(ResourcePaths.APP_DIR).find(app).getAbsolutePath();

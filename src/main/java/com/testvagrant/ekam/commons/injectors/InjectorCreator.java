@@ -27,15 +27,15 @@ public class InjectorCreator {
     this.ekamTestContext = ekamTestContext;
   }
 
-  public InjectorCreator createMobileInjector() {
-    return this.createMobileInjector(false);
+  public void createMobileInjector() {
+    this.createMobileInjector(false);
   }
 
-  public InjectorCreator createWebInjector() {
-    return this.createWebInjector(false);
+  public void createWebInjector() {
+    this.createWebInjector(false);
   }
 
-  public InjectorCreator createMobileInjector(boolean enableWeb) {
+  public void createMobileInjector(boolean enableWeb) {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().mobileModules());
 
     MobileDriverDetails mobileDriverDetails = baseInjector.getInstance(MobileDriverDetails.class);
@@ -48,10 +48,9 @@ public class InjectorCreator {
             new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
     mobileDriverInjector = createApiInjector(mobileDriverInjector);
     updateInjectors(mobileDriverInjector);
-    return this;
   }
 
-  public InjectorCreator createWebInjector(boolean enableMobile) {
+  public void createWebInjector(boolean enableMobile) {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().webModules());
     WebDriver webDriver = baseInjector.getInstance(WebDriver.class);
     EkamRunContext mobileContext = getEkamRunContext(webDriver, buildTargetDetails(webDriver));
@@ -62,14 +61,13 @@ public class InjectorCreator {
             new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
     webDriverInjector = createApiInjector(webDriverInjector);
     updateInjectors(webDriverInjector);
-    return this;
   }
 
   private void updateInjectors(Injector baseInjector) {
     InjectorsCacheProvider.getInstance().put(baseInjector);
   }
 
-  public InjectorCreator createApiInjector() {
+  public void createApiInjector() {
     EkamRunContext mobileContext = getEkamRunContext(null, null);
     EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
     Injector apiInjector =
@@ -77,12 +75,10 @@ public class InjectorCreator {
     apiInjector =
         apiInjector.createChildInjector(new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
     updateInjectors(apiInjector);
-    return this;
   }
 
   public Injector createApiInjector(Injector baseInjector) {
-    Injector apiInjector = baseInjector.createChildInjector(new ApiHostsModule(), new GrpcModule());
-    return apiInjector;
+    return baseInjector.createChildInjector(new ApiHostsModule(), new GrpcModule());
   }
 
   private Injector enableWeb(

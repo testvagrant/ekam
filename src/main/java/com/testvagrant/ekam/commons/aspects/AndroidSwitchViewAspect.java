@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.Screen;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class AndroidSwitchViewAspect implements MethodInterceptor {
 
   @Override
@@ -19,14 +19,14 @@ public class AndroidSwitchViewAspect implements MethodInterceptor {
       }
 
       Method method = methodInvocation.getMethod();
-      AndroidSwitchView iosSwitchView = method.getAnnotation(AndroidSwitchView.class);
+      Class iosSwitchView = method.getAnnotation(AndroidSwitchView.class).view();
 
       return iosSwitchView
-          .view()
           .getDeclaredMethod(method.getName(), method.getParameterTypes())
-          .invoke(Screen(iosSwitchView.view()), methodInvocation.getArguments());
+          .invoke(Screen(iosSwitchView), methodInvocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(throwable.getMessage());
+      throw new RuntimeException(
+          "Unable to switch view to Android.\nError Message:\n" + throwable.getMessage());
     }
   }
 }

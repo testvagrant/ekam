@@ -29,8 +29,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
   }
 
   private MobileConfigParser getMobileConfigParser() {
-    MobileConfigParser mobileConfigParser = new MobileConfigParser(ekam.getMobile());
-    return mobileConfigParser;
+    return new MobileConfigParser(ekam.getMobile());
   }
 
   private MobileDriverDetails createRemoteDriver() {

@@ -16,6 +16,7 @@ public class MobileModule extends AbstractModule {
     bind(MobileDriverDetails.class)
         .toProvider(MobileDriverDetailsProvider.class)
         .asEagerSingleton();
+
     bind(new TypeLiteral<AppiumDriver<MobileElement>>() {})
         .toProvider(AppiumDriverProvider.class)
         .asEagerSingleton();
