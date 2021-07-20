@@ -7,7 +7,6 @@ plugins {
 
 repositories {
     mavenCentral()
-//    mavenLocal()
     jcenter()
 }
 
@@ -129,8 +128,8 @@ publishing {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             credentials {
-                username sonatypeUsername
-                password sonatypePassword
+                username System.getenv("sonatypeUsername")
+                password System.getenv("sonatypePassword")
             }
         }
     }
@@ -188,6 +187,10 @@ model {
     tasks.generatePomFileForMavenJavaPublication {
         destination = file("$buildDir/generated-pom.xml")
     }
+}
+
+task runTests(type: Test) {
+    useTestNG()
 }
 
 
