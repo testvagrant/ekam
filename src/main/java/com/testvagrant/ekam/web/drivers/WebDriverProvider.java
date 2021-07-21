@@ -8,50 +8,58 @@ import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.commons.random.FindOne;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
 import com.testvagrant.ekam.config.models.EkamConfig;
+import com.testvagrant.ekam.config.models.WebConfig;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
 import com.testvagrant.ekam.drivers.models.RemoteBrowserConfig;
 import com.testvagrant.ekam.drivers.web.LocalDriverManager;
 import com.testvagrant.ekam.drivers.web.RemoteDriverManager;
 import com.testvagrant.ekam.mobile.remote.ConfigLoader;
 import com.testvagrant.ekam.mobile.remote.RemoteUrlBuilder;
-import com.testvagrant.ekam.web.WebLauncher;
+import org.awaitility.Awaitility;
 import org.openqa.selenium.WebDriver;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 
 public class WebDriverProvider implements Provider<WebDriver> {
 
-  @Inject EkamConfig ekam;
+  @Inject private EkamConfig ekam;
 
-  List<String> randomBrowsers;
+  private final List<String> randomBrowsers;
+  private final BrowserConfig browserConfig;
+
+  public WebDriverProvider() {
+    randomBrowsers = generateBrowsers();
+    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
+    browserConfig = webConfigParser.buildBrowserConfig();
+  }
 
   @Override
   public WebDriver get() {
-    randomBrowsers = generateBrowsers();
     WebDriver webDriver = createDriver();
     launchSite(webDriver);
     return webDriver;
   }
 
   private WebDriver createDriver() {
-    String browser = updateBrowserIfAny();
-    browser =
-        browser.equalsIgnoreCase("responsive")
-            ? EkamSupportedPlatforms.CHROME.name().toLowerCase()
-            : browser;
+    String browser = getBrowser();
 
     return ekam.getWeb().isRemote()
         ? new RemoteDriverManager(getRemoteBrowserConfig(browser)).launchDriver()
-        : new LocalDriverManager(browser, getLocalBrowserConfig()).launchDriver();
+        : new LocalDriverManager(browser, browserConfig).launchDriver();
   }
 
-  private String updateBrowserIfAny() {
-    String browser = ekam.getWeb().getTarget().trim();
-    if (ekam.getWeb().isAny()) {
-      browser = getRandomBrowser();
-      ekam.getWeb().setTarget(browser.trim());
+  private String getBrowser() {
+    WebConfig webConfig = ekam.getWeb();
+
+    if (webConfig.isAny()) {
+      String browser = FindOne.inList(randomBrowsers);
+      webConfig.setTarget(browser.trim());
+      return browser;
     }
+
+    String browser = webConfig.getTarget().trim();
     return browser.equalsIgnoreCase("responsive")
         ? EkamSupportedPlatforms.CHROME.name().toLowerCase()
         : browser;
@@ -59,19 +67,26 @@ public class WebDriverProvider implements Provider<WebDriver> {
 
   private void launchSite(WebDriver webDriver) {
     if (!ekam.getWeb().launchSite()) return;
-    new WebLauncher().launch(ekam.getWeb().getLaunchUrl(), webDriver);
-  }
 
-  private BrowserConfig getLocalBrowserConfig() {
-    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
-    return webConfigParser.buildBrowserConfig();
+    String url = ekam.getWeb().getLaunchUrl().trim();
+    webDriver.get(url);
+
+    for (int retry = 0; retry < 3; retry++) {
+      try {
+        Awaitility.await()
+            .atMost(Duration.ofMinutes(1))
+            .until(() -> !webDriver.getTitle().isEmpty());
+        break;
+      } catch (Exception e) {
+        webDriver.navigate().refresh();
+      }
+    }
   }
 
   private RemoteBrowserConfig getRemoteBrowserConfig(String browser) {
-    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
-    BrowserConfig browserConfig = webConfigParser.buildBrowserConfig();
     CloudConfig cloudConfig = new ConfigLoader().loadConfig(ekam.getWeb().getHub());
     URL remoteUrl = RemoteUrlBuilder.build(cloudConfig);
+
     return RemoteBrowserConfig.builder()
         .browser(browser)
         .url(remoteUrl)
@@ -80,12 +95,8 @@ public class WebDriverProvider implements Provider<WebDriver> {
         .build();
   }
 
-  private String getRandomBrowser() {
-    return FindOne.inList(randomBrowsers);
-  }
-
   private List<String> generateBrowsers() {
     RepetitiveStringGenerator repetitiveStringGenerator = new RepetitiveStringGenerator();
-    return repetitiveStringGenerator.generate("chrome", "firefox");
+    return repetitiveStringGenerator.generate("chrome", "firefox", "msedge");
   }
 }

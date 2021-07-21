@@ -17,18 +17,13 @@ public class WebConfigParser extends TestConfigParser {
 
   public WebConfigParser(WebConfig webConfig) {
     this.webConfig = webConfig;
-    String testFeedName = this.webConfig.getFeed();
+    String testFeedName = webConfig.getFeed();
     webTestFeed = getTestFeed(testFeedName);
   }
 
   public DesiredCapabilities getDesiredCapabilities() {
     Map<String, Object> capabilitiesMap = webTestFeed.getDesiredCapabilities();
     return new DesiredCapabilities(capabilitiesMap);
-  }
-
-  public String getBrowserName() {
-    String target = webConfig.getTarget();
-    return target.equalsIgnoreCase("responsive") ? EkamSupportedPlatforms.CHROME.name() : target;
   }
 
   public List<String> getArguments() {
@@ -39,33 +34,20 @@ public class WebConfigParser extends TestConfigParser {
     return arguments;
   }
 
-  public List<String> getExtensions() {
-    return webTestFeed.getExtensions();
-  }
-
-  public Map<String, Object> getExperimentalOptions() {
-    return webTestFeed.getExperimentalOptions();
-  }
-
-  public Map<String, Object> getPreferences() {
-    return webTestFeed.getPreferences();
-  }
-
   public BrowserConfig buildBrowserConfig() {
     return BrowserConfig.builder()
         .desiredCapabilities(getDesiredCapabilities())
         .arguments(getArguments())
-        .preferences(getPreferences())
+        .preferences(webTestFeed.getPreferences())
         .arguments(getArguments())
-        .experimentalOptions(getExperimentalOptions())
-        .extensions(getExtensions())
+        .experimentalOptions(webTestFeed.getExperimentalOptions())
+        .extensions(webTestFeed.getExtensions())
         .build();
   }
 
   private WebTestFeed getTestFeed(String testFeedName) {
-    if (testFeedName == null || testFeedName.isEmpty()) {
-      return WebTestFeed.builder().build();
-    }
-    return loadFeed(testFeedName, System.getProperty(ConfigKeys.Env.WEB_ENV), WebTestFeed.class);
+    return testFeedName == null || testFeedName.isEmpty()
+        ? WebTestFeed.builder().build()
+        : loadFeed(testFeedName, System.getProperty(ConfigKeys.Env.WEB_ENV), WebTestFeed.class);
   }
 }

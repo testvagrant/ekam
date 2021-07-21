@@ -22,7 +22,8 @@ public class EkamTestBase {
 
   private final String target;
   private final boolean publishToDashboard;
-  @Inject DashboardTestNgBuildManager dashboardTestNgBuildManager;
+
+  @Inject private DashboardTestNgBuildManager dashboardTestNgBuildManager;
   @Inject private EkamConfig ekam;
 
   public EkamTestBase(String target) {

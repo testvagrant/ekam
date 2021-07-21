@@ -1,5 +1,6 @@
 package com.testvagrant.ekam.web.initializer;
 
+import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.injectors.InjectorCreator;
 import com.testvagrant.ekam.commons.models.EkamTest;
 import org.openqa.selenium.WebDriver;
@@ -19,6 +20,8 @@ public class EkamWebTest {
   }
 
   public void dispose() {
-    injectorsCache().getInjector().getInstance(WebDriver.class).quit();
+    Injector injector = injectorsCache().getInjector();
+    WebDriver webDriver = injector.getInstance(WebDriver.class);
+    if (webDriver != null) webDriver.quit();
   }
 }
