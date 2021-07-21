@@ -19,8 +19,8 @@ public class MobileTest extends EkamTestBase {
   }
 
   /**
-   * Executes before every test. Creates Mobile injector binding AppiumDriver and Switch view
-   * Creates screenshot directory and target.json for the current test being executed
+   * Executes before every test. Creates Mobile injector binding AppiumDriver, SwitchViewModule,
+   * StepRecorderModule and APIModule
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {

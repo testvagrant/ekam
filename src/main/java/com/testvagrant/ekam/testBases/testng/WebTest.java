@@ -19,8 +19,8 @@ public class WebTest extends EkamTestBase {
   }
 
   /**
-   * Executes before every test. Creates Web injector binding WebDriver and SwitchView Creates
-   * screenshot directory and target.json for the current test being executed
+   * Executes before every test. Creates Web injector binding WebDriver, SwitchViewModule,
+   * StepRecorderModule and APIModule
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {

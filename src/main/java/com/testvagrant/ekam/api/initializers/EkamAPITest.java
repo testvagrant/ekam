@@ -12,6 +12,6 @@ public class EkamAPITest {
   }
 
   public void init() {
-    new InjectorCreator(ekamTest).injectApiAndStepRecorder();
+    new InjectorCreator(ekamTest).createApiInjector();
   }
 }

@@ -33,10 +33,8 @@ public class InjectorCreator {
   }
 
   /** Creates API Injector binding APIHostsModule, StepRecorderModule */
-  public void injectApiAndStepRecorder() {
+  public void createApiInjector() {
     EkamTestContext testContext = buildEkamTestContext(null);
-    createTargetJson(testContext);
-
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().baseModules());
     injectApiAndStepRecorder(baseInjector, testContext);
   }
