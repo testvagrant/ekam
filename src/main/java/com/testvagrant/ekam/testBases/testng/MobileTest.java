@@ -1,11 +1,19 @@
 package com.testvagrant.ekam.testBases.testng;
 
+import com.testvagrant.ekam.commons.factories.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.commons.models.EkamTest;
-import com.testvagrant.ekam.mobile.initializers.EkamMobileTest;
+import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
+import com.testvagrant.ekam.mobile.EkamMobileInjector;
 import com.testvagrant.ekam.testBases.EkamTestBase;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import java.util.Objects;
+
+import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
 public class MobileTest extends EkamTestBase {
 
@@ -27,7 +35,7 @@ public class MobileTest extends EkamTestBase {
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamMobileTest(ekamTest).init(false);
+    new EkamMobileInjector(ekamTest).createInjector(false);
   }
 
   /**
@@ -39,6 +47,18 @@ public class MobileTest extends EkamTestBase {
   @AfterMethod(alwaysRun = true)
   public void ekamMobileTearDown(ITestResult iTestResult) {
     updateBuild(iTestResult);
-    new EkamMobileTest(buildEkamTest(iTestResult)).dispose();
+    dispose();
+  }
+
+  private void dispose() {
+    MobileDriverDetails mobileDriverDetails =
+        injectorsCache().getInjector().getInstance(MobileDriverDetails.class);
+    AppiumDriver<MobileElement> driver = mobileDriverDetails.getDriver();
+
+    if (driver != null) driver.quit();
+    if (mobileDriverDetails.getService() != null) mobileDriverDetails.getService().stop();
+
+    DeviceCacheDisposeFactory.dispose(
+        Objects.requireNonNull(mobileDriverDetails).getTargetDetails(), ekam.getMobile());
   }
 }

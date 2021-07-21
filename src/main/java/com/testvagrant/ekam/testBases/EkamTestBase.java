@@ -20,9 +20,8 @@ import static com.testvagrant.ekam.commons.cache.providers.DataStoreProvider.dat
 public class EkamTestBase {
 
   private final String target;
-
+  @Inject protected EkamConfig ekam;
   @Inject private DashboardTestNgBuildManager dashboardTestNgBuildManager;
-  @Inject private EkamConfig ekam;
 
   public EkamTestBase(String target) {
     this.target = target;
