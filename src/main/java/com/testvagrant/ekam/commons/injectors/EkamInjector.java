@@ -24,11 +24,11 @@ import java.io.File;
 import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 import static com.testvagrant.ekam.commons.io.FileUtilities.fileUtils;
 
-public class InjectorCreator {
+public class EkamInjector {
 
   private final EkamTest ekamTest;
 
-  public InjectorCreator(EkamTest ekamTest) {
+  public EkamInjector(EkamTest ekamTest) {
     this.ekamTest = ekamTest;
   }
 

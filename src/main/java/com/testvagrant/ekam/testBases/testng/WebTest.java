@@ -1,9 +1,9 @@
 package com.testvagrant.ekam.testBases.testng;
 
 import com.google.inject.Injector;
+import com.testvagrant.ekam.commons.injectors.EkamInjector;
 import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.testBases.EkamTestBase;
-import com.testvagrant.ekam.web.EkamWebInjector;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -31,7 +31,7 @@ public class WebTest extends EkamTestBase {
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamWebInjector(ekamTest).createInjector(false);
+    new EkamInjector(ekamTest).createWebInjector(false);
   }
 
   /**

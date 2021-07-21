@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.testBases.testng;
 
-import com.testvagrant.ekam.api.initializers.EkamAPITest;
 import com.testvagrant.ekam.api.modules.ApiHostsModule;
+import com.testvagrant.ekam.commons.injectors.EkamInjector;
 import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.testBases.EkamTestBase;
@@ -25,7 +25,7 @@ public class APITest extends EkamTestBase {
   @BeforeMethod(alwaysRun = true)
   public void initTest(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamAPITest(ekamTest).init();
+    new EkamInjector(ekamTest).createApiInjector();
   }
 
   /**
