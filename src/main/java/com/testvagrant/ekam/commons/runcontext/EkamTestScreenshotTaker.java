@@ -1,6 +1,9 @@
 package com.testvagrant.ekam.commons.runcontext;
 
+import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
 import com.testvagrant.ekam.commons.path.PathBuilder;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 
 import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
+@SuppressWarnings("unchecked")
 public class EkamTestScreenshotTaker {
 
   private final EkamTestContext testContext;
@@ -42,8 +46,12 @@ public class EkamTestScreenshotTaker {
 
   private File takeScreenshotAsFile() {
     try {
+      AppiumDriver<MobileElement> mobileDriver =
+          injectorsCache().getInjector().getInstance(MobileDriverDetails.class).getDriver();
       TakesScreenshot driver =
-          (TakesScreenshot) injectorsCache().getInjector().getInstance(WebDriver.class);
+          mobileDriver == null
+              ? (TakesScreenshot) injectorsCache().getInjector().getInstance(WebDriver.class)
+              : mobileDriver;
       return driver.getScreenshotAs(OutputType.FILE);
     } catch (WebDriverException ex) {
       throw new RuntimeException("Failed to take screenshot." + ex.getMessage());

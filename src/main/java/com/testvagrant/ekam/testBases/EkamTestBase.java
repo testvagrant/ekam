@@ -15,26 +15,23 @@ import org.testng.annotations.Guice;
 
 import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 import static com.testvagrant.ekam.commons.cache.providers.DataStoreProvider.dataStoreProvider;
-import static java.util.Objects.requireNonNull;
 
 @Guice(modules = {EkamConfigModule.class})
 public class EkamTestBase {
 
   private final String target;
-  private final boolean publishToDashboard;
 
   @Inject private DashboardTestNgBuildManager dashboardTestNgBuildManager;
   @Inject private EkamConfig ekam;
 
   public EkamTestBase(String target) {
     this.target = target;
-    publishToDashboard = requireNonNull(ekam).getDashboardConfig().publishToDashboard();
   }
 
   /** Start Dashboard build if dashboard url specified in config */
   @BeforeSuite(alwaysRun = true)
   public void onStart() {
-    if (publishToDashboard) {
+    if (ekam.getDashboardConfig().publishToDashboard()) {
       dashboardTestNgBuildManager.start(target);
     }
   }
@@ -42,15 +39,19 @@ public class EkamTestBase {
   /** Finalize current build for dashboard if dashboard url specified in config */
   @AfterSuite(alwaysRun = true)
   public void onFinish() {
-    if (publishToDashboard) {
+    if (ekam.getDashboardConfig().publishToDashboard()) {
       String dashboardUrl = ekam.getDashboardConfig().getDashboardUrl();
       dashboardTestNgBuildManager.finish(dashboardUrl);
     }
   }
 
-  /** Updates dashboard build details with Feature, Scenario and Step details */
+  /**
+   * Updates dashboard build details with Feature, Scenario and Step details
+   *
+   * @param result: Testng ITestResult
+   */
   protected void updateBuild(ITestResult result) {
-    if (publishToDashboard) {
+    if (ekam.getDashboardConfig().publishToDashboard()) {
       EkamTestNGBuildGenerator buildGenerator =
           (EkamTestNGBuildGenerator)
               dataStoreProvider().get("buildGenerator").orElse(new EkamTestNGBuildGenerator());

@@ -21,6 +21,8 @@ public class WebTest extends EkamTestBase {
   /**
    * Executes before every test. Creates Web injector binding WebDriver, SwitchViewModule,
    * StepRecorderModule and APIModule
+   *
+   * @param iTestResult: TestNg ITestResult
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {
@@ -31,6 +33,8 @@ public class WebTest extends EkamTestBase {
   /**
    * Executes everytime after completion of a test. Updates dashboard build with Test details
    * Performs WebDriver Teardown
+   *
+   * @param iTestResult: TestNg ITestResult
    */
   @AfterMethod(alwaysRun = true)
   public void ekamWebTearDown(ITestResult iTestResult) {

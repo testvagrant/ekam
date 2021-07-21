@@ -21,6 +21,8 @@ public class MobileTest extends EkamTestBase {
   /**
    * Executes before every test. Creates Mobile injector binding AppiumDriver, SwitchViewModule,
    * StepRecorderModule and APIModule
+   *
+   * @param iTestResult: TestNg ITestResult
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
@@ -31,6 +33,8 @@ public class MobileTest extends EkamTestBase {
   /**
    * Executes everytime after completion of a test. Updates dashboard build with Test details
    * Performs Appium Teardown
+   *
+   * @param iTestResult: TestNg ITestResult
    */
   @AfterMethod(alwaysRun = true)
   public void ekamMobileTearDown(ITestResult iTestResult) {

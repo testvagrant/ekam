@@ -17,14 +17,22 @@ public class APITest extends EkamTestBase {
     super("api");
   }
 
-  /** Executes before every test. Creates APIInjector by binding APIHosts and GRPC module */
+  /**
+   * Executes before every test. Creates APIInjector by binding APIHosts and GRPC module
+   *
+   * @param iTestResult: TestNg ITestResult
+   */
   @BeforeMethod(alwaysRun = true)
   public void initTest(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
     new EkamAPITest(ekamTest).init();
   }
 
-  /** Executes everytime after completion of a test. Updates dashboard build with Test details */
+  /**
+   * Executes everytime after completion of a test. Updates dashboard build with Test details
+   *
+   * @param iTestResult:TestNg ITestResult
+   */
   @AfterMethod(alwaysRun = true)
   public void ekamAPITearDown(ITestResult iTestResult) {
     updateBuild(iTestResult);

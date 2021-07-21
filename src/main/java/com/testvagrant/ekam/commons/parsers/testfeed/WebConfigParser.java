@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.commons.parsers.testfeed;
 
 import com.testvagrant.ekam.commons.models.web.WebTestFeed;
-import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.config.models.WebConfig;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;

@@ -24,15 +24,11 @@ import java.util.List;
 
 public class WebDriverProvider implements Provider<WebDriver> {
 
-  @Inject private EkamConfig ekam;
-
   private final List<String> randomBrowsers;
-  private final BrowserConfig browserConfig;
+  @Inject private EkamConfig ekam;
 
   public WebDriverProvider() {
     randomBrowsers = generateBrowsers();
-    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
-    browserConfig = webConfigParser.buildBrowserConfig();
   }
 
   @Override
@@ -43,10 +39,12 @@ public class WebDriverProvider implements Provider<WebDriver> {
   }
 
   private WebDriver createDriver() {
+    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
+    BrowserConfig browserConfig = webConfigParser.buildBrowserConfig();
     String browser = getBrowser();
 
     return ekam.getWeb().isRemote()
-        ? new RemoteDriverManager(getRemoteBrowserConfig(browser)).launchDriver()
+        ? new RemoteDriverManager(getRemoteBrowserConfig(browser, browserConfig)).launchDriver()
         : new LocalDriverManager(browser, browserConfig).launchDriver();
   }
 
@@ -83,7 +81,7 @@ public class WebDriverProvider implements Provider<WebDriver> {
     }
   }
 
-  private RemoteBrowserConfig getRemoteBrowserConfig(String browser) {
+  private RemoteBrowserConfig getRemoteBrowserConfig(String browser, BrowserConfig browserConfig) {
     CloudConfig cloudConfig = new ConfigLoader().loadConfig(ekam.getWeb().getHub());
     URL remoteUrl = RemoteUrlBuilder.build(cloudConfig);
 

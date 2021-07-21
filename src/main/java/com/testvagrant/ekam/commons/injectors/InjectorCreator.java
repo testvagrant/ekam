@@ -35,6 +35,7 @@ public class InjectorCreator {
   /** Creates API Injector binding APIHostsModule, StepRecorderModule */
   public void createApiInjector() {
     EkamTestContext testContext = buildEkamTestContext(null);
+    createTargetJson(testContext);
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().baseModules());
     injectApiAndStepRecorder(baseInjector, testContext);
   }
@@ -42,6 +43,8 @@ public class InjectorCreator {
   /**
    * Create Mobile injector binding AppiumDriver, WebDriver(if enableWeb), ApiModule,
    * SwitchViewModule, StepRecorderModule
+   *
+   * @param enableWeb: Whether or not to bind WebInjector
    */
   public void createMobileInjector(boolean enableWeb) {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().mobileModules());
@@ -57,6 +60,8 @@ public class InjectorCreator {
   /**
    * Create web injector binding WebDriver, AppiumDriver(if enableMobile), ApiModule,
    * SwitchViewModule, StepRecorderModule
+   *
+   * @param enableMobile: Whether or not to bind Mobile Injector
    */
   public void createWebInjector(boolean enableMobile) {
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().webModules());
@@ -114,7 +119,9 @@ public class InjectorCreator {
     String serialize = new GsonParser().serialize(testContext.getTargets());
     File testFolder = new File(new PathBuilder(testContext.getTestFolder()).toString());
 
-    if (!testFolder.exists()) throw new RuntimeException(testFolder + "doesn't exist");
+    if (!testFolder.exists()) {
+      fileUtils().createDirectory(testFolder.getAbsolutePath());
+    }
 
     String fileName = new PathBuilder(testContext.getTestFolder()).append("target.json").toString();
     fileUtils().writeFile(fileName, serialize);
