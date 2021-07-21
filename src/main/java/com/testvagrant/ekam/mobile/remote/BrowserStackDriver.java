@@ -3,7 +3,6 @@ package com.testvagrant.ekam.mobile.remote;
 import com.testvagrant.ekam.commons.config.CloudConfig;
 import com.testvagrant.ekam.commons.parsers.testfeed.MobileConfigParser;
 import com.testvagrant.ekam.devicemanager.devicefinder.BrowserStackDeviceFinder;
-import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.CapabilityMapper;
 import io.appium.java_client.remote.MobileCapabilityType;

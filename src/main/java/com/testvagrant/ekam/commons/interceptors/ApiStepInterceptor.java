@@ -24,7 +24,7 @@ public class ApiStepInterceptor extends StepInterceptor implements MethodInterce
   private void addStep(MethodInvocation invocation) throws Throwable {
     APIStep stepAnnotation = invocation.getMethod().getAnnotation(APIStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
-    LayoutInitiator.getInstance().addStep(step);
+    LayoutInitiator.layoutInitiator().addStep(step);
     recordAllureStep(
         stepAnnotation.keyword(), stepAnnotation.persona(), stepAnnotation.description());
   }

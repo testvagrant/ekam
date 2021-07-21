@@ -1,15 +1,13 @@
 package com.testvagrant.ekam.testBases.testng;
 
-import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
-import com.testvagrant.ekam.mobile.initializers.EkamMobileTestContext;
-import com.testvagrant.ekam.testBases.EkamTest;
+import com.testvagrant.ekam.commons.models.EkamTest;
+import com.testvagrant.ekam.mobile.initializers.EkamMobileTest;
+import com.testvagrant.ekam.testBases.EkamTestBase;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import static com.testvagrant.ekam.commons.testContext.TestNgEkamTestContextBuilder.buildTestContext;
-
-public class MobileTest extends EkamTest {
+public class MobileTest extends EkamTestBase {
 
   public MobileTest() {
     super("mobile");
@@ -26,8 +24,8 @@ public class MobileTest extends EkamTest {
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
-    EkamTestDetails testContext = buildTestContext(iTestResult);
-    new EkamMobileTestContext(testContext).init();
+    EkamTest ekamTest = buildEkamTest(iTestResult);
+    new EkamMobileTest(ekamTest).init(false);
   }
 
   /**
@@ -37,6 +35,6 @@ public class MobileTest extends EkamTest {
   @AfterMethod(alwaysRun = true)
   public void ekamMobileTearDown(ITestResult iTestResult) {
     updateBuild(iTestResult);
-    new EkamMobileTestContext(buildTestContext(iTestResult)).dispose();
+    new EkamMobileTest(buildEkamTest(iTestResult)).dispose();
   }
 }

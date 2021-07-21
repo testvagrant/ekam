@@ -1,11 +1,12 @@
 package com.testvagrant.ekam.commons.interceptors;
 
-import com.testvagrant.ekam.commons.LayoutInitiator;
 import com.testvagrant.ekam.commons.annotations.MobileStep;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.testvagrant.ekam.commons.LayoutInitiator.layoutInitiator;
 
 public class MobileStepInterceptor extends StepInterceptor implements MethodInterceptor {
   @Override
@@ -23,12 +24,12 @@ public class MobileStepInterceptor extends StepInterceptor implements MethodInte
   private void addStep(MethodInvocation invocation) throws Throwable {
     MobileStep stepAnnotation = invocation.getMethod().getAnnotation(MobileStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
-    LayoutInitiator.getInstance().addStep(step);
+    layoutInitiator().addStep(step);
     recordAllureStep(
         stepAnnotation.keyword(),
         stepAnnotation.persona(),
         stepAnnotation.description(),
-        LayoutInitiator.getInstance().captureMobileScreenshot());
+        layoutInitiator().captureScreenshot());
   }
 
   private com.testvagrant.ekam.dashboard.models.Step buildStep(MobileStep stepAnnotation) {

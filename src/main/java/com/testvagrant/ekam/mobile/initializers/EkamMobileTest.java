@@ -3,24 +3,24 @@ package com.testvagrant.ekam.mobile.initializers;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.factories.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.commons.injectors.InjectorCreator;
+import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
 import com.testvagrant.ekam.config.models.EkamConfig;
 
 import java.util.Objects;
 
 import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
-public class EkamMobileTestContext {
+public class EkamMobileTest {
 
-  private final EkamTestDetails ekamTestDetails;
+  private final EkamTest ekamTest;
 
-  public EkamMobileTestContext(EkamTestDetails ekamTestDetails) {
-    this.ekamTestDetails = ekamTestDetails;
+  public EkamMobileTest(EkamTest ekamTest) {
+    this.ekamTest = ekamTest;
   }
 
-  public void init() {
-    new InjectorCreator(ekamTestDetails).createMobileInjector(false);
+  public void init(boolean enableWeb) {
+    new InjectorCreator(ekamTest).createMobileInjector(enableWeb);
   }
 
   public void dispose() {
@@ -39,5 +39,4 @@ public class EkamMobileTestContext {
           mobileDriverDetails.getTargetDetails(), ekamConfig.getMobile());
     }
   }
-
 }

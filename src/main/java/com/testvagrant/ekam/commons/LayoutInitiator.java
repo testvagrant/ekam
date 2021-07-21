@@ -2,7 +2,7 @@ package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.runcontext.EkamTestExecutionDetailsManager;
+import com.testvagrant.ekam.commons.runcontext.EkamTestScreenshotTaker;
 import com.testvagrant.ekam.dashboard.StepRecorder;
 import com.testvagrant.ekam.dashboard.models.Step;
 import com.testvagrant.ekam.mobile.MobileScreen;
@@ -20,38 +20,26 @@ import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injector
 @SuppressWarnings("unchecked")
 public class LayoutInitiator {
 
-  public static LayoutInitiator getInstance() {
+  public static LayoutInitiator layoutInitiator() {
     return new LayoutInitiator();
   }
 
   public static <Page extends WebPage> Page Page(Class<Page> tPage) {
-    return getInstance().createWebLayout(tPage);
+    return layoutInitiator().createWebLayout(tPage);
   }
 
   public static <Activity extends MobileScreen> Activity Screen(Class<Activity> tActivity) {
-    return getInstance().createMobileLayout(tActivity);
+    return layoutInitiator().createMobileLayout(tActivity);
   }
 
   public static <Client> Client Client(Class<Client> tClient) {
-    return getInstance().createAPILayout(tClient);
+    return layoutInitiator().createAPILayout(tClient);
   }
 
-  public void captureScreenshot() {
-    EkamTestExecutionDetailsManager ekamTestExecutionDetailsManager =
-        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
-    ekamTestExecutionDetailsManager.captureScreenshot();
-  }
-
-  public Path captureWebScreenshot() {
-    EkamTestExecutionDetailsManager ekamRunTarget =
-        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
-    return ekamRunTarget.captureWebScreenshot();
-  }
-
-  public Path captureMobileScreenshot() {
-    EkamTestExecutionDetailsManager ekamRunTarget =
-        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
-    return ekamRunTarget.captureMobileScreenshot();
+  public Path captureScreenshot() {
+    EkamTestScreenshotTaker screenshotTaker =
+        getInjector().getInstance(EkamTestScreenshotTaker.class);
+    return screenshotTaker.captureScreenshot();
   }
 
   public void addStep(Step step) {

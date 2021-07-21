@@ -1,15 +1,13 @@
 package com.testvagrant.ekam.testBases.testng;
 
-import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
-import com.testvagrant.ekam.testBases.EkamTest;
-import com.testvagrant.ekam.web.initializer.EkamWebTestContext;
+import com.testvagrant.ekam.commons.models.EkamTest;
+import com.testvagrant.ekam.testBases.EkamTestBase;
+import com.testvagrant.ekam.web.initializer.EkamWebTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import static com.testvagrant.ekam.commons.testContext.TestNgEkamTestContextBuilder.buildTestContext;
-
-public class WebTest extends EkamTest {
+public class WebTest extends EkamTestBase {
 
   public WebTest() {
     super("web");
@@ -21,13 +19,13 @@ public class WebTest extends EkamTest {
   }
 
   /**
-   * Executes before every test. Creates Web injector binding WebDriver and SwitchView
-   * Creates screenshot directory and target.json for the current test being executed
+   * Executes before every test. Creates Web injector binding WebDriver and SwitchView Creates
+   * screenshot directory and target.json for the current test being executed
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {
-    EkamTestDetails ekamTestDetails = buildTestContext(iTestResult);
-    new EkamWebTestContext(ekamTestDetails).init();
+    EkamTest ekamTest = buildEkamTest(iTestResult);
+    new EkamWebTest(ekamTest).init(false);
   }
 
   /**
@@ -37,6 +35,6 @@ public class WebTest extends EkamTest {
   @AfterMethod(alwaysRun = true)
   public void ekamWebTearDown(ITestResult iTestResult) {
     updateBuild(iTestResult);
-    new EkamWebTestContext(buildTestContext(iTestResult)).dispose();
+    new EkamWebTest(buildEkamTest(iTestResult)).dispose();
   }
 }

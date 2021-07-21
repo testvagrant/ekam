@@ -1,10 +1,10 @@
 package com.testvagrant.ekam.commons.interceptors;
 
-import com.testvagrant.ekam.commons.LayoutInitiator;
+import static com.testvagrant.ekam.commons.LayoutInitiator.layoutInitiator;
 
 public class ScreenshotTaker {
 
   public void saveScreenshot() {
-    LayoutInitiator.getInstance().captureScreenshot();
+    layoutInitiator().captureScreenshot();
   }
 }

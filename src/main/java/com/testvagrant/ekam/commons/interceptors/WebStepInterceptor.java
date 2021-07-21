@@ -1,11 +1,12 @@
 package com.testvagrant.ekam.commons.interceptors;
 
-import com.testvagrant.ekam.commons.LayoutInitiator;
 import com.testvagrant.ekam.commons.annotations.WebStep;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.testvagrant.ekam.commons.LayoutInitiator.layoutInitiator;
 
 public class WebStepInterceptor extends StepInterceptor implements MethodInterceptor {
   @Override
@@ -23,12 +24,12 @@ public class WebStepInterceptor extends StepInterceptor implements MethodInterce
   private void addStep(MethodInvocation invocation) throws Throwable {
     WebStep stepAnnotation = invocation.getMethod().getAnnotation(WebStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
-    LayoutInitiator.getInstance().addStep(step);
+    layoutInitiator().addStep(step);
     recordAllureStep(
         stepAnnotation.keyword(),
         stepAnnotation.persona(),
         stepAnnotation.description(),
-        LayoutInitiator.getInstance().captureWebScreenshot());
+        layoutInitiator().captureScreenshot());
   }
 
   private com.testvagrant.ekam.dashboard.models.Step buildStep(WebStep stepAnnotation) {

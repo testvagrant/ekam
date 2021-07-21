@@ -3,6 +3,7 @@ package com.testvagrant.ekam.testBases;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.commons.initializers.DashboardTestNgBuildManager;
+import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.dashboard.EkamTestNGBuildGenerator;
@@ -17,15 +18,14 @@ import static com.testvagrant.ekam.commons.cache.providers.DataStoreProvider.dat
 import static java.util.Objects.requireNonNull;
 
 @Guice(modules = {EkamConfigModule.class})
-public class EkamTest {
-
-  @Inject DashboardTestNgBuildManager dashboardTestNgBuildManager;
-  @Inject private EkamConfig ekam;
+public class EkamTestBase {
 
   private final String target;
   private final boolean publishToDashboard;
+  @Inject DashboardTestNgBuildManager dashboardTestNgBuildManager;
+  @Inject private EkamConfig ekam;
 
-  public EkamTest(String target) {
+  public EkamTestBase(String target) {
     this.target = target;
     publishToDashboard = requireNonNull(ekam).getDashboardConfig().publishToDashboard();
   }
@@ -68,5 +68,12 @@ public class EkamTest {
       default:
         return "skipped";
     }
+  }
+
+  protected EkamTest buildEkamTest(ITestResult testResult) {
+    return EkamTest.builder()
+        .feature(testResult.getMethod().getTestClass().getName())
+        .scenario(testResult.getMethod().getMethodName())
+        .build();
   }
 }

@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.commons.testContext;
+package com.testvagrant.ekam.commons.models;
 
 import com.google.common.base.Objects;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class EkamTestDetails {
+public class EkamTest {
   private String feature;
   private String scenario;
 

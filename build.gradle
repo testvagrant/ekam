@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     jcenter()
 }
 
@@ -56,7 +57,7 @@ dependencies {
     implementation('com.testvagrant.ekam:ekam-drivers:1.0.2')
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.0.3-alpha')
-    implementation('com.testvagrant.ekam:ekam-commons:0.0.6-beta')
+    implementation('com.testvagrant.ekam:ekam-commons:0.0.7-beta')
     implementation('com.testvagrant.ekam:ekam-config:0.0.5-beta')
     implementation('com.testvagrant.ekam:ekam-atoms:0.0.1-beta')
     implementation('com.testvagrant.ekam:ekam-device-manager:0.0.5-beta')

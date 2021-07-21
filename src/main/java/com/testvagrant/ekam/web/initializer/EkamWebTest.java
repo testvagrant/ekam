@@ -1,21 +1,21 @@
 package com.testvagrant.ekam.web.initializer;
 
 import com.testvagrant.ekam.commons.injectors.InjectorCreator;
-import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
+import com.testvagrant.ekam.commons.models.EkamTest;
 import org.openqa.selenium.WebDriver;
 
 import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
-public class EkamWebTestContext {
+public class EkamWebTest {
 
-  private final EkamTestDetails ekamTestDetails;
+  private final EkamTest ekamTest;
 
-  public EkamWebTestContext(EkamTestDetails ekamTestDetails) {
-    this.ekamTestDetails = ekamTestDetails;
+  public EkamWebTest(EkamTest ekamTest) {
+    this.ekamTest = ekamTest;
   }
 
-  public void init() {
-    new InjectorCreator(ekamTestDetails).createWebInjector(false);
+  public void init(boolean enableMobile) {
+    new InjectorCreator(ekamTest).createWebInjector(enableMobile);
   }
 
   public void dispose() {

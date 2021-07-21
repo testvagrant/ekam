@@ -1,9 +1,9 @@
 package com.testvagrant.ekam.commons.runcontext;
 
 import com.testvagrant.ekam.commons.io.ResourcePaths;
+import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import lombok.*;
-import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class EkamTestContext {
 
-  private WebDriver driver;
+  private EkamTest ekamTest;
   private String testFolder;
 
   @Builder.Default private List<TargetDetails> targets = new ArrayList<>();
@@ -26,7 +26,7 @@ public class EkamTestContext {
   }
 
   public EkamTestContext addTarget(TargetDetails target) {
-    targets.add(target);
+    if (target != null) targets.add(target);
     return this;
   }
 }
