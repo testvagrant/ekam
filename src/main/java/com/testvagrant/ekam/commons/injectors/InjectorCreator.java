@@ -5,12 +5,11 @@ import com.google.inject.Injector;
 import com.testvagrant.ekam.api.modules.ApiHostsModule;
 import com.testvagrant.ekam.api.modules.GrpcModule;
 import com.testvagrant.ekam.commons.ModulesLibrary;
-import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
 import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.modules.EkamRunTargetModule;
-import com.testvagrant.ekam.commons.runcontext.EkamRunContext;
-import com.testvagrant.ekam.commons.runcontext.EkamRunTarget;
-import com.testvagrant.ekam.commons.testContext.EkamTestContext;
+import com.testvagrant.ekam.commons.modules.EkamTestModule;
+import com.testvagrant.ekam.commons.runcontext.EkamTestContext;
+import com.testvagrant.ekam.commons.runcontext.EkamTestExecutionDetailsManager;
+import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
 import com.testvagrant.ekam.devicemanager.models.EkamSupportedPlatforms;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
@@ -19,62 +18,79 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
+
 public class InjectorCreator {
-  private final EkamTestContext ekamTestContext;
-  private Injector mobileDriverInjector, webDriverInjector;
 
-  public InjectorCreator(EkamTestContext ekamTestContext) {
-    this.ekamTestContext = ekamTestContext;
+  private final EkamTestDetails ekamTestDetails;
+
+  public InjectorCreator(EkamTestDetails ekamTestDetails) {
+    this.ekamTestDetails = ekamTestDetails;
   }
 
-  public void createMobileInjector() {
-    this.createMobileInjector(false);
+  /** Creates API Injector with APIHosts and GRPC modules. Adds the injector to injector cache */
+  public void createApiInjector() {
+    EkamTestContext apiTestsEkamTestContext = buildEkamTestContext(null, null);
+    EkamTestExecutionDetailsManager testContextDetailsManager =
+        new EkamTestExecutionDetailsManager(apiTestsEkamTestContext);
+    testContextDetailsManager.saveTargetDetails();
+
+    Injector baseInjector = Guice.createInjector(new ModulesLibrary().apiModules());
+    EkamTestModule ekamTestModule = new EkamTestModule(testContextDetailsManager, ekamTestDetails);
+    Injector apiInjector = baseInjector.createChildInjector(ekamTestModule);
+    injectorsCache().put(apiInjector);
   }
 
-  public void createWebInjector() {
-    this.createWebInjector(false);
-  }
-
+  /** Create mobile injector binding AppiumDriver, SwitchView and WebModule(if enabled) */
   public void createMobileInjector(boolean enableWeb) {
+    // Create base injector with mobile modules
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().mobileModules());
-
     MobileDriverDetails mobileDriverDetails = baseInjector.getInstance(MobileDriverDetails.class);
-    EkamRunContext mobileContext =
-        getEkamRunContext(mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
-    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
-    baseInjector = enableWeb(enableWeb, baseInjector, optimusRunTarget);
+    EkamTestContext mobileContext =
+        buildEkamTestContext(
+            mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
+
+    // Create screenshot directory and target.json for the current test
+    EkamTestExecutionDetailsManager testContextDetailsManager =
+        new EkamTestExecutionDetailsManager(mobileContext);
+    testContextDetailsManager.createScreenShotDirectory();
+    testContextDetailsManager.saveTargetDetails();
+
+    // Bind web modules to base injector
+    if (enableWeb) baseInjector = enableWeb(baseInjector, testContextDetailsManager);
+
     Injector mobileDriverInjector =
         baseInjector.createChildInjector(
-            new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
+            new EkamTestModule(testContextDetailsManager, ekamTestDetails));
+
+    // Bind API injector to base injector and add to injector cache
     mobileDriverInjector = createApiInjector(mobileDriverInjector);
-    updateInjectors(mobileDriverInjector);
+    injectorsCache().put(mobileDriverInjector);
   }
 
+  /** Create web injector binding WebDriver, SwitchView and MobileModule(if enabled) */
   public void createWebInjector(boolean enableMobile) {
+    // Create base injector with web modules
     Injector baseInjector = Guice.createInjector(new ModulesLibrary().webModules());
     WebDriver webDriver = baseInjector.getInstance(WebDriver.class);
-    EkamRunContext mobileContext = getEkamRunContext(webDriver, buildTargetDetails(webDriver));
-    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
-    baseInjector = enableWeb(enableMobile, baseInjector, optimusRunTarget);
+    EkamTestContext webContext = buildEkamTestContext(webDriver, buildTargetDetails(webDriver));
+
+    // Create screenshot directory and target.json for the current test
+    EkamTestExecutionDetailsManager testContextDetailsManager =
+        new EkamTestExecutionDetailsManager(webContext);
+    testContextDetailsManager.createScreenShotDirectory();
+    testContextDetailsManager.saveTargetDetails();
+
+    // Bind mobile modules to base injector
+    if (enableMobile) baseInjector = enableMobile(baseInjector, testContextDetailsManager);
+
     Injector webDriverInjector =
         baseInjector.createChildInjector(
-            new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
+            new EkamTestModule(testContextDetailsManager, ekamTestDetails));
+
+    // Bind API injector to base injector and add to injector cache
     webDriverInjector = createApiInjector(webDriverInjector);
-    updateInjectors(webDriverInjector);
-  }
-
-  private void updateInjectors(Injector baseInjector) {
-    InjectorsCacheProvider.getInstance().put(baseInjector);
-  }
-
-  public void createApiInjector() {
-    EkamRunContext mobileContext = getEkamRunContext(null, null);
-    EkamRunTarget optimusRunTarget = new EkamRunTarget(mobileContext);
-    Injector apiInjector =
-        createApiInjector(Guice.createInjector(new ModulesLibrary().baseModules()));
-    apiInjector =
-        apiInjector.createChildInjector(new EkamRunTargetModule(optimusRunTarget, ekamTestContext));
-    updateInjectors(apiInjector);
+    injectorsCache().put(webDriverInjector);
   }
 
   public Injector createApiInjector(Injector baseInjector) {
@@ -82,38 +98,31 @@ public class InjectorCreator {
   }
 
   private Injector enableWeb(
-      boolean enableWeb, Injector baseInjector, EkamRunTarget optimusRunTarget) {
-    if (enableWeb) {
-      Injector webInjector = baseInjector.createChildInjector(new WebModule());
-      WebDriver webDriver = webInjector.getInstance(WebDriver.class);
-      EkamRunContext webContext = getEkamRunContext(webDriver, buildTargetDetails(webDriver));
-      optimusRunTarget.addWebContext(webContext);
-      return webInjector;
-    }
-    return baseInjector;
+      Injector baseInjector, EkamTestExecutionDetailsManager testContextDetailsManager) {
+    Injector webInjector = baseInjector.createChildInjector(new WebModule());
+    WebDriver webDriver = webInjector.getInstance(WebDriver.class);
+    EkamTestContext webContext = buildEkamTestContext(webDriver, buildTargetDetails(webDriver));
+    testContextDetailsManager.addWebContext(webContext);
+    return webInjector;
   }
 
   private Injector enableMobile(
-      boolean enableMobile, Injector baseInjector, EkamRunTarget optimusRunTarget) {
-    if (enableMobile) {
-      Injector mobileInjector = baseInjector.createChildInjector(new MobileModule());
-      MobileDriverDetails mobileDriverDetails =
-          mobileInjector.getInstance(MobileDriverDetails.class);
-      EkamRunContext mobileContext =
-          getEkamRunContext(
-              mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
-      optimusRunTarget.addMobileContext(mobileContext);
-      return mobileInjector;
-    }
-    return baseInjector;
+      Injector baseInjector, EkamTestExecutionDetailsManager optimusRunTarget) {
+    Injector mobileInjector = baseInjector.createChildInjector(new MobileModule());
+    MobileDriverDetails mobileDriverDetails = mobileInjector.getInstance(MobileDriverDetails.class);
+    EkamTestContext mobileContext =
+        buildEkamTestContext(
+            mobileDriverDetails.getDriver(), mobileDriverDetails.getTargetDetails());
+    optimusRunTarget.addMobileContext(mobileContext);
+    return mobileInjector;
   }
 
-  private EkamRunContext getEkamRunContext(WebDriver webDriver, TargetDetails targetDetails) {
-    return EkamRunContext.builder()
-        .webDriver(webDriver)
+  private EkamTestContext buildEkamTestContext(WebDriver webDriver, TargetDetails targetDetails) {
+    return EkamTestContext.builder()
+        .driver(webDriver)
         .build()
         .addTarget(targetDetails)
-        .testPath(ekamTestContext.getFeatureName(), ekamTestContext.getTestName());
+        .testPath(ekamTestDetails.getFeature(), ekamTestDetails.getScenario());
   }
 
   public TargetDetails buildTargetDetails(WebDriver webDriver) {

@@ -1,11 +1,13 @@
 package com.testvagrant.ekam.testBases.testng;
 
-import com.testvagrant.ekam.commons.testContext.EkamTestContextConverter;
-import com.testvagrant.ekam.mobile.initializers.MobileContextInitializer;
+import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
+import com.testvagrant.ekam.mobile.initializers.EkamMobileTestContext;
 import com.testvagrant.ekam.testBases.EkamTest;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import static com.testvagrant.ekam.commons.testContext.TestNgEkamTestContextBuilder.buildTestContext;
 
 public class MobileTest extends EkamTest {
 
@@ -17,20 +19,24 @@ public class MobileTest extends EkamTest {
     this();
     System.setProperty("mobileFeed", mobileFeed);
   }
-  //
-  //  @BeforeSuite(alwaysRun = true)
-  //  public void hooksSetup() {
-  //    new EkamExecutionHooks().apply();
-  //  }
 
+  /**
+   * Executes before every test. Creates Mobile injector binding AppiumDriver and Switch view
+   * Creates screenshot directory and target.json for the current test being executed
+   */
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
-    new MobileContextInitializer(EkamTestContextConverter.convert(iTestResult)).init();
+    EkamTestDetails testContext = buildTestContext(iTestResult);
+    new EkamMobileTestContext(testContext).init();
   }
 
+  /**
+   * Executes everytime after completion of a test. Updates dashboard build with Test details
+   * Performs Appium Teardown
+   */
   @AfterMethod(alwaysRun = true)
   public void ekamMobileTearDown(ITestResult iTestResult) {
     updateBuild(iTestResult);
-    new MobileContextInitializer(EkamTestContextConverter.convert(iTestResult)).dispose();
+    new EkamMobileTestContext(buildTestContext(iTestResult)).dispose();
   }
 }

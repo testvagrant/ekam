@@ -1,30 +1,31 @@
 package com.testvagrant.ekam.mobile.initializers;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
 import com.testvagrant.ekam.commons.factories.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.commons.injectors.InjectorCreator;
 import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.testContext.EkamTestContext;
+import com.testvagrant.ekam.commons.testContext.EkamTestDetails;
 import com.testvagrant.ekam.config.models.EkamConfig;
 
 import java.util.Objects;
 
-public class MobileContextInitializer {
+import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
-  private final EkamTestContext ekamTestContext;
+public class EkamMobileTestContext {
 
-  public MobileContextInitializer(EkamTestContext ekamTestContext) {
-    this.ekamTestContext = ekamTestContext;
+  private final EkamTestDetails ekamTestDetails;
+
+  public EkamMobileTestContext(EkamTestDetails ekamTestDetails) {
+    this.ekamTestDetails = ekamTestDetails;
   }
 
   public void init() {
-    new InjectorCreator(ekamTestContext).createMobileInjector();
+    new InjectorCreator(ekamTestDetails).createMobileInjector(false);
   }
 
   public void dispose() {
     MobileDriverDetails mobileDriverDetails = null;
-    Injector injector = getInjector();
+    Injector injector = injectorsCache().getInjector();
     EkamConfig ekamConfig = injector.getInstance(EkamConfig.class);
     try {
       mobileDriverDetails = injector.getInstance(MobileDriverDetails.class);
@@ -39,7 +40,4 @@ public class MobileContextInitializer {
     }
   }
 
-  private Injector getInjector() {
-    return InjectorsCacheProvider.getInstance().get();
-  }
 }

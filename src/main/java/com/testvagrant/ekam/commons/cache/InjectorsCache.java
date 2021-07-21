@@ -8,7 +8,7 @@ public class InjectorsCache extends DataCache<Injector> {
     put(String.valueOf(Thread.currentThread().getId()), injector);
   }
 
-  public Injector get() {
+  public Injector getInjector() {
     return get(String.valueOf(Thread.currentThread().getId()))
         .orElseThrow(() -> new RuntimeException("Cannot get injector"));
   }

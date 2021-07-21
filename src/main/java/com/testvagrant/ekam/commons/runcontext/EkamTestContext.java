@@ -6,7 +6,6 @@ import lombok.*;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -14,25 +13,20 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EkamRunContext {
+public class EkamTestContext {
 
-  private WebDriver webDriver;
+  private WebDriver driver;
   private String testFolder;
 
   @Builder.Default private List<TargetDetails> targets = new ArrayList<>();
 
-  public EkamRunContext testPath(String className, String testName) {
+  public EkamTestContext testPath(String className, String testName) {
     testFolder = ResourcePaths.getTestPath(className, testName);
     return this;
   }
 
-  public EkamRunContext addTarget(TargetDetails target) {
+  public EkamTestContext addTarget(TargetDetails target) {
     targets.add(target);
-    return this;
-  }
-
-  public EkamRunContext addTarget(TargetDetails... target) {
-    targets.addAll(Arrays.asList(target));
     return this;
   }
 }

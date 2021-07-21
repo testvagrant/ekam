@@ -1,9 +1,8 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.commons.cache.InjectorsCacheProvider;
 import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.runcontext.EkamRunTarget;
+import com.testvagrant.ekam.commons.runcontext.EkamTestExecutionDetailsManager;
 import com.testvagrant.ekam.dashboard.StepRecorder;
 import com.testvagrant.ekam.dashboard.models.Step;
 import com.testvagrant.ekam.mobile.MobileScreen;
@@ -15,6 +14,8 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 
 import java.nio.file.Path;
 import java.time.Duration;
+
+import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
 
 @SuppressWarnings("unchecked")
 public class LayoutInitiator {
@@ -35,18 +36,21 @@ public class LayoutInitiator {
     return getInstance().createAPILayout(tClient);
   }
 
-  public Path captureScreenshot() {
-    EkamRunTarget ekamRunTarget = getInjector().getInstance(EkamRunTarget.class);
-    return ekamRunTarget.captureScreenshot();
+  public void captureScreenshot() {
+    EkamTestExecutionDetailsManager ekamTestExecutionDetailsManager =
+        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
+    ekamTestExecutionDetailsManager.captureScreenshot();
   }
 
   public Path captureWebScreenshot() {
-    EkamRunTarget ekamRunTarget = getInjector().getInstance(EkamRunTarget.class);
+    EkamTestExecutionDetailsManager ekamRunTarget =
+        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
     return ekamRunTarget.captureWebScreenshot();
   }
 
   public Path captureMobileScreenshot() {
-    EkamRunTarget ekamRunTarget = getInjector().getInstance(EkamRunTarget.class);
+    EkamTestExecutionDetailsManager ekamRunTarget =
+        getInjector().getInstance(EkamTestExecutionDetailsManager.class);
     return ekamRunTarget.captureMobileScreenshot();
   }
 
@@ -78,6 +82,6 @@ public class LayoutInitiator {
   }
 
   private Injector getInjector() {
-    return InjectorsCacheProvider.getInstance().get();
+    return injectorsCache().getInjector();
   }
 }

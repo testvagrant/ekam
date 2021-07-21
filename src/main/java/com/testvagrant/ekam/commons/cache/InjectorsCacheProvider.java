@@ -6,7 +6,7 @@ public class InjectorsCacheProvider {
 
   private InjectorsCacheProvider() {}
 
-  public static InjectorsCache getInstance() {
+  public static InjectorsCache injectorsCache() {
     if (injectorsCacheProvider == null) {
       synchronized (InjectorsCacheProvider.class) {
         if (injectorsCacheProvider == null) {
