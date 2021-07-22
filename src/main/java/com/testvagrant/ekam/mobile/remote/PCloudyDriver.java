@@ -1,10 +1,10 @@
 package com.testvagrant.ekam.mobile.remote;
 
-import com.testvagrant.ekam.commons.config.CloudConfig;
-import com.testvagrant.ekam.commons.parsers.testfeed.MobileConfigParser;
+import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.devicemanager.devicefinder.PCloudyDeviceFinder;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.CapabilityMapper;
+import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.apache.commons.lang3.tuple.Triple;
 import org.openqa.selenium.remote.DesiredCapabilities;

@@ -1,19 +1,19 @@
 package com.testvagrant.ekam.mobile.remote;
 
-import com.testvagrant.ekam.commons.parsers.testfeed.MobileConfigParser;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
+import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
 import org.apache.commons.lang3.tuple.Triple;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
-import static com.testvagrant.ekam.commons.constants.Hubs.*;
+import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
 
 public class RemoteMobileDriverFactory {
 
-  public static Triple<URL, DesiredCapabilities, TargetDetails> getInstance(
-      String hub, MobileConfigParser mobileConfigParser) {
-    switch (hub) {
+  public static Triple<URL, DesiredCapabilities, TargetDetails> remoteMobileDriverFactory(
+      MobileConfigParser mobileConfigParser) {
+    switch (mobileConfigParser.getMobileConfig().getHub()) {
       case BROWSERSTACK:
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();
       case P_CLOUDY:

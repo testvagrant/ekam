@@ -1,11 +1,11 @@
 package com.testvagrant.ekam.commons;
 
 import com.google.inject.Injector;
-import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.runcontext.EkamTestScreenshotTaker;
 import com.testvagrant.ekam.dashboard.StepRecorder;
 import com.testvagrant.ekam.dashboard.models.Step;
+import com.testvagrant.ekam.internal.executiontimeline.EkamTestScreenshotTaker;
 import com.testvagrant.ekam.mobile.MobileScreen;
+import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import com.testvagrant.ekam.web.WebPage;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebDriver;
@@ -15,9 +15,8 @@ import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import java.nio.file.Path;
 import java.time.Duration;
 
-import static com.testvagrant.ekam.commons.cache.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
-@SuppressWarnings("unchecked")
 public class LayoutInitiator {
 
   public static LayoutInitiator layoutInitiator() {

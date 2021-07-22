@@ -1,8 +1,8 @@
 package com.testvagrant.ekam.mobile.remote;
 
-import com.testvagrant.ekam.commons.config.CloudConfig;
-import com.testvagrant.ekam.commons.exceptions.HubNotFoundException;
 import com.testvagrant.ekam.commons.io.GsonParser;
+import com.testvagrant.ekam.commons.remote.exceptions.HubNotFoundException;
+import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

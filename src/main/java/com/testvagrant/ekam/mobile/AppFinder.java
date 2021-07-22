@@ -5,9 +5,9 @@ import com.testvagrant.ekam.commons.io.FileFinder;
 import java.io.File;
 import java.util.List;
 
-import static com.testvagrant.ekam.commons.constants.MobilePlatforms.ANDROID;
-import static com.testvagrant.ekam.commons.constants.MobilePlatforms.IOS;
 import static com.testvagrant.ekam.commons.io.ResourcePaths.APP_DIR;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.ANDROID;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.IOS;
 
 public class AppFinder {
 

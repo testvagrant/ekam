@@ -2,14 +2,13 @@ package com.testvagrant.ekam.mobile.driver;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.testvagrant.ekam.commons.models.mobile.MobileDriverDetails;
-import com.testvagrant.ekam.commons.parsers.testfeed.MobileConfigParser;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.devicemanager.devicefinder.LocalDeviceFinder;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.drivers.mobile.MobileDriverManager;
 import com.testvagrant.ekam.drivers.mobile.ServerManager;
-import com.testvagrant.ekam.mobile.remote.RemoteMobileDriverFactory;
+import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
+import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -18,9 +17,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
-public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails> {
+import static com.testvagrant.ekam.mobile.remote.RemoteMobileDriverFactory.remoteMobileDriverFactory;
 
-  protected ThreadLocal<MobileDriverDetails> mobileDriverDetailsThreadLocal = new ThreadLocal<>();
+public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails> {
 
   @Inject private EkamConfig ekam;
 
@@ -33,25 +32,32 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
 
   private MobileDriverDetails createRemoteDriver(MobileConfigParser mobileConfigParser) {
     Triple<URL, DesiredCapabilities, TargetDetails> sessionDetails =
-        RemoteMobileDriverFactory.getInstance(ekam.getMobile().getHub(), mobileConfigParser);
+        remoteMobileDriverFactory(mobileConfigParser);
+
+    URL remoteUrl = sessionDetails.getLeft();
+    DesiredCapabilities desiredCapabilities = sessionDetails.getMiddle();
+    TargetDetails targetDetails = sessionDetails.getRight();
+
     AppiumDriver<MobileElement> driver =
-        new MobileDriverManager(sessionDetails.getLeft(), sessionDetails.getMiddle())
-            .createDriver();
+        new MobileDriverManager(remoteUrl, desiredCapabilities).createDriver();
+
     return MobileDriverDetails.builder()
         .driver(driver)
-        .targetDetails(sessionDetails.getRight())
-        .capabilities(sessionDetails.getMiddle())
+        .targetDetails(targetDetails)
+        .capabilities(desiredCapabilities)
         .build();
   }
 
   private MobileDriverDetails createLocalDriver(MobileConfigParser mobileConfigParser) {
-    DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-    LocalDeviceFinder localDeviceFinder =
+    TargetDetails availableDevice =
         new LocalDeviceFinder(
-            mobileConfigParser.getPlatform(), mobileConfigParser.getDeviceFilters());
-    TargetDetails availableDevice = localDeviceFinder.findDevice();
-    DesiredCapabilities capabilities =
-        desiredCapabilities.merge(new DesiredCapabilities(availableDevice.asMap()));
+                mobileConfigParser.getPlatform(), mobileConfigParser.getDeviceFilters())
+            .findDevice();
+
+    DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
+    DesiredCapabilities deviceCapabilities = new DesiredCapabilities(availableDevice.asMap());
+    DesiredCapabilities capabilities = desiredCapabilities.merge(deviceCapabilities);
+
     AppiumDriverLocalService appiumDriverLocalService =
         new ServerManager().startService(mobileConfigParser.getServerArguments());
     AppiumDriver<MobileElement> driver =

@@ -1,10 +1,10 @@
 package com.testvagrant.ekam.mobile.remote;
 
-import com.testvagrant.ekam.commons.config.CloudConfig;
+import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.devicemanager.remote.browserstack.BrowserStackUploadManager;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;
 
-import static com.testvagrant.ekam.commons.constants.Hubs.*;
+import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
 
 public class RemoteDriverUploadFactory {
   public static String uploadUrl(String hub, String appPath) {

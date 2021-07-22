@@ -2,11 +2,10 @@ package com.testvagrant.ekam.web.drivers;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.testvagrant.ekam.commons.config.CloudConfig;
-import com.testvagrant.ekam.commons.parsers.testfeed.WebConfigParser;
 import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.commons.random.FindAny;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
+import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.config.models.WebConfig;
 import com.testvagrant.ekam.drivers.models.BrowserConfig;
@@ -15,6 +14,7 @@ import com.testvagrant.ekam.drivers.web.LocalDriverManager;
 import com.testvagrant.ekam.drivers.web.RemoteDriverManager;
 import com.testvagrant.ekam.mobile.remote.ConfigLoader;
 import com.testvagrant.ekam.mobile.remote.RemoteUrlBuilder;
+import com.testvagrant.ekam.web.configparser.WebConfigParser;
 import org.awaitility.Awaitility;
 import org.openqa.selenium.WebDriver;
 
