@@ -1,4 +1,7 @@
 image: adoptopenjdk:11-jdk-hotspot
 build:
   stage: build
+  only:
+    - master
+    - merge_requests
   script: ./gradlew clean build --info
