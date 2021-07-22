@@ -5,7 +5,7 @@ import com.google.inject.Provider;
 import com.testvagrant.ekam.commons.config.CloudConfig;
 import com.testvagrant.ekam.commons.parsers.testfeed.WebConfigParser;
 import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
-import com.testvagrant.ekam.commons.random.FindOne;
+import com.testvagrant.ekam.commons.random.FindAny;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.config.models.WebConfig;
@@ -52,7 +52,7 @@ public class WebDriverProvider implements Provider<WebDriver> {
     WebConfig webConfig = ekam.getWeb();
 
     if (webConfig.isAny()) {
-      String browser = FindOne.inList(randomBrowsers);
+      String browser = FindAny.inList(randomBrowsers);
       webConfig.setTarget(browser.trim());
       return browser;
     }

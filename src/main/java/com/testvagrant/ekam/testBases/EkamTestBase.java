@@ -2,7 +2,7 @@ package com.testvagrant.ekam.testBases;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.testvagrant.ekam.commons.initializers.DashboardTestNgBuildManager;
+import com.testvagrant.ekam.reports.dashboard.DashboardTestNgBuildManager;
 import com.testvagrant.ekam.commons.models.EkamTest;
 import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.config.models.EkamConfig;

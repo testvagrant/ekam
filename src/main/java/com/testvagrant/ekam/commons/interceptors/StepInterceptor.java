@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.commons.interceptors;
 
 import com.testvagrant.ekam.commons.Toggles;
-import com.testvagrant.ekam.reports.AllureAttachment;
+import com.testvagrant.ekam.reports.allure.AllureAttachment;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.exception.ExceptionUtils;

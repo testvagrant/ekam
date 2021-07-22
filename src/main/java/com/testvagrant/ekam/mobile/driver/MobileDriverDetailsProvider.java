@@ -22,19 +22,18 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
 
   protected ThreadLocal<MobileDriverDetails> mobileDriverDetailsThreadLocal = new ThreadLocal<>();
 
-  @Inject EkamConfig ekam;
+  @Inject private EkamConfig ekam;
 
   public MobileDriverDetails setupMobileDriver() {
-    return ekam.getMobile().isRemote() ? createRemoteDriver() : createLocalDriver();
+    MobileConfigParser mobileConfigParser = new MobileConfigParser(ekam.getMobile());
+    return ekam.getMobile().isRemote()
+        ? createRemoteDriver(mobileConfigParser)
+        : createLocalDriver(mobileConfigParser);
   }
 
-  private MobileConfigParser getMobileConfigParser() {
-    return new MobileConfigParser(ekam.getMobile());
-  }
-
-  private MobileDriverDetails createRemoteDriver() {
+  private MobileDriverDetails createRemoteDriver(MobileConfigParser mobileConfigParser) {
     Triple<URL, DesiredCapabilities, TargetDetails> sessionDetails =
-        RemoteMobileDriverFactory.getInstance(ekam.getMobile().getHub(), getMobileConfigParser());
+        RemoteMobileDriverFactory.getInstance(ekam.getMobile().getHub(), mobileConfigParser);
     AppiumDriver<MobileElement> driver =
         new MobileDriverManager(sessionDetails.getLeft(), sessionDetails.getMiddle())
             .createDriver();
@@ -45,18 +44,16 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
         .build();
   }
 
-  private MobileDriverDetails createLocalDriver() {
-    MobileConfigParser mobileConfigParser = getMobileConfigParser();
+  private MobileDriverDetails createLocalDriver(MobileConfigParser mobileConfigParser) {
     DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
     LocalDeviceFinder localDeviceFinder =
         new LocalDeviceFinder(
-            mobileConfigParser.getPlatform().name().toLowerCase(),
-            mobileConfigParser.getDeviceFilters());
+            mobileConfigParser.getPlatform(), mobileConfigParser.getDeviceFilters());
     TargetDetails availableDevice = localDeviceFinder.findDevice();
     DesiredCapabilities capabilities =
         desiredCapabilities.merge(new DesiredCapabilities(availableDevice.asMap()));
     AppiumDriverLocalService appiumDriverLocalService =
-        new ServerManager().startService(mobileConfigParser.getServerArgumentsMap());
+        new ServerManager().startService(mobileConfigParser.getServerArguments());
     AppiumDriver<MobileElement> driver =
         new MobileDriverManager(appiumDriverLocalService.getUrl(), capabilities).createDriver();
 

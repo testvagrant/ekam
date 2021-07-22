@@ -7,7 +7,7 @@ import com.testvagrant.ekam.atoms.mobile.QueryFunctions;
 import com.testvagrant.ekam.atoms.mobile.Textbox;
 import com.testvagrant.ekam.atoms.mobile.android.AndroidDeviceDriver;
 import com.testvagrant.ekam.atoms.mobile.ios.IOSDeviceDriver;
-import com.testvagrant.ekam.reports.ReportLogger;
+import com.testvagrant.ekam.reports.allure.ReportLogger;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.openqa.selenium.By;

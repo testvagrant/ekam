@@ -52,7 +52,7 @@ public class QualityKioskDriver {
 
   private TargetDetails findTarget() {
     return new PCloudyDeviceFinder(
-            mobileConfigParser.getPlatform().name().toLowerCase(),
+            mobileConfigParser.getPlatform(),
             mobileConfigParser.getDeviceFilters(),
             cloudConfig.getApiHost(),
             cloudConfig.getUsername(),

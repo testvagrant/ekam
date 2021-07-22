@@ -49,7 +49,7 @@ public class BrowserStackDriver {
 
   private TargetDetails findTarget() {
     return new BrowserStackDeviceFinder(
-            mobileConfigParser.getPlatform().name().toLowerCase(),
+            mobileConfigParser.getPlatform(),
             mobileConfigParser.getDeviceFilters(),
             cloudConfig.getUsername(),
             cloudConfig.getAccessKey())

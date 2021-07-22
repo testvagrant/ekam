@@ -1,7 +1,6 @@
-package com.testvagrant.ekam.commons.initializers;
+package com.testvagrant.ekam.reports.dashboard;
 
 import com.testvagrant.ekam.commons.cache.DataStoreCache;
-import com.testvagrant.ekam.commons.injectors.Injectors;
 import com.testvagrant.ekam.dashboard.EkamTestNGBuildGenerator;
 import com.testvagrant.ekam.dashboard.models.dashboard.BuildOptions;
 import com.testvagrant.ekam.dashboard.publishers.EkamReportPublisher;
@@ -24,9 +23,9 @@ public class DashboardTestNgBuildManager {
 
   public void start(String target) {
     testNGBuildGenerator.get().startBuild();
-    dataStoreProvider().put("buildGenerator", testNGBuildGenerator);
+    dataStoreProvider().put("buildGenerator", testNGBuildGenerator.get());
     dataStoreCache.put("target", target);
-    dataStoreCache.put(Injectors.LOG_FOLDER.getInjector(), createLogFolder());
+//    dataStoreCache.put(Injectors.LOG_FOLDER.getInjector(), createLogFolder());
   }
 
   public void finish(String dashboardUrl) {

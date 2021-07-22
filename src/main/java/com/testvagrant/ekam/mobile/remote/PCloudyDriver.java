@@ -55,7 +55,7 @@ public class PCloudyDriver {
 
   private TargetDetails findTarget() {
     return new PCloudyDeviceFinder(
-            mobileConfigParser.getPlatform().name().toLowerCase(),
+            mobileConfigParser.getPlatform(),
             mobileConfigParser.getDeviceFilters(),
             cloudConfig.getApiHost(),
             cloudConfig.getUsername(),

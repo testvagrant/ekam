@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.reports;
+package com.testvagrant.ekam.reports.allure;
 
 import io.qameta.allure.Allure;
 import org.apache.commons.lang3.exception.ExceptionUtils;

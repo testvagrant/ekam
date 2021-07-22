@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.reports;
+package com.testvagrant.ekam.reports.allure;
 
 import org.testng.Reporter;
 

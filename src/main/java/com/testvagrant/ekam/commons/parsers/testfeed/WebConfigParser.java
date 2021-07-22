@@ -7,38 +7,27 @@ import com.testvagrant.ekam.drivers.models.BrowserConfig;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
-import java.util.Map;
 
 public class WebConfigParser extends TestConfigParser {
 
-  private final WebTestFeed webTestFeed;
   private final WebConfig webConfig;
 
   public WebConfigParser(WebConfig webConfig) {
     this.webConfig = webConfig;
-    String testFeedName = webConfig.getFeed();
-    webTestFeed = getTestFeed(testFeedName);
-  }
-
-  public DesiredCapabilities getDesiredCapabilities() {
-    Map<String, Object> capabilitiesMap = webTestFeed.getDesiredCapabilities();
-    return new DesiredCapabilities(capabilitiesMap);
-  }
-
-  public List<String> getArguments() {
-    List<String> arguments = webTestFeed.getArguments();
-    if (webConfig.isHeadless()) {
-      arguments.add("--headless");
-    }
-    return arguments;
   }
 
   public BrowserConfig buildBrowserConfig() {
+    WebTestFeed webTestFeed = getTestFeed(webConfig.getFeed());
+    DesiredCapabilities capabilities =
+        new DesiredCapabilities(webTestFeed.getDesiredCapabilities());
+
+    List<String> arguments = webTestFeed.getArguments();
+    if (webConfig.isHeadless()) arguments.add("--headless");
+
     return BrowserConfig.builder()
-        .desiredCapabilities(getDesiredCapabilities())
-        .arguments(getArguments())
+        .desiredCapabilities(capabilities)
+        .arguments(arguments)
         .preferences(webTestFeed.getPreferences())
-        .arguments(getArguments())
         .experimentalOptions(webTestFeed.getExperimentalOptions())
         .extensions(webTestFeed.getExtensions())
         .build();

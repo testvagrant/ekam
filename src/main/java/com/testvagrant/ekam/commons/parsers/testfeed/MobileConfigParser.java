@@ -1,16 +1,9 @@
 package com.testvagrant.ekam.commons.parsers.testfeed;
 
 import com.testvagrant.ekam.commons.generators.PortGenerator;
-import com.testvagrant.ekam.commons.io.FileFinder;
-import com.testvagrant.ekam.commons.io.GsonParser;
-import com.testvagrant.ekam.commons.io.ResourcePaths;
-import com.testvagrant.ekam.commons.models.caps.AndroidOnlyCapabilities;
-import com.testvagrant.ekam.commons.models.caps.IOSOnlyCapabilities;
 import com.testvagrant.ekam.commons.models.mobile.MobileTestFeed;
-import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
-import com.testvagrant.ekam.commons.random.FindOne;
+import com.testvagrant.ekam.commons.random.FindAny;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
-import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.config.models.MobileConfig;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilter;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
@@ -18,192 +11,168 @@ import com.testvagrant.ekam.mobile.AppFinder;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.flags.ServerArgument;
-import lombok.Getter;
 import org.apache.commons.exec.OS;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Getter
+import static com.testvagrant.ekam.commons.constants.MobilePlatforms.ANDROID;
+import static com.testvagrant.ekam.commons.constants.MobilePlatforms.IOS;
+import static com.testvagrant.ekam.config.models.ConfigKeys.Env.MOBILE_ENV;
+
 public class MobileConfigParser extends TestConfigParser {
-  private final MobileTestFeed mobileTestFeed;
-  private final String testFeedName;
-  private final String platform;
-  private final GsonParser gsonParser;
-  private final List<Map<String, Object>> desiredCapabilitiesList;
-  private final Map<String, Object> desiredCapabilities;
+  private final MobileTestFeed testFeed;
   private final MobileConfig mobileConfig;
-  List<String> randomDevices;
+  private String platform;
+  private DesiredCapabilities desiredCapabilities;
+  private DeviceFilters deviceFilters;
+  private Map<ServerArgument, String> serverArguments;
 
   public MobileConfigParser(MobileConfig mobileConfig) {
     this.mobileConfig = mobileConfig;
-    this.testFeedName = this.mobileConfig.getFeed();
-    this.platform = updatePlatformIfAny();
-    this.mobileTestFeed = getTestFeed(testFeedName);
-    this.desiredCapabilitiesList = mobileTestFeed.getDesiredCapabilities();
-    this.desiredCapabilities = getDesiredCapabilities(this.platform);
-    this.gsonParser = new GsonParser();
-    this.randomDevices = generateRandomDevices();
+    setPlatform();
+    this.testFeed = getTestFeed(mobileConfig.getFeed());
   }
 
-  public EkamSupportedPlatforms getPlatform() {
-    return EkamSupportedPlatforms.valueOf(String.valueOf(getPlatformValue().trim()).toUpperCase());
+  public String getPlatform() {
+    if (platform == null) setPlatform();
+    return platform;
   }
 
-  private String getPlatformValue() {
-    return desiredCapabilities.get(MobileCapabilityType.PLATFORM_NAME).toString();
+  public MobileConfig getMobileConfig() {
+    return mobileConfig;
   }
 
-  private Map<String, Object> getDesiredCapabilities(String platform) {
-    if (desiredCapabilitiesList.isEmpty()) {
-      throw new RuntimeException("Cannot find desired capabilities in " + testFeedName + ".json");
-    }
-    if (desiredCapabilitiesList.size() == 1) {
-      return desiredCapabilitiesList.get(0);
-    }
-
-    if (mobileConfig.isAny() && desiredCapabilitiesList.size() == 1) {
-      return desiredCapabilitiesList.get(0);
-    }
-    return desiredCapabilitiesList.stream()
-        .filter(
-            desiredCaps ->
-                desiredCaps
-                    .get(MobileCapabilityType.PLATFORM_NAME)
-                    .toString()
-                    .equalsIgnoreCase(platform))
-        .findFirst()
-        .orElseThrow(
-            () ->
-                new RuntimeException(
-                    String.format(
-                        "Cannot find desired caps for platform %s in testfeed %s",
-                        platform, testFeedName)));
-  }
-
-  public Map<ServerArgument, String> getServerArgumentsMap() {
-    return mobileConfig.isServerArgsProvided()
-        ? new ServerArgumentParser(mobileConfig.getServerArgs()).getServerArgumentsMap()
-        : new ServerArgumentParser(mobileTestFeed.getServerArguments()).getServerArgumentsMap();
+  public Map<ServerArgument, String> getServerArguments() {
+    if (serverArguments == null) setServerArguments();
+    return serverArguments;
   }
 
   public DesiredCapabilities getDesiredCapabilities() {
-    Map<String, Object> generalCapabilities =
-        getPlatform().equals(EkamSupportedPlatforms.IOS)
-            ? getIOSCapabilities().toDesiredCapabilities()
-            : getAndroidCapabilities().toDesiredCapabilities();
-
-    Map<String, Object> mergedCapabilities = mergeDesiredCapabilities(generalCapabilities);
-    Map<String, Object> desiredCapabilitiesMap = updateMandatoryDesiredCaps(mergedCapabilities);
-    return new DesiredCapabilities(desiredCapabilitiesMap);
+    if (desiredCapabilities == null) setDesiredCapabilities();
+    return desiredCapabilities;
   }
 
   public DeviceFilters getDeviceFilters() {
+    if (deviceFilters == null) setDeviceFilters();
+    return deviceFilters;
+  }
+
+  private void setDeviceFilters() {
     if (mobileConfig.isDeviceFiltersProvided()) {
-      return new DeviceFiltersParser(mobileConfig.getDeviceFilters()).getDeviceFilters();
+      deviceFilters = loadFeed(mobileConfig.getDeviceFilters(), MOBILE_ENV, DeviceFilters.class);
+      return;
     }
 
     Map<String, Object> desiredCapabilities = getDesiredCapabilities().asMap();
-    String udid = String.valueOf(desiredCapabilities.getOrDefault(MobileCapabilityType.UDID, ""));
-    String model =
-        String.valueOf(desiredCapabilities.getOrDefault(MobileCapabilityType.DEVICE_NAME, ""));
+    String udid = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.UDID, "");
+    String model = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.DEVICE_NAME, "");
+    String platformVersion =
+        (String) desiredCapabilities.getOrDefault(MobileCapabilityType.PLATFORM_VERSION, "");
 
     DeviceFilter udidFilter =
         new DeviceFilter().toBuilder().include(Collections.singletonList(udid)).build();
 
     DeviceFilter modelFilter =
         new DeviceFilter().toBuilder().include(Collections.singletonList(model)).build();
-    return new DeviceFilters().toBuilder().model(modelFilter).udid(udidFilter).build();
+
+    DeviceFilter platformVersionFilter =
+        new DeviceFilter().toBuilder().include(Collections.singletonList(platformVersion)).build();
+
+    deviceFilters =
+        new DeviceFilters()
+            .toBuilder()
+                .model(modelFilter)
+                .udid(udidFilter)
+                .platformVersion(platformVersionFilter)
+                .build();
   }
 
-  private AndroidOnlyCapabilities getAndroidCapabilities() {
-    return gsonParser.serialize(desiredCapabilities, AndroidOnlyCapabilities.class);
+  private void setServerArguments() {
+    serverArguments =
+        mobileConfig.isServerArgsProvided()
+            ? new ServerArgumentParser(mobileConfig.getServerArgs()).getServerArgumentsMap()
+            : new ServerArgumentParser(testFeed.getServerArguments()).getServerArgumentsMap();
   }
 
-  private IOSOnlyCapabilities getIOSCapabilities() {
-    return gsonParser.serialize(desiredCapabilities, IOSOnlyCapabilities.class);
-  }
+  private void setDesiredCapabilities() {
+    List<Map<String, Object>> capabilitiesList = testFeed.getDesiredCapabilities();
+    RuntimeException exception = new RuntimeException("Cannot find desired capabilities");
 
-  private Map<String, Object> mergeDesiredCapabilities(Map<String, Object> desiredCapabilitiesMap) {
-    desiredCapabilities.entrySet().parallelStream()
-        .forEach(
-            entry -> {
-              if (!desiredCapabilitiesMap.containsKey(entry.getKey())) {
-                desiredCapabilitiesMap.put(entry.getKey(), entry.getValue());
-              }
-            });
-    return desiredCapabilitiesMap;
-  }
-
-  private Map<String, Object> updateMandatoryDesiredCaps(
-      Map<String, Object> desiredCapabilitiesMap) {
-    desiredCapabilitiesMap.put(CapabilityType.PLATFORM_NAME, getPlatform().name().trim());
-
-    if (!desiredCapabilitiesMap.getOrDefault(MobileCapabilityType.APP, "").toString().isEmpty()) {
-      String appPath = getAppPath();
-      desiredCapabilitiesMap.put(MobileCapabilityType.APP, appPath);
+    if (capabilitiesList.isEmpty() || mobileConfig.isAny() || capabilitiesList.size() == 1) {
+      desiredCapabilities =
+          new DesiredCapabilities(capabilitiesList.stream().findAny().orElseThrow(() -> exception));
+      return;
     }
-    if (!mobileConfig.isRemote() && getPlatform().equals(EkamSupportedPlatforms.ANDROID)) {
-      desiredCapabilitiesMap.put(
+
+    Map<String, Object> capabilities =
+        capabilitiesList.stream()
+            .filter(
+                desiredCaps ->
+                    desiredCaps
+                        .get(MobileCapabilityType.PLATFORM_NAME)
+                        .toString()
+                        .equalsIgnoreCase(platform))
+            .findFirst()
+            .orElseThrow(() -> exception);
+
+    Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
+    desiredCapabilities = new DesiredCapabilities(updatedCapabilities);
+  }
+
+  private Map<String, Object> updateMandatoryCapabilities(Map<String, Object> capabilities) {
+    capabilities.put(CapabilityType.PLATFORM_NAME, platform);
+
+    String app = (String) capabilities.getOrDefault(MobileCapabilityType.APP, "");
+    if (!app.isEmpty()) {
+      String appPath =
+          Objects.isNull(mobileConfig.getFeed()) || mobileConfig.getFeed().isEmpty()
+              ? AppFinder.getDefaultApp(platform)
+              : app.contains(":") ? app : AppFinder.findApp(app);
+      capabilities.put(MobileCapabilityType.APP, appPath);
+    }
+
+    if (!mobileConfig.isRemote() && platform.equalsIgnoreCase(ANDROID)) {
+      capabilities.put(
           AndroidMobileCapabilityType.SYSTEM_PORT,
-          PortGenerator.aRandomOpenPortOnAllLocalInterfaces());
+          PortGenerator.randomOpenPortOnAllLocalInterfaces());
     }
-    return desiredCapabilitiesMap;
+
+    return capabilities;
   }
 
-  private String getAppPath() {
-    if (isMobileFeedEmpty(testFeedName))
-      return AppFinder.getDefaultApp(platform)
-          .orElseThrow(
-              () -> new RuntimeException("Cannot find any app in app folder please add one"))
-          .getAbsolutePath();
-    String app = getAppCapability();
-    if (app.isEmpty()) return app;
-    return app.contains(":")
-        ? app
-        : new FileFinder(ResourcePaths.APP_DIR).find(app).getAbsolutePath();
-  }
-
-  private boolean isMobileFeedEmpty(String testFeedName) {
-    return testFeedName == null || testFeedName.isEmpty();
-  }
-
-  private String getAppCapability() {
-    return desiredCapabilities.getOrDefault("app", "").toString();
-  }
-
-  private MobileTestFeed getTestFeed(String testFeedName) {
-    if (isMobileFeedEmpty(testFeedName)) {
-      return MobileTestFeed.builder()
-          .desiredCapabilities(new DefaultCapabilitiesBuilder().defaultCapsList(platform))
-          .build();
-    }
-    return loadFeed(
-        testFeedName, System.getProperty(ConfigKeys.Env.MOBILE_ENV), MobileTestFeed.class);
-  }
-
-  private String updatePlatformIfAny() {
-    String device = mobileConfig.getTarget().trim();
+  private void setPlatform() {
     if (mobileConfig.isAny()) {
-      device = getRandomDevice();
-      mobileConfig.setTarget(device.trim());
+      List<String> randomPlatforms = generateRandomPlatforms();
+      platform = FindAny.inList(randomPlatforms);
+      mobileConfig.setTarget(platform.trim());
     }
-    return device;
+
+    platform = mobileConfig.getTarget().trim();
   }
 
-  private String getRandomDevice() {
-    return FindOne.inList(randomDevices);
+  private MobileTestFeed getTestFeed(String testFeed) {
+    if (testFeed == null || testFeed.isEmpty()) {
+      return MobileTestFeed.builder().desiredCapabilities(generateDefaultCapabilities()).build();
+    }
+
+    return loadFeed(testFeed, System.getProperty(MOBILE_ENV), MobileTestFeed.class);
   }
 
-  private List<String> generateRandomDevices() {
+  private List<String> generateRandomPlatforms() {
     RepetitiveStringGenerator repetitiveStringGenerator = new RepetitiveStringGenerator();
-    if (OS.isFamilyMac()) {
-      return repetitiveStringGenerator.generate("android", "ios");
-    } else {
-      return repetitiveStringGenerator.generate("android");
-    }
+    return OS.isFamilyMac()
+        ? repetitiveStringGenerator.generate(ANDROID, IOS)
+        : repetitiveStringGenerator.generate(ANDROID);
+  }
+
+  private List<Map<String, Object>> generateDefaultCapabilities() {
+    Map<String, Object> capabilities = new HashMap<>();
+    capabilities.put(MobileCapabilityType.PLATFORM_NAME, platform);
+
+    List<Map<String, Object>> capabilitiesList = new ArrayList<>();
+    capabilitiesList.add(capabilities);
+    return capabilitiesList;
   }
 }
