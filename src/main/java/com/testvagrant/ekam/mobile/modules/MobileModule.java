@@ -12,7 +12,6 @@ public class MobileModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    // bind driver
     bind(MobileDriverDetails.class)
         .toProvider(MobileDriverDetailsProvider.class)
         .asEagerSingleton();

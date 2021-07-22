@@ -7,6 +7,9 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Model representing EkamTest execution details
+ */
 @Getter
 @Setter
 @Builder

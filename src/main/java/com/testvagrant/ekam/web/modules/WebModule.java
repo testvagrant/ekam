@@ -8,7 +8,6 @@ public class WebModule extends AbstractModule {
 
   @Override
   public void configure() {
-    // bind driver
     bind(WebDriver.class).toProvider(WebDriverProvider.class).asEagerSingleton();
   }
 }

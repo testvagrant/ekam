@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /***
- * Model to store test context: Feature and Scenario/TestClass and TestMethod
+ * Model to store test details: Feature and Scenario/TestClass and TestMethod
  */
 @Getter
 @Setter

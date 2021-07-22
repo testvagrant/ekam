@@ -1,5 +1,7 @@
 package com.testvagrant.ekam.mobile.remote;
 
+import com.testvagrant.ekam.commons.remote.ConfigLoader;
+import com.testvagrant.ekam.commons.remote.RemoteUrlBuilder;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.devicemanager.devicefinder.BrowserStackDeviceFinder;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;

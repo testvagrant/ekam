@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.mobile.remote;
+package com.testvagrant.ekam.commons.remote;
 
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 
@@ -8,7 +8,7 @@ public class RemoteUrlBuilder {
 
   public static URL build(CloudConfig cloudConfig) {
     try {
-      String urlString = "";
+      String urlString;
       if (!cloudConfig.getUrl().isEmpty()) {
         urlString = cloudConfig.getUrl();
       } else {

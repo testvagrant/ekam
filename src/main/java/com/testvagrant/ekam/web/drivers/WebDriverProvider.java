@@ -5,6 +5,8 @@ import com.google.inject.Provider;
 import com.testvagrant.ekam.commons.platform.EkamSupportedPlatforms;
 import com.testvagrant.ekam.commons.random.FindAny;
 import com.testvagrant.ekam.commons.random.RepetitiveStringGenerator;
+import com.testvagrant.ekam.commons.remote.ConfigLoader;
+import com.testvagrant.ekam.commons.remote.RemoteUrlBuilder;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.config.models.WebConfig;
@@ -12,8 +14,6 @@ import com.testvagrant.ekam.drivers.models.BrowserConfig;
 import com.testvagrant.ekam.drivers.models.RemoteBrowserConfig;
 import com.testvagrant.ekam.drivers.web.LocalDriverManager;
 import com.testvagrant.ekam.drivers.web.RemoteDriverManager;
-import com.testvagrant.ekam.mobile.remote.ConfigLoader;
-import com.testvagrant.ekam.mobile.remote.RemoteUrlBuilder;
 import com.testvagrant.ekam.web.configparser.WebConfigParser;
 import org.awaitility.Awaitility;
 import org.openqa.selenium.WebDriver;
@@ -24,34 +24,27 @@ import java.util.List;
 
 public class WebDriverProvider implements Provider<WebDriver> {
 
-  private final List<String> randomBrowsers;
   @Inject private EkamConfig ekam;
-
-  public WebDriverProvider() {
-    randomBrowsers = generateBrowsers();
-  }
 
   @Override
   public WebDriver get() {
-    WebDriver webDriver = createDriver();
-    launchSite(webDriver);
-    return webDriver;
-  }
-
-  private WebDriver createDriver() {
-    WebConfigParser webConfigParser = new WebConfigParser(ekam.getWeb());
-    BrowserConfig browserConfig = webConfigParser.buildBrowserConfig();
+    BrowserConfig browserConfig = new WebConfigParser(ekam.getWeb()).buildBrowserConfig();
     String browser = getBrowser();
 
-    return ekam.getWeb().isRemote()
-        ? new RemoteDriverManager(getRemoteBrowserConfig(browser, browserConfig)).launchDriver()
-        : new LocalDriverManager(browser, browserConfig).launchDriver();
+    WebDriver driver =
+        ekam.getWeb().isRemote()
+            ? new RemoteDriverManager(getRemoteBrowserConfig(browser, browserConfig)).launchDriver()
+            : new LocalDriverManager(browser, browserConfig).launchDriver();
+
+    launchSite(driver);
+    return driver;
   }
 
   private String getBrowser() {
     WebConfig webConfig = ekam.getWeb();
 
     if (webConfig.isAny()) {
+      List<String> randomBrowsers = generateBrowsers();
       String browser = FindAny.inList(randomBrowsers);
       webConfig.setTarget(browser.trim());
       return browser;
@@ -61,6 +54,18 @@ public class WebDriverProvider implements Provider<WebDriver> {
     return browser.equalsIgnoreCase("responsive")
         ? EkamSupportedPlatforms.CHROME.name().toLowerCase()
         : browser;
+  }
+
+  private RemoteBrowserConfig getRemoteBrowserConfig(String browser, BrowserConfig browserConfig) {
+    CloudConfig cloudConfig = new ConfigLoader().loadConfig(ekam.getWeb().getHub());
+    URL remoteUrl = RemoteUrlBuilder.build(cloudConfig);
+
+    return RemoteBrowserConfig.builder()
+        .browser(browser)
+        .url(remoteUrl)
+        .desiredCapabilities(browserConfig.getDesiredCapabilities())
+        .experimentalOptions(browserConfig.getExperimentalOptions())
+        .build();
   }
 
   private void launchSite(WebDriver webDriver) {
@@ -79,18 +84,6 @@ public class WebDriverProvider implements Provider<WebDriver> {
         webDriver.navigate().refresh();
       }
     }
-  }
-
-  private RemoteBrowserConfig getRemoteBrowserConfig(String browser, BrowserConfig browserConfig) {
-    CloudConfig cloudConfig = new ConfigLoader().loadConfig(ekam.getWeb().getHub());
-    URL remoteUrl = RemoteUrlBuilder.build(cloudConfig);
-
-    return RemoteBrowserConfig.builder()
-        .browser(browser)
-        .url(remoteUrl)
-        .desiredCapabilities(browserConfig.getDesiredCapabilities())
-        .experimentalOptions(browserConfig.getExperimentalOptions())
-        .build();
   }
 
   private List<String> generateBrowsers() {

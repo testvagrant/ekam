@@ -1,15 +1,12 @@
 package com.testvagrant.ekam.testbases.testng;
 
-import com.testvagrant.ekam.api.modules.ApiHostsModule;
-import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamInjector;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Guice;
 
-@Guice(modules = {EkamConfigModule.class, ApiHostsModule.class})
+/** TestBase for Ekam API Tests */
 public class APITest extends TestNgTest {
 
   public APITest() {

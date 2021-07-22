@@ -20,8 +20,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.*;
 
 import static com.testvagrant.ekam.config.models.ConfigKeys.Env.MOBILE_ENV;
-import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.ANDROID;
-import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.IOS;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatform.ANDROID;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatform.IOS;
 
 public class MobileConfigParser extends TestConfigParser {
 

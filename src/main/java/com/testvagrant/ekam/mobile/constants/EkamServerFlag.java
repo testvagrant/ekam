@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.mobile.models;
+package com.testvagrant.ekam.mobile.constants;
 
 import io.appium.java_client.service.local.flags.ServerArgument;
 

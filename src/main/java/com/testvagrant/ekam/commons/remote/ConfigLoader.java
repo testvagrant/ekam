@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.mobile.remote;
+package com.testvagrant.ekam.commons.remote;
 
 import com.testvagrant.ekam.commons.io.GsonParser;
 import com.testvagrant.ekam.commons.remote.exceptions.HubNotFoundException;

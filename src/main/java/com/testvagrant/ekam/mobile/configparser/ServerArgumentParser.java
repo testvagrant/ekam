@@ -1,6 +1,6 @@
 package com.testvagrant.ekam.mobile.configparser;
 
-import com.testvagrant.ekam.mobile.models.EkamServerFlag;
+import com.testvagrant.ekam.mobile.constants.EkamServerFlag;
 import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import io.appium.java_client.service.local.flags.IOSServerFlag;

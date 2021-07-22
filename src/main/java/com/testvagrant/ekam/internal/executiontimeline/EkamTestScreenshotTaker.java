@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
+/** Captures and save screenshots for the EkamTest specified */
 public class EkamTestScreenshotTaker {
 
   private final EkamTestContext testContext;
@@ -48,10 +49,13 @@ public class EkamTestScreenshotTaker {
     try {
       AppiumDriver<MobileElement> mobileDriver =
           injectorsCache().getInjector().getInstance(MobileDriverDetails.class).getDriver();
+
+      // Convert Mobile/WebDriver to ScreenshotDriver
       TakesScreenshot driver =
           mobileDriver == null
               ? (TakesScreenshot) injectorsCache().getInjector().getInstance(WebDriver.class)
               : mobileDriver;
+
       return driver.getScreenshotAs(OutputType.FILE);
     } catch (WebDriverException ex) {
       throw new RuntimeException("Failed to take screenshot." + ex.getMessage());

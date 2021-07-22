@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.List;
 
 import static com.testvagrant.ekam.commons.io.ResourcePaths.APP_DIR;
-import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.ANDROID;
-import static com.testvagrant.ekam.mobile.constants.MobilePlatforms.IOS;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatform.ANDROID;
+import static com.testvagrant.ekam.mobile.constants.MobilePlatform.IOS;
 
 public class AppFinder {
 

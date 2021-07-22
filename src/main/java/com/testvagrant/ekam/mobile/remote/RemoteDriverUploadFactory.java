@@ -1,5 +1,6 @@
 package com.testvagrant.ekam.mobile.remote;
 
+import com.testvagrant.ekam.commons.remote.ConfigLoader;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.devicemanager.remote.browserstack.BrowserStackUploadManager;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;

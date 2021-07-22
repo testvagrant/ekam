@@ -13,7 +13,8 @@ public class RemoteMobileDriverFactory {
 
   public static Triple<URL, DesiredCapabilities, TargetDetails> remoteMobileDriverFactory(
       MobileConfigParser mobileConfigParser) {
-    switch (mobileConfigParser.getMobileConfig().getHub()) {
+    String hub = mobileConfigParser.getMobileConfig().getHub();
+    switch (hub) {
       case BROWSERSTACK:
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();
       case P_CLOUDY:
@@ -23,7 +24,7 @@ public class RemoteMobileDriverFactory {
       case KOBITON:
       case SAUCE_LABS:
       default:
-        throw new UnsupportedOperationException("Yet to support other remote clouds");
+        throw new UnsupportedOperationException(String.format("'%s' not supported", hub));
     }
   }
 }

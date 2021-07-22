@@ -6,6 +6,7 @@ import com.testvagrant.ekam.reports.allure.ReportLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+// TODO:: Implement annotations and remove query functions
 public class WebPage extends QueryFunctions {
 
   @Inject protected BrowserDriver browserDriver;

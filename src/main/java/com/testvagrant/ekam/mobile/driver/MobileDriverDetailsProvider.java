@@ -23,7 +23,8 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
 
   @Inject private EkamConfig ekam;
 
-  public MobileDriverDetails setupMobileDriver() {
+  @Override
+  public MobileDriverDetails get() {
     MobileConfigParser mobileConfigParser = new MobileConfigParser(ekam.getMobile());
     return ekam.getMobile().isRemote()
         ? createRemoteDriver(mobileConfigParser)
@@ -33,7 +34,6 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
   private MobileDriverDetails createRemoteDriver(MobileConfigParser mobileConfigParser) {
     Triple<URL, DesiredCapabilities, TargetDetails> sessionDetails =
         remoteMobileDriverFactory(mobileConfigParser);
-
     URL remoteUrl = sessionDetails.getLeft();
     DesiredCapabilities desiredCapabilities = sessionDetails.getMiddle();
     TargetDetails targetDetails = sessionDetails.getRight();
@@ -69,10 +69,5 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
         .service(appiumDriverLocalService)
         .capabilities(capabilities)
         .build();
-  }
-
-  @Override
-  public MobileDriverDetails get() {
-    return setupMobileDriver();
   }
 }

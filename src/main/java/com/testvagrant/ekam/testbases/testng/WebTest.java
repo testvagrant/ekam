@@ -10,6 +10,9 @@ import org.testng.annotations.BeforeMethod;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
+/**
+ * TestBase for Ekam Web tests
+ */
 public class WebTest extends TestNgTest {
 
   public WebTest() {

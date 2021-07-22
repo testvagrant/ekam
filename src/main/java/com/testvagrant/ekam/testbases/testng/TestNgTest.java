@@ -16,6 +16,9 @@ import org.testng.annotations.Guice;
 import static com.testvagrant.ekam.commons.cache.providers.DataStoreProvider.dataStoreProvider;
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
+/**
+ * TestBase for all Ekam Testng tests
+ */
 @Guice(modules = {EkamConfigModule.class})
 public class TestNgTest {
 
