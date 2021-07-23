@@ -2,9 +2,9 @@ package com.testvagrant.ekam.mobile.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import com.testvagrant.ekam.mobile.driver.AppiumDriverProvider;
-import com.testvagrant.ekam.mobile.driver.MobileDriverDetailsProvider;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
+import com.testvagrant.ekam.mobile.providers.AppiumDriverProvider;
+import com.testvagrant.ekam.mobile.providers.MobileDriverDetailsProvider;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 

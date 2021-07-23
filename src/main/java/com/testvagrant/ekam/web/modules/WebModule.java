@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.web.modules;
 
 import com.google.inject.AbstractModule;
-import com.testvagrant.ekam.web.drivers.WebDriverProvider;
+import com.testvagrant.ekam.web.providers.WebDriverProvider;
 import org.openqa.selenium.WebDriver;
 
 public class WebModule extends AbstractModule {

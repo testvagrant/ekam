@@ -19,7 +19,7 @@ public class BrowserStackDriver {
 
   private final DesiredCapabilities desiredCapabilities;
   private final CloudConfig cloudConfig;
-  private MobileConfigParser mobileConfigParser;
+  private final MobileConfigParser mobileConfigParser;
 
   public BrowserStackDriver(MobileConfigParser mobileConfigParser) {
     this.mobileConfigParser = mobileConfigParser;
@@ -27,26 +27,27 @@ public class BrowserStackDriver {
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
   }
 
-  public BrowserStackDriver(MobileConfigParser mobileConfigParser, CloudConfig cloudConfig) {
-    this.cloudConfig = cloudConfig;
-    this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-  }
-
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
     String appUrl = uploadApp();
+    URL url = RemoteUrlBuilder.build(cloudConfig);
+
     Map<String, Object> browserStackCaps =
         new CapabilityMapper().mapToBrowserStackCaps(appUrl, target);
-    return Triple.of(getUrl(), mergeCaps(browserStackCaps), target);
+    DesiredCapabilities updatedCapabilities =
+        desiredCapabilities.merge(new DesiredCapabilities(browserStackCaps));
+
+    return Triple.of(url, updatedCapabilities, target);
   }
 
-  private URL getUrl() {
-    return RemoteUrlBuilder.build(cloudConfig);
-  }
-
-  private DesiredCapabilities mergeCaps(Map<String, Object> updatedCaps) {
-    desiredCapabilities.merge(new DesiredCapabilities(updatedCaps));
-    return desiredCapabilities;
+  private String uploadApp() {
+    if (!mobileConfigParser.getMobileConfig().isRemote()) return "";
+    String app =
+        (String)
+            mobileConfigParser.getDesiredCapabilities().getCapability(MobileCapabilityType.APP);
+    boolean isAppPresent = !Objects.isNull(app) && !app.isEmpty();
+    if (!mobileConfigParser.getMobileConfig().isUploadApp() || !isAppPresent) return "";
+    return RemoteDriverUploadFactory.uploadUrl(mobileConfigParser.getMobileConfig().getHub(), app);
   }
 
   private TargetDetails findTarget() {
@@ -56,15 +57,5 @@ public class BrowserStackDriver {
             cloudConfig.getUsername(),
             cloudConfig.getAccessKey())
         .findDevice();
-  }
-
-  public String uploadApp() {
-    if (!mobileConfigParser.getMobileConfig().isRemote()) return "";
-    String app =
-        (String)
-            mobileConfigParser.getDesiredCapabilities().getCapability(MobileCapabilityType.APP);
-    boolean isAppPresent = !Objects.isNull(app) && !app.isEmpty();
-    if (!mobileConfigParser.getMobileConfig().isUploadApp() || !isAppPresent) return "";
-    return RemoteDriverUploadFactory.uploadUrl(mobileConfigParser.getMobileConfig().getHub(), app);
   }
 }

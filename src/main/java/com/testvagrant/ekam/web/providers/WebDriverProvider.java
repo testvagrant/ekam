@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.web.drivers;
+package com.testvagrant.ekam.web.providers;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;

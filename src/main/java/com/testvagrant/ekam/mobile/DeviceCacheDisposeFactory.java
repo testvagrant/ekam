@@ -1,12 +1,12 @@
 package com.testvagrant.ekam.mobile;
 
+import com.testvagrant.ekam.commons.remote.ConfigLoader;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.config.models.MobileConfig;
 import com.testvagrant.ekam.devicemanager.BrowserStackDeviceManagerProvider;
 import com.testvagrant.ekam.devicemanager.LocalDeviceManagerProvider;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyDeviceManagerProvider;
-import com.testvagrant.ekam.commons.remote.ConfigLoader;
 
 import static com.testvagrant.ekam.commons.remote.constants.Hub.P_CLOUDY;
 import static com.testvagrant.ekam.commons.remote.constants.Hub.QUALITY_KIOSK;

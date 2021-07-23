@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.testvagrant.ekam.commons.io.FileFinder;
 import com.testvagrant.ekam.commons.io.GsonParser;
+import com.testvagrant.ekam.commons.parsers.SystemPropertyParser;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public class ApiHostsModule extends AbstractModule {
   @Override
   public void configure() {
     Map<String, String> envProps = loadApiTestFeed();
-    Names.bindProperties(binder(), envProps);
+    Names.bindProperties(binder(), SystemPropertyParser.parse(envProps));
   }
 
   private Map<String, String> loadApiTestFeed() {

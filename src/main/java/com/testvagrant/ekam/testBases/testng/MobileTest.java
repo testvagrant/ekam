@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.testbases.testng;
+package com.testvagrant.ekam.testBases.testng;
 
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamInjector;
@@ -14,9 +14,7 @@ import java.util.Objects;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
-/**
- * TestBase for Ekam Mobile Tests
- */
+/** TestBase for Ekam Mobile Tests */
 public class MobileTest extends TestNgTest {
 
   public MobileTest() {

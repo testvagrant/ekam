@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.testbases.testng;
+package com.testvagrant.ekam.testBases.testng;
 
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamInjector;

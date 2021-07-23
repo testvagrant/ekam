@@ -18,7 +18,7 @@ import java.util.Objects;
 public class QualityKioskDriver {
   private final DesiredCapabilities desiredCapabilities;
   private final CloudConfig cloudConfig;
-  private MobileConfigParser mobileConfigParser;
+  private final MobileConfigParser mobileConfigParser;
 
   public QualityKioskDriver(MobileConfigParser mobileConfigParser) {
     this.mobileConfigParser = mobileConfigParser;
@@ -26,22 +26,14 @@ public class QualityKioskDriver {
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
   }
 
-  public QualityKioskDriver(MobileConfigParser mobileConfigParser, CloudConfig cloudConfig) {
-    this.cloudConfig = cloudConfig;
-    this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-  }
-
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
     String appUrl = uploadApp();
+    URL url = RemoteUrlBuilder.build(cloudConfig);
     Map<String, Object> qualityKioskCaps =
         mapToQualityKioskCaps(
             appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target);
-    return Triple.of(getUrl(), mergeCaps(qualityKioskCaps), target);
-  }
-
-  private URL getUrl() {
-    return RemoteUrlBuilder.build(cloudConfig);
+    return Triple.of(url, mergeCaps(qualityKioskCaps), target);
   }
 
   private DesiredCapabilities mergeCaps(Map<String, Object> updatedCaps) {
@@ -76,12 +68,12 @@ public class QualityKioskDriver {
 
   private Map<String, Object> mapToQualityKioskCaps(
       String appUrl, String userName, String accessKey, TargetDetails targetDetails) {
-    Map<String, Object> pcloudyCaps = mapToQualtyKioskCaps(userName, accessKey, targetDetails);
-    if (!appUrl.isEmpty()) pcloudyCaps.put("Capability_ApplicationName", appUrl);
-    return pcloudyCaps;
+    Map<String, Object> pCloudyCaps = mapToQualityKioskCaps(userName, accessKey, targetDetails);
+    if (!appUrl.isEmpty()) pCloudyCaps.put("Capability_ApplicationName", appUrl);
+    return pCloudyCaps;
   }
 
-  private Map<String, Object> mapToQualtyKioskCaps(
+  private Map<String, Object> mapToQualityKioskCaps(
       String userName, String accessKey, TargetDetails targetDetails) {
     Map<String, Object> capsMap = new HashMap<>();
     capsMap.put("Capability_Username", userName);

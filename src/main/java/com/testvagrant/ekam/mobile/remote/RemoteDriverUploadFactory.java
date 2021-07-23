@@ -8,6 +8,7 @@ import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;
 import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
 
 public class RemoteDriverUploadFactory {
+
   public static String uploadUrl(String hub, String appPath) {
     CloudConfig cloudConfig = new ConfigLoader().loadConfig(hub);
     switch (hub.toLowerCase()) {

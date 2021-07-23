@@ -20,7 +20,7 @@ public class PCloudyDriver {
 
   private final DesiredCapabilities desiredCapabilities;
   private final CloudConfig cloudConfig;
-  private MobileConfigParser mobileConfigParser;
+  private final MobileConfigParser mobileConfigParser;
 
   public PCloudyDriver(MobileConfigParser mobileConfigParser) {
     this.mobileConfigParser = mobileConfigParser;
@@ -28,23 +28,16 @@ public class PCloudyDriver {
     this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
   }
 
-  public PCloudyDriver(MobileConfigParser mobileConfigParser, CloudConfig cloudConfig) {
-    this.cloudConfig = cloudConfig;
-    this.desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
-  }
-
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
     String appUrl = uploadApp();
+    URL url = RemoteUrlBuilder.build(cloudConfig);
+
     Map<String, Object> pCloudyCaps =
         new CapabilityMapper()
             .mapToPCloudyCaps(
                 appUrl, cloudConfig.getUsername(), cloudConfig.getAccessKey(), target);
-    return Triple.of(getUrl(), mergeCaps(pCloudyCaps), target);
-  }
-
-  private URL getUrl() {
-    return RemoteUrlBuilder.build(cloudConfig);
+    return Triple.of(url, mergeCaps(pCloudyCaps), target);
   }
 
   private DesiredCapabilities mergeCaps(Map<String, Object> updatedCaps) {

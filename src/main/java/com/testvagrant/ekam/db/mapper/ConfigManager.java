@@ -3,6 +3,7 @@ package com.testvagrant.ekam.db.mapper;
 import com.google.gson.Gson;
 import com.testvagrant.ekam.commons.io.FileFinder;
 import com.testvagrant.ekam.commons.io.ResourcePaths;
+import com.testvagrant.ekam.commons.parsers.SystemPropertyParser;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 import com.testvagrant.ekam.db.DBConfig;
 import com.testvagrant.ekam.db.configuration.DBConfiguration;
@@ -46,9 +47,18 @@ public class ConfigManager {
 
       Gson gson = new Gson();
       String json = gson.toJson(stringObjectEntry.getValue());
-      return gson.fromJson(json, DBConfiguration.class);
+      DBConfiguration configuration = gson.fromJson(json, DBConfiguration.class);
+      return updateConfiguration(configuration);
     } catch (Exception ex) {
       throw new RuntimeException(ex.getMessage());
     }
+  }
+
+  private DBConfiguration updateConfiguration(DBConfiguration configuration) {
+    configuration.setUsername(SystemPropertyParser.parse(configuration.getUsername()));
+    configuration.setPassword(SystemPropertyParser.parse(configuration.getPassword()));
+    configuration.setHost(SystemPropertyParser.parse(configuration.getHost()));
+    configuration.setPort(SystemPropertyParser.parse(configuration.getPort()));
+    return configuration;
   }
 }

@@ -1,4 +1,4 @@
-package com.testvagrant.ekam.testbases.testng;
+package com.testvagrant.ekam.testBases.testng;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
@@ -10,9 +10,7 @@ import org.testng.annotations.BeforeMethod;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
-/**
- * TestBase for Ekam Web tests
- */
+/** TestBase for Ekam Web tests */
 public class WebTest extends TestNgTest {
 
   public WebTest() {
