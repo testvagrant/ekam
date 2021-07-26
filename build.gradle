@@ -149,12 +149,12 @@ def customizePom(pom) {
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
 
-            description 'Optimus Lite API to manage test devices and create appium driver based on platform'
-            name 'Optimus Lite'
-            url 'https://gitlab.com/testvagrant/automation-studio/ekam'
+            description 'Ekam, a unified test automation platform, helps you to get started with WEB | MOBILE | API Test Automation'
+            name 'Ekam'
+            url 'https://gitlab.com/testvagrant/automation-studio/ekam-studio/ekam'
             organization {
-                name 'com.testvagrant.optimus'
-                url 'https://gitlab.com/testvagrant/automation-studio'
+                name 'com.testvagrant.ekam'
+                url 'https://gitlab.com/testvagrant/automation-studio/ekam-studio'
             }
             issueManagement {
                 system 'GitLab'
@@ -196,5 +196,5 @@ task runTests(type: Test) {
 
 
 signing {
-    sign publishing.publications
+    sign configurations.archives
 }

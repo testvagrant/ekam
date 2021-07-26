@@ -56,9 +56,10 @@ public class TestNgTest {
           (EkamTestNGBuildGenerator)
               dataStoreProvider().get("buildGenerator").orElse(new EkamTestNGBuildGenerator());
       buildGenerator.addTestCase(result, getTestStatus(result));
-      Injector injector = injectorsCache().getInjector();
-      injector.getInstance(StepRecorder.class).generateSteps();
     }
+
+    Injector injector = injectorsCache().getInjector();
+    injector.getInstance(StepRecorder.class).generateSteps();
   }
 
   private String getTestStatus(ITestResult result) {
