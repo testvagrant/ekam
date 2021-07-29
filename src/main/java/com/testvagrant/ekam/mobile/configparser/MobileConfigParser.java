@@ -25,161 +25,162 @@ import static com.testvagrant.ekam.mobile.constants.MobilePlatform.IOS;
 
 public class MobileConfigParser extends TestConfigParser {
 
-  private final MobileTestFeed testFeed;
-  private final MobileConfig mobileConfig;
-  private String platform;
-  private DesiredCapabilities desiredCapabilities;
-  private DeviceFilters deviceFilters;
-  private Map<ServerArgument, String> serverArguments;
+    private final MobileTestFeed testFeed;
+    private final MobileConfig mobileConfig;
+    private String platform;
+    private DesiredCapabilities desiredCapabilities;
+    private DeviceFilters deviceFilters;
+    private Map<ServerArgument, String> serverArguments;
 
-  public MobileConfigParser(MobileConfig mobileConfig) {
-    this.mobileConfig = mobileConfig;
-    setPlatform();
-    this.testFeed = getTestFeed(mobileConfig.getFeed());
-  }
-
-  public String getPlatform() {
-    if (platform == null) setPlatform();
-    return platform;
-  }
-
-  public MobileConfig getMobileConfig() {
-    return mobileConfig;
-  }
-
-  public Map<ServerArgument, String> getServerArguments() {
-    if (serverArguments == null) setServerArguments();
-    return serverArguments;
-  }
-
-  public DesiredCapabilities getDesiredCapabilities() {
-    if (desiredCapabilities == null) setDesiredCapabilities();
-    return desiredCapabilities;
-  }
-
-  public DeviceFilters getDeviceFilters() {
-    if (deviceFilters == null) setDeviceFilters();
-    return deviceFilters;
-  }
-
-  private void setDeviceFilters() {
-    if (mobileConfig.isDeviceFiltersProvided()) {
-      deviceFilters = loadFeed(mobileConfig.getDeviceFilters(), MOBILE_ENV, DeviceFilters.class);
-      return;
+    public MobileConfigParser(MobileConfig mobileConfig) {
+        this.mobileConfig = mobileConfig;
+        setPlatform();
+        this.testFeed = getTestFeed(mobileConfig.getFeed());
     }
 
-    Map<String, Object> desiredCapabilities = getDesiredCapabilities().asMap();
-    String udid = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.UDID, "");
-    String model = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.DEVICE_NAME, "");
-    String platformVersion =
-        (String) desiredCapabilities.getOrDefault(MobileCapabilityType.PLATFORM_VERSION, "");
-
-    DeviceFilter udidFilter =
-        new DeviceFilter().toBuilder().include(Collections.singletonList(udid)).build();
-
-    DeviceFilter modelFilter =
-        new DeviceFilter().toBuilder().include(Collections.singletonList(model)).build();
-
-    DeviceFilter platformVersionFilter =
-        new DeviceFilter().toBuilder().include(Collections.singletonList(platformVersion)).build();
-
-    deviceFilters =
-        new DeviceFilters()
-            .toBuilder()
-                .model(modelFilter)
-                .udid(udidFilter)
-                .platformVersion(platformVersionFilter)
-                .build();
-  }
-
-  private void setServerArguments() {
-    List<String> serverArgs =
-        mobileConfig.isServerArgsProvided() ? loadServerArguments() : testFeed.getServerArguments();
-    serverArguments = new ServerArgumentParser(serverArgs).getServerArguments();
-  }
-
-  private void setDesiredCapabilities() {
-    List<Map<String, Object>> capabilitiesList = testFeed.getDesiredCapabilities();
-    RuntimeException exception = new RuntimeException("Cannot find desired capabilities");
-
-    if (capabilitiesList.isEmpty() || mobileConfig.isAny() || capabilitiesList.size() == 1) {
-      desiredCapabilities =
-          new DesiredCapabilities(capabilitiesList.stream().findAny().orElseThrow(() -> exception));
-      return;
+    public String getPlatform() {
+        if (platform == null) setPlatform();
+        return platform;
     }
 
-    Map<String, Object> capabilities =
-        capabilitiesList.stream()
-            .filter(
-                desiredCaps ->
-                    desiredCaps
-                        .get(MobileCapabilityType.PLATFORM_NAME)
-                        .toString()
-                        .equalsIgnoreCase(platform))
-            .findFirst()
-            .orElseThrow(() -> exception);
-
-    Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
-    desiredCapabilities = new DesiredCapabilities(updatedCapabilities);
-  }
-
-  private Map<String, Object> updateMandatoryCapabilities(Map<String, Object> capabilities) {
-    capabilities.put(CapabilityType.PLATFORM_NAME, platform);
-
-    String app = (String) capabilities.getOrDefault(MobileCapabilityType.APP, "");
-    if (!app.isEmpty()) {
-      String appPath =
-          Objects.isNull(mobileConfig.getFeed()) || mobileConfig.getFeed().isEmpty()
-              ? AppFinder.getDefaultApp(platform)
-              : app.contains(":") ? app : AppFinder.findApp(app);
-      capabilities.put(MobileCapabilityType.APP, appPath);
+    public MobileConfig getMobileConfig() {
+        return mobileConfig;
     }
 
-    if (!mobileConfig.isRemote() && platform.equalsIgnoreCase(ANDROID)) {
-      capabilities.put(
-          AndroidMobileCapabilityType.SYSTEM_PORT,
-          PortGenerator.randomOpenPortOnAllLocalInterfaces());
+    public Map<ServerArgument, String> getServerArguments() {
+        if (serverArguments == null) setServerArguments();
+        return serverArguments;
     }
 
-    return capabilities;
-  }
-
-  private void setPlatform() {
-    if (mobileConfig.isAny()) {
-      List<String> randomPlatforms = generateRandomPlatforms();
-      platform = FindAny.inList(randomPlatforms);
-      mobileConfig.setTarget(platform.trim());
+    public DesiredCapabilities getDesiredCapabilities() {
+        if (desiredCapabilities == null) setDesiredCapabilities();
+        return desiredCapabilities;
     }
 
-    platform = mobileConfig.getTarget().trim();
-  }
-
-  private MobileTestFeed getTestFeed(String testFeed) {
-    if (testFeed == null || testFeed.isEmpty()) {
-      return MobileTestFeed.builder().desiredCapabilities(generateDefaultCapabilities()).build();
+    public DeviceFilters getDeviceFilters() {
+        if (deviceFilters == null) setDeviceFilters();
+        return deviceFilters;
     }
 
-    return loadFeed(testFeed, System.getProperty(MOBILE_ENV), MobileTestFeed.class);
-  }
+    private void setDeviceFilters() {
+        if (mobileConfig.isDeviceFiltersProvided()) {
+            deviceFilters = loadFeed(mobileConfig.getDeviceFilters(), MOBILE_ENV, DeviceFilters.class);
+            return;
+        }
 
-  private List<String> loadServerArguments() {
-    return loadFeed(
-        mobileConfig.getServerArgs(), MOBILE_ENV, new TypeToken<List<String>>() {}.getType());
-  }
+        Map<String, Object> desiredCapabilities = getDesiredCapabilities().asMap();
+        String udid = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.UDID, "");
+        String model = (String) desiredCapabilities.getOrDefault(MobileCapabilityType.DEVICE_NAME, "");
+        String platformVersion =
+                (String) desiredCapabilities.getOrDefault(MobileCapabilityType.PLATFORM_VERSION, "");
 
-  private List<String> generateRandomPlatforms() {
-    RepetitiveStringGenerator repetitiveStringGenerator = new RepetitiveStringGenerator();
-    return OS.isFamilyMac()
-        ? repetitiveStringGenerator.generate(ANDROID, IOS)
-        : repetitiveStringGenerator.generate(ANDROID);
-  }
+        DeviceFilter udidFilter =
+                new DeviceFilter().toBuilder().include(Collections.singletonList(udid)).build();
 
-  private List<Map<String, Object>> generateDefaultCapabilities() {
-    Map<String, Object> capabilities = new HashMap<>();
-    capabilities.put(MobileCapabilityType.PLATFORM_NAME, platform);
+        DeviceFilter modelFilter =
+                new DeviceFilter().toBuilder().include(Collections.singletonList(model)).build();
 
-    List<Map<String, Object>> capabilitiesList = new ArrayList<>();
-    capabilitiesList.add(capabilities);
-    return capabilitiesList;
-  }
+        DeviceFilter platformVersionFilter =
+                new DeviceFilter().toBuilder().include(Collections.singletonList(platformVersion)).build();
+
+        deviceFilters =
+                new DeviceFilters()
+                        .toBuilder()
+                        .model(modelFilter)
+                        .udid(udidFilter)
+                        .platformVersion(platformVersionFilter)
+                        .build();
+    }
+
+    private void setServerArguments() {
+        List<String> serverArgs =
+                mobileConfig.isServerArgsProvided() ? loadServerArguments() : testFeed.getServerArguments();
+        serverArguments = new ServerArgumentParser(serverArgs).getServerArguments();
+    }
+
+    private void setDesiredCapabilities() {
+        List<Map<String, Object>> capabilitiesList = testFeed.getDesiredCapabilities();
+        RuntimeException exception = new RuntimeException("Cannot find desired capabilities");
+
+        if (capabilitiesList.isEmpty() || mobileConfig.isAny() || capabilitiesList.size() == 1) {
+            desiredCapabilities =
+                    new DesiredCapabilities(capabilitiesList.stream().findAny().orElseThrow(() -> exception));
+            return;
+        }
+
+        Map<String, Object> capabilities =
+                capabilitiesList.stream()
+                        .filter(
+                                desiredCaps ->
+                                        desiredCaps
+                                                .get(MobileCapabilityType.PLATFORM_NAME)
+                                                .toString()
+                                                .equalsIgnoreCase(platform))
+                        .findFirst()
+                        .orElseThrow(() -> exception);
+
+        Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
+        desiredCapabilities = new DesiredCapabilities(updatedCapabilities);
+    }
+
+    private Map<String, Object> updateMandatoryCapabilities(Map<String, Object> capabilities) {
+        capabilities.put(CapabilityType.PLATFORM_NAME, platform);
+
+        String app = (String) capabilities.getOrDefault(MobileCapabilityType.APP, "");
+        if (!app.isEmpty()) {
+            String appPath =
+                    Objects.isNull(mobileConfig.getFeed()) || mobileConfig.getFeed().isEmpty()
+                            ? AppFinder.getDefaultApp(platform)
+                            : app.contains(":") ? app : AppFinder.findApp(app);
+            capabilities.put(MobileCapabilityType.APP, appPath);
+        }
+
+        if (!mobileConfig.isRemote() && platform.equalsIgnoreCase(ANDROID)) {
+            capabilities.put(
+                    AndroidMobileCapabilityType.SYSTEM_PORT,
+                    PortGenerator.randomOpenPortOnAllLocalInterfaces());
+        }
+
+        return capabilities;
+    }
+
+    private void setPlatform() {
+        if (mobileConfig.isAny()) {
+            List<String> randomPlatforms = generateRandomPlatforms();
+            platform = FindAny.inList(randomPlatforms);
+            mobileConfig.setTarget(platform.trim());
+        }
+
+        platform = mobileConfig.getTarget().trim();
+    }
+
+    private MobileTestFeed getTestFeed(String testFeed) {
+        if (testFeed == null || testFeed.isEmpty()) {
+            return MobileTestFeed.builder().desiredCapabilities(generateDefaultCapabilities()).build();
+        }
+
+        return loadFeed(testFeed, System.getProperty(MOBILE_ENV), MobileTestFeed.class);
+    }
+
+    private List<String> loadServerArguments() {
+        return loadFeed(
+                mobileConfig.getServerArgs(), System.getProperty(MOBILE_ENV), new TypeToken<List<String>>() {
+                }.getType());
+    }
+
+    private List<String> generateRandomPlatforms() {
+        RepetitiveStringGenerator repetitiveStringGenerator = new RepetitiveStringGenerator();
+        return OS.isFamilyMac()
+                ? repetitiveStringGenerator.generate(ANDROID, IOS)
+                : repetitiveStringGenerator.generate(ANDROID);
+    }
+
+    private List<Map<String, Object>> generateDefaultCapabilities() {
+        Map<String, Object> capabilities = new HashMap<>();
+        capabilities.put(MobileCapabilityType.PLATFORM_NAME, platform);
+
+        List<Map<String, Object>> capabilitiesList = new ArrayList<>();
+        capabilitiesList.add(capabilities);
+        return capabilitiesList;
+    }
 }
