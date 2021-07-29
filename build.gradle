@@ -111,7 +111,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.2.0-beta'
+            version '0.2.1-beta'
 
             from components.java
 
@@ -196,5 +196,5 @@ task runTests(type: Test) {
 
 
 signing {
-    sign configurations.archives
+    sign publishing.publications
 }
