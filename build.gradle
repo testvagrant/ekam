@@ -41,6 +41,7 @@ dependencies {
     implementation('io.qameta.allure:allure-testng:2.14.0')
     implementation('io.qameta.allure:allure-okhttp3:2.14.0')
     implementation('io.qameta.allure:allure-rest-assured:2.10.0')
+    implementation 'io.qameta.allure:allure-cucumber6-jvm:2.14.0'
 
     //logger
     implementation('org.apache.logging.log4j:log4j-api:2.14.1')
@@ -80,6 +81,10 @@ dependencies {
     testImplementation('org.junit-pioneer:junit-pioneer:1.4.2')
 
     implementation('org.testng:testng:7.4.0')
+
+
+    implementation('io.cucumber:cucumber-java:6.10.4')
+    implementation('io.cucumber:cucumber-testng:6.10.4')
 
     // generic wait
     implementation('org.awaitility:awaitility:4.1.0')
@@ -129,8 +134,8 @@ publishing {
         maven {
             url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
             credentials {
-                username System.getenv("sonatypeUsername")
-                password System.getenv("sonatypePassword")
+                username sonatypeUsername
+                password sonatypePassword
             }
         }
     }

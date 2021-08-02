@@ -19,8 +19,9 @@ public class AppFinder {
     switch (platform.trim().toLowerCase()) {
       case IOS:
         List<File> iosFiles = fileFinder.findWithExtension(".ipa");
+        List<File> iosSimFiles = fileFinder.findWithExtension(".app");
+        iosFiles.addAll(iosSimFiles);
         return iosFiles.stream().findAny().orElseThrow(() -> exception).getAbsolutePath();
-
       case ANDROID:
       default:
         List<File> androidFiles = fileFinder.findWithExtension(".apk");
@@ -29,6 +30,6 @@ public class AppFinder {
   }
 
   public static String findApp(String path) {
-    return new FileFinder(APP_DIR).find(path).getAbsolutePath();
+    return new FileFinder(APP_DIR, "").find(path).getAbsolutePath();
   }
 }

@@ -1,0 +1,26 @@
+{
+  "desiredCapabilities": [
+    {
+      "app": "decathlon.apk",
+      "platformName": "android",
+      "newCommandTimeout": 300,
+      "autoGrantPermissions": true,
+      "noReset": true,
+      "avdLaunchTimeout": 300,
+      "autoAcceptAlerts": true,
+      "useKeystore": false
+    },
+    {
+      "app": "sample.app",
+      "platformName": "ios",
+      "newCommandTimeout": 300,
+      "autoGrantPermissions": true,
+      "noReset": true,
+      "fullReset": false,
+      "avdLaunchTimeout": 300,
+      "autoAcceptAlerts": true,
+      "useKeystore": false,
+      "automationName": "XCUITest"
+    }
+  ]
+}
