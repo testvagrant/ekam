@@ -68,6 +68,30 @@ public class MobileConfigParserTests {
     Assertions.assertEquals(matchingTargets.get(0).getName(), name);
   }
 
+  @Test
+//  @SetSystemProperty(key = "mobile.feed", value = "ios_app_mobile_feed")
+  public void shouldFindAppProvidedInTheTestFeed() {
+    Injector injector = Guice.createInjector(new EkamConfigModule());
+    EkamConfig config = injector.getInstance(EkamConfig.class);
+    MobileConfigParser configParser = new MobileConfigParser(config.getMobile());
+    DeviceFilters deviceFilters = configParser.getDeviceFilters();
+
+    String udid = "c6dbe58c21d23487e7ec19d894749494e8b26019";
+    String name = "iphone";
+
+    List<TargetDetails> targets = getTargetDetails();
+
+    Predicate<TargetDetails> predicate =
+            new DeviceFiltersManager()
+                    .createDeviceFilters(EkamSupportedPlatforms.IOS.name(), deviceFilters);
+
+    List<TargetDetails> matchingTargets =
+            targets.parallelStream().filter(predicate).collect(Collectors.toList());
+
+    Assertions.assertEquals(matchingTargets.get(0).getUdid(), udid);
+    Assertions.assertEquals(matchingTargets.get(0).getName(), name);
+  }
+
   private List<TargetDetails> getTargetDetails() {
     TargetDetails iosEmulator =
         TargetDetails.builder()
@@ -90,4 +114,7 @@ public class MobileConfigParserTests {
 
     return Arrays.asList(iosEmulator, iosDevice, iosDeviceWithModel);
   }
+
+
+
 }

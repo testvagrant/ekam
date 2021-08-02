@@ -8,11 +8,7 @@ import io.cucumber.java.Scenario;
 public class ApiScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
-    EkamTest ekamTest =
-        EkamTest.builder()
-            .scenario(scenario.getName())
-            .feature(getFeatureFileNameFromScenarioId(scenario))
-            .build();
+    EkamTest ekamTest  = buildEkamTest(scenario);
     new EkamInjector(ekamTest).createApiInjector();
   }
 }
