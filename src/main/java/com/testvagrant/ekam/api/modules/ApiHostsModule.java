@@ -2,17 +2,15 @@ package com.testvagrant.ekam.api.modules;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import com.testvagrant.ekam.commons.io.FileFinder;
 import com.testvagrant.ekam.commons.io.GsonParser;
 import com.testvagrant.ekam.commons.parsers.SystemPropertyParser;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 
-import static com.testvagrant.ekam.commons.io.ResourcePaths.TEST_RESOURCES;
+import static com.testvagrant.ekam.commons.io.FileUtilities.fileUtils;
 
 @SuppressWarnings("unchecked")
 public class ApiHostsModule extends AbstractModule {
@@ -25,11 +23,12 @@ public class ApiHostsModule extends AbstractModule {
 
   private Map<String, String> loadApiTestFeed() {
     String env = System.getProperty(ConfigKeys.Env.API_ENV, System.getProperty("env", ""));
-    String fileName = System.getProperty(ConfigKeys.Api.HOSTS).replaceAll(".json", "").trim();
+    String fileName = System.getProperty(ConfigKeys.Api.HOSTS).replaceAll(".json", "").trim().concat(".json");
 
-    File file = new FileFinder(TEST_RESOURCES, env).find(fileName, ".json");
-    return Objects.isNull(file)
-        ? new HashMap<>()
-        : new GsonParser().deserialize(file.getAbsolutePath(), Map.class);
+    Optional<File> file = fileUtils().findResource(fileName, env);
+    if(file.isPresent()) {
+      return new GsonParser().deserialize(file.get().getAbsolutePath(), Map.class);
+    }
+    throw new RuntimeException("Looks like have either not created hosts.json or have not set api.hosts in config.");
   }
 }

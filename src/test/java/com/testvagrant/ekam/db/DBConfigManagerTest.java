@@ -19,6 +19,16 @@ public class DBConfigManagerTest {
   }
 
   @Test
+  @SetSystemProperty(key = "db.drivers", value = "main_drivers")
+  public void findDBConfigFromSrcMainResources() {
+    DBConfig configuration = new ConfigManager().getConfiguration(DBType.POSTGRES.getDbString());
+    Assertions.assertEquals(configuration.getHost(), "i");
+    Assertions.assertEquals(configuration.getPort(), "j");
+    Assertions.assertEquals(configuration.getUsername(), "k");
+    Assertions.assertEquals(configuration.getPassword(), "l");
+  }
+
+  @Test
   @SetSystemProperty(key = "env", value = "qa")
   public void findDBConfigFromEnvWhenSpecified() {
     DBConfig configuration = new ConfigManager().getConfiguration(DBType.POSTGRES.getDbString());
@@ -26,6 +36,17 @@ public class DBConfigManagerTest {
     Assertions.assertEquals(configuration.getPort(), "qa");
     Assertions.assertEquals(configuration.getUsername(), "qa");
     Assertions.assertEquals(configuration.getPassword(), "qa");
+  }
+
+  @Test
+  @SetSystemProperty(key = "env", value = "qa")
+  @SetSystemProperty(key = "db.drivers", value = "main_drivers")
+  public void findDBConfigFromEnvWhenSpecifiedInSrcMainResources() {
+    DBConfig configuration = new ConfigManager().getConfiguration(DBType.POSTGRES.getDbString());
+    Assertions.assertEquals(configuration.getHost(), "main_qa");
+    Assertions.assertEquals(configuration.getPort(), "main_qa");
+    Assertions.assertEquals(configuration.getUsername(), "main_qa");
+    Assertions.assertEquals(configuration.getPassword(), "main_qa");
   }
 
   @Test

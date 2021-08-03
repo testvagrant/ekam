@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.testvagrant.ekam.api.modules.ApiHostsModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
@@ -33,8 +34,25 @@ public class ApiEnvTests {
   }
 
   @Test
+  @Disabled
   @SetSystemProperty(key = "env", value = "")
+  @SetSystemProperty(key = "api.hosts", value = "hosts")
   public void apiConfigTestForEnv() {
     Assertions.assertEquals("abc", config.getHost());
+  }
+
+  @Test
+  @SetSystemProperty(key = "env", value = "")
+  @SetSystemProperty(key = "api.hosts", value = "main_hosts")
+  public void apiConfigTestForEnvFromSrcMainResource() {
+    Assertions.assertEquals("abc", config.getHost());
+  }
+
+  @Test
+  @SetSystemProperty(key = "api.env", value = "staging")
+  @SetSystemProperty(key = "env", value = "qa")
+  @SetSystemProperty(key = "api.hosts", value = "main_hosts")
+  public void shouldPickUpHostFromAPiEnvWhenSpecifiedInSrcMainResource() {
+    Assertions.assertEquals("staging", config.getHost());
   }
 }
