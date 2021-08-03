@@ -1,3 +1,8 @@
+# 0.2.2-beta
+* Updated Ekam Commons 0.0.8-beta
+* Updated Ekam Config to 1.0.1
+* Modified ApiHostsModule & ConfigManager to use Directory finder
+
 # 0.1.7-beta
 
 * Fixed bug in mobile config parser to read app Capability.
