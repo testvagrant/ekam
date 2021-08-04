@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ScenarioDefinition {
 
-    protected EkamTest buildEkamTest(Scenario scenario) {
-        return EkamTest.builder()
-                .scenario(scenario.getName())
-                .feature(StringUtils.capitalize(scenario.getName().replaceAll("\\s", "")))
-                .build();
-    }
+  protected EkamTest buildEkamTest(Scenario scenario) {
+    return EkamTest.builder()
+        .scenario(scenario.getName())
+        .feature(StringUtils.capitalize(scenario.getName().replaceAll("\\s", "")))
+        .build();
+  }
 }

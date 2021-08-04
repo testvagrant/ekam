@@ -23,12 +23,14 @@ public class ApiHostsModule extends AbstractModule {
 
   private Map<String, String> loadApiTestFeed() {
     String env = System.getProperty(ConfigKeys.Env.API_ENV, System.getProperty("env", ""));
-    String fileName = System.getProperty(ConfigKeys.Api.HOSTS).replaceAll(".json", "").trim().concat(".json");
+    String fileName =
+        System.getProperty(ConfigKeys.Api.HOSTS).replaceAll(".json", "").trim().concat(".json");
 
     Optional<File> file = fileUtils().findResource(fileName, env);
-    if(file.isPresent()) {
+    if (file.isPresent()) {
       return new GsonParser().deserialize(file.get().getAbsolutePath(), Map.class);
     }
-    throw new RuntimeException("Looks like have either not created hosts.json or have not set api.hosts in config.");
+    throw new RuntimeException(
+        "Looks like have either not created hosts.json or have not set api.hosts in config.");
   }
 }

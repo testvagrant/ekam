@@ -23,15 +23,14 @@ public class MobileScenarioDefinition extends ScenarioDefinition {
 
   public void tearDown() {
     MobileDriverDetails mobileDriverDetails =
-            injectorsCache().getInjector().getInstance(MobileDriverDetails.class);
+        injectorsCache().getInjector().getInstance(MobileDriverDetails.class);
     AppiumDriver<MobileElement> driver = mobileDriverDetails.getDriver();
 
     if (driver != null) driver.quit();
     if (mobileDriverDetails.getService() != null) mobileDriverDetails.getService().stop();
 
     DeviceCacheDisposeFactory.dispose(
-            Objects.requireNonNull(mobileDriverDetails).getTargetDetails(), injectorsCache().getInjector().getInstance(EkamConfig.class).getMobile());
+        Objects.requireNonNull(mobileDriverDetails).getTargetDetails(),
+        injectorsCache().getInjector().getInstance(EkamConfig.class).getMobile());
   }
-
-
 }
