@@ -1,3 +1,9 @@
+# 0.2.3-beta
+* Updated Ekam Commons 0.0.9-beta
+* Updated Ekam Atoms to 0.0.4-beta
+* Removed stale tests ApiTestFeedTests
+* Updated Publishing task with github repo details
+
 # 0.2.2-beta
 * Updated Ekam Commons 0.0.8-beta
 * Updated Ekam Config to 1.0.1

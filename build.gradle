@@ -58,9 +58,9 @@ dependencies {
     implementation('com.testvagrant.ekam:ekam-drivers:1.0.2')
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.0.3-alpha')
-    implementation('com.testvagrant.ekam:ekam-commons:0.0.8-beta')
+    implementation('com.testvagrant.ekam:ekam-commons:0.0.9-beta')
     implementation('com.testvagrant.ekam:ekam-config:1.0.1')
-    implementation('com.testvagrant.ekam:ekam-atoms:0.0.1-beta')
+    implementation('com.testvagrant.ekam:ekam-atoms:0.0.4-beta')
     implementation('com.testvagrant.ekam:ekam-device-manager:0.0.5-beta')
 
     //selenium
@@ -116,7 +116,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.2.2-beta'
+            version '0.2.3-beta'
 
             from components.java
 
@@ -156,26 +156,26 @@ def customizePom(pom) {
 
             description 'Ekam, a unified test automation platform, helps you to get started with WEB | MOBILE | API Test Automation'
             name 'Ekam'
-            url 'https://gitlab.com/testvagrant/automation-studio/ekam-studio/ekam'
+            url 'https://github.com/testvagrant/ekam'
             organization {
                 name 'com.testvagrant.ekam'
-                url 'https://gitlab.com/testvagrant/automation-studio/ekam-studio'
+                url 'https://github.com/testvagrant'
             }
             issueManagement {
                 system 'GitLab'
-                url 'https://gitlab.com/testvagrant/automation-studio/ekam/issues'
+                url 'https://github.com/testvagrant/ekam/issues'
             }
             licenses {
                 license {
                     name 'MIT License'
-                    url 'https://gitlab.com/testvagrant/automation-studio/ekam/-/blob/master/LICENSE'
+                    url 'https://github.com/testvagrant/ekam/-/blob/master/LICENSE'
                     distribution 'repo'
                 }
             }
             scm {
-                url 'https://gitlab.com/testvagrant/automation-studio/ekam'
-                connection 'https://gitlab.com/testvagrant/automation-studio/ekam.git'
-                developerConnection 'git@gitlab.com:testvagrant/automation-studio/ekam.git'
+                url 'https://github.com/testvagrant/ekam'
+                connection 'https://github.com/testvagrant/ekam.git'
+                developerConnection 'git@github.com:testvagrant/ekam.git'
             }
             developers {
                 developer {
