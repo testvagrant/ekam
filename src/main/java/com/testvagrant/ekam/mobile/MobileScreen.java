@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.mobile;
 
 import com.google.inject.Inject;
+import com.testvagrant.ekam.atoms.MultiPlatformFinder;
 import com.testvagrant.ekam.atoms.mobile.*;
 import com.testvagrant.ekam.atoms.mobile.android.AndroidDeviceDriver;
 import com.testvagrant.ekam.atoms.mobile.ios.IOSDeviceDriver;
@@ -23,7 +24,7 @@ public abstract class MobileScreen extends QueryFunctions {
     return new Element(driver, locator);
   }
 
-  protected Element element(Finder finder) {
+  protected Element element(MultiPlatformFinder finder) {
     return new Element(driver, finder);
   }
 
@@ -31,7 +32,7 @@ public abstract class MobileScreen extends QueryFunctions {
     return new Textbox(driver, locator);
   }
 
-  protected Textbox textbox(Finder finder) {
+  protected Textbox textbox(MultiPlatformFinder finder) {
     return new Textbox(driver, finder);
   }
 
@@ -39,12 +40,12 @@ public abstract class MobileScreen extends QueryFunctions {
     return new ElementCollection(driver, locator);
   }
 
-  protected ElementCollection elementCollection(Finder finder) {
+  protected ElementCollection elementCollection(MultiPlatformFinder finder) {
     return new ElementCollection(driver, finder);
   }
 
-  protected Finder finder(By androidFindBy, By iosFindBy) {
-    return Finder.builder().androidFindBy(androidFindBy).iosFindBy(iosFindBy).build();
+  protected MultiPlatformFinder finder(By androidFindBy, By iosFindBy) {
+    return MultiPlatformFinder.builder().androidFindBy(androidFindBy).iosFindBy(iosFindBy).build();
   }
 
   public void log(String message) {

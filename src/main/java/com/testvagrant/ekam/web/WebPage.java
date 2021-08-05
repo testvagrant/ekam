@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.web;
 
 import com.google.inject.Inject;
-import com.testvagrant.ekam.atoms.mobile.MultiPlatformFinder;
+import com.testvagrant.ekam.atoms.MultiPlatformFinder;
 import com.testvagrant.ekam.atoms.web.*;
 import com.testvagrant.ekam.reports.allure.ReportLogger;
 import org.openqa.selenium.By;
