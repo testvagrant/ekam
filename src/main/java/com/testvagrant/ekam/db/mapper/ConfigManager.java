@@ -31,10 +31,12 @@ public class ConfigManager {
   private DBConfig getDBConfiguration(String name) {
     try {
       String env = System.getProperty(ConfigKeys.Env.DB_ENV, System.getProperty("env", ""));
-      String fileName = System.getProperty(ConfigKeys.DB.DRIVERS).replaceAll(".yml", "").trim().concat(".yml");
+      String fileName =
+          System.getProperty(ConfigKeys.DB.DRIVERS).replaceAll(".yml", "").trim().concat(".yml");
       Optional<File> file = fileUtils().findResource(fileName, env);
       if (!file.isPresent()) {
-        throw new RuntimeException("Looks like have either not created drivers.yml or have not set db.drivers in config.");
+        throw new RuntimeException(
+            "Looks like have either not created drivers.yml or have not set db.drivers in config.");
       }
       LinkedHashMap<String, Object> parse =
           new Yaml().loadAs(new FileReader(file.get()), LinkedHashMap.class);

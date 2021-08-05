@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.web;
 
 import com.google.inject.Inject;
+import com.testvagrant.ekam.atoms.mobile.MultiPlatformFinder;
 import com.testvagrant.ekam.atoms.web.*;
 import com.testvagrant.ekam.reports.allure.ReportLogger;
 import org.openqa.selenium.By;
@@ -22,6 +23,13 @@ public class WebPage extends QueryFunctions {
 
   protected Dropdown dropdown(By locator) {
     return new Dropdown(driver, locator);
+  }
+
+  protected MultiPlatformFinder finder(By findBy, By responsiveFindBy) {
+    return MultiPlatformFinder.builder()
+        .webFindBy(findBy)
+        .responsiveFindBy(responsiveFindBy)
+        .build();
   }
 
   protected ElementCollection elementCollection(By locator) {
