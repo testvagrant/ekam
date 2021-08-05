@@ -7,6 +7,7 @@ import com.testvagrant.ekam.commons.parsers.SystemPropertyParser;
 import com.testvagrant.ekam.config.models.ConfigKeys;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +31,6 @@ public class ApiHostsModule extends AbstractModule {
     if (file.isPresent()) {
       return new GsonParser().deserialize(file.get().getAbsolutePath(), Map.class);
     }
-    throw new RuntimeException(
-        "Looks like have either not created hosts.json or have not set api.hosts in config.");
+    return new HashMap<>();
   }
 }

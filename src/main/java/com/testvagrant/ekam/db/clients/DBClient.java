@@ -20,6 +20,15 @@ public abstract class DBClient {
     handle = dbi.open();
   }
 
+  protected DBClient(String database, DBConfig dbConfig, DBType dbType) {
+    String url =
+            String.format(
+                    "jdbc:%s://%s:%s/%s",
+                    dbType.getDbString(), dbConfig.getHost(), dbConfig.getPort(), database);
+    DBI dbi = new DBI(url, dbConfig.getUsername(), dbConfig.getPassword());
+    handle = dbi.open();
+  }
+
   protected Handle getHandle() {
     return handle;
   }
