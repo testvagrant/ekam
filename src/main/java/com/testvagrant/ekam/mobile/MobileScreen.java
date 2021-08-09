@@ -2,7 +2,10 @@ package com.testvagrant.ekam.mobile;
 
 import com.google.inject.Inject;
 import com.testvagrant.ekam.atoms.MultiPlatformFinder;
-import com.testvagrant.ekam.atoms.mobile.*;
+import com.testvagrant.ekam.atoms.mobile.Element;
+import com.testvagrant.ekam.atoms.mobile.ElementCollection;
+import com.testvagrant.ekam.atoms.mobile.QueryFunctions;
+import com.testvagrant.ekam.atoms.mobile.Textbox;
 import com.testvagrant.ekam.atoms.mobile.android.AndroidDeviceDriver;
 import com.testvagrant.ekam.atoms.mobile.ios.IOSDeviceDriver;
 import com.testvagrant.ekam.reports.allure.ReportLogger;

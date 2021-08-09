@@ -1,7 +1,8 @@
 package com.testvagrant.ekam.commons;
 
 public enum Toggles {
-  TIMELINE(Boolean.parseBoolean(System.getProperty("timeline", "true")));
+  TIMELINE(Boolean.parseBoolean(System.getProperty("timeline", "true"))),
+  LOGS(Boolean.parseBoolean(System.getProperty("enableLogs", "true")));
 
   private final Boolean active;
 

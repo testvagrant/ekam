@@ -1,38 +1,56 @@
 package com.testvagrant.ekam.internal.logger;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.apache.logging.log4j.core.config.builder.api.*;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EkamLogger {
 
   private final String filePath;
+  private final ConfigurationBuilder<BuiltConfiguration> builder;
 
   public EkamLogger(String filePath) {
     this.filePath = filePath;
+    builder = ConfigurationBuilderFactory.newConfigurationBuilder();
   }
 
-  public void init() {
+  public void init(String level, List<String> logTypes) {
     ConfigurationBuilder<BuiltConfiguration> builder =
         ConfigurationBuilderFactory.newConfigurationBuilder();
-    AppenderComponentBuilder console = builder.newAppender("stdout", "Console");
-    builder.add(console);
+    RootLoggerComponentBuilder rootLogger = builder.newRootLogger(level);
 
-    AppenderComponentBuilder file = builder.newAppender("logToFile", "File");
-    file.addAttribute("fileName", filePath);
-    builder.add(file);
+    List<AppenderComponentBuilder> appenders = new ArrayList<>();
 
-    LayoutComponentBuilder standard = builder.newLayout("PatternLayout");
-    standard.addAttribute("pattern", "%d [%t] %-5level: %msg%n%throwable");
-    console.add(standard);
-    file.add(standard);
+    if (logTypes.contains("console")) appenders.add(buildConsoleAppender());
+    if (logTypes.contains("file")) appenders.add(buildFileAppender());
 
-    RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
-    rootLogger.add(builder.newAppenderRef("stdout"));
-    rootLogger.add(builder.newAppenderRef("logToFile"));
+    appenders.parallelStream().forEach(builder::add);
+    appenders.parallelStream()
+        .forEach(appender -> rootLogger.add(builder.newAppenderRef(appender.getName())));
     builder.add(rootLogger);
 
     Configurator.reconfigure(builder.build());
+  }
+
+  private AppenderComponentBuilder buildFileAppender() {
+    AppenderComponentBuilder file = builder.newAppender("logToFile", "File");
+    file.addAttribute("fileName", filePath);
+    file.add(layoutBuilder(builder));
+    return file;
+  }
+
+  private AppenderComponentBuilder buildConsoleAppender() {
+    AppenderComponentBuilder console = builder.newAppender("stdout", "Console");
+    console.add(layoutBuilder(builder));
+    return console;
+  }
+
+  private LayoutComponentBuilder layoutBuilder(ConfigurationBuilder<BuiltConfiguration> builder) {
+    LayoutComponentBuilder standard = builder.newLayout("PatternLayout");
+    standard.addAttribute("pattern", "%d [%t] %-5level: %msg%n%throwable");
+    return standard;
   }
 }

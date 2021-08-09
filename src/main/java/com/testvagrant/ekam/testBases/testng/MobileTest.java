@@ -1,7 +1,7 @@
 package com.testvagrant.ekam.testBases.testng;
 
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
-import com.testvagrant.ekam.internal.injectors.EkamInjector;
+import com.testvagrant.ekam.internal.injectors.EkamMobileInjector;
 import com.testvagrant.ekam.mobile.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
@@ -35,7 +35,7 @@ public class MobileTest extends TestNgTest {
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamInjector(ekamTest).createMobileInjector(false);
+    new EkamMobileInjector(ekamTest).create();
   }
 
   /**

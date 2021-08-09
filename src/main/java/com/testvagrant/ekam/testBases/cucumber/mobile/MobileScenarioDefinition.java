@@ -2,7 +2,7 @@ package com.testvagrant.ekam.testBases.cucumber.mobile;
 
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
-import com.testvagrant.ekam.internal.injectors.EkamInjector;
+import com.testvagrant.ekam.internal.injectors.EkamMobileInjector;
 import com.testvagrant.ekam.mobile.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import com.testvagrant.ekam.testBases.cucumber.ScenarioDefinition;
@@ -18,7 +18,7 @@ public class MobileScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
     EkamTest ekamTest = buildEkamTest(scenario);
-    new EkamInjector(ekamTest).createMobileInjector(false);
+    new EkamMobileInjector(ekamTest).create();
   }
 
   public void tearDown() {
