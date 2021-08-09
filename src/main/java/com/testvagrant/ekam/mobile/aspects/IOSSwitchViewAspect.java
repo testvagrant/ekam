@@ -25,8 +25,7 @@ public class IOSSwitchViewAspect implements MethodInterceptor {
           .getDeclaredMethod(method.getName(), method.getParameterTypes())
           .invoke(Screen(iosSwitchView), invocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(
-          "Unable to switch view to IOS.\nError Message:\n" + throwable.getMessage());
+      throw new RuntimeException(throwable.getMessage());
     }
   }
 }

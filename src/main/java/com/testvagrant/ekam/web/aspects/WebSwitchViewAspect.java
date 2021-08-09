@@ -23,8 +23,7 @@ public class WebSwitchViewAspect implements MethodInterceptor {
       return view.getDeclaredMethod(method.getName(), method.getParameterTypes())
           .invoke(Page(view), invocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(
-          "Unable to switch to Responsive View.\nError Message:\n" + throwable.getMessage());
+      throw new RuntimeException(throwable.getMessage());
     }
   }
 }

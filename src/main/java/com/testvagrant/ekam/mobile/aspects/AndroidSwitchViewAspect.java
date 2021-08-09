@@ -25,8 +25,7 @@ public class AndroidSwitchViewAspect implements MethodInterceptor {
           .getDeclaredMethod(method.getName(), method.getParameterTypes())
           .invoke(Screen(iosSwitchView), methodInvocation.getArguments());
     } catch (Throwable throwable) {
-      throw new RuntimeException(
-          "Unable to switch view to Android.\nError Message:\n" + throwable.getMessage());
+      throw new RuntimeException(throwable.getMessage());
     }
   }
 }
