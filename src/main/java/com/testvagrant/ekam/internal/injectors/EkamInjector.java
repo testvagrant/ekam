@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.internal.injectors;
 
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.testvagrant.ekam.api.modules.ApiHostsModule;
@@ -8,12 +9,14 @@ import com.testvagrant.ekam.api.modules.GrpcModule;
 import com.testvagrant.ekam.commons.io.GsonParser;
 import com.testvagrant.ekam.commons.io.ResourcePaths;
 import com.testvagrant.ekam.commons.path.PathBuilder;
+import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTestContext;
 import com.testvagrant.ekam.internal.logger.EkamLogger;
 import com.testvagrant.ekam.internal.modules.EkamTestModule;
+import com.testvagrant.ekam.internal.modules.LoggerModule;
 import com.testvagrant.ekam.internal.modules.StepRecorderModule;
-import org.apache.logging.log4j.Level;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.Arrays;
@@ -27,9 +30,12 @@ public class EkamInjector {
 
   protected final EkamTest ekamTest;
   protected final EkamTestContext testContext;
+  private Logger logger;
+  private final EkamConfig ekamConfig;
 
-  public EkamInjector(EkamTest ekamTest) {
+  public EkamInjector(EkamTest ekamTest, EkamConfig ekamConfig) {
     this.ekamTest = ekamTest;
+    this.ekamConfig = ekamConfig;
     testContext = init();
   }
 
@@ -38,7 +44,11 @@ public class EkamInjector {
     injectorsCache().put(injector);
 
     modules.addAll(
-        Arrays.asList(new ApiHostsModule(), new GrpcModule(), new StepRecorderModule(testContext)));
+        Arrays.asList(
+            new ApiHostsModule(),
+            new GrpcModule(),
+            new StepRecorderModule(testContext),
+            new LoggerModule(logger)));
     injector = injector.createChildInjector(modules);
     injectorsCache().put(injector);
     return injector;
@@ -80,14 +90,11 @@ public class EkamInjector {
 
   private void initLogger(String testDirectory) {
     if (LOGS.isOn()) {
-      String logLevel = System.getProperty("logLevel", Level.INFO.toString()).toUpperCase();
-      String[] logTypes = System.getProperty("logTypes", "console,file").split(",");
-
       String logDirectory = new PathBuilder(testDirectory).append("logs").toString();
       fileUtils().createDirectory(logDirectory);
 
-      String logFilePath = new PathBuilder(logDirectory).append("log.log").toString();
-      new EkamLogger(logFilePath).init(logLevel, Arrays.asList(logTypes));
+      String logFilePath = new PathBuilder(logDirectory).append("logs.log").toString();
+      logger = new EkamLogger(logFilePath, ekamConfig.getLogConfig()).init();
     }
   }
 }

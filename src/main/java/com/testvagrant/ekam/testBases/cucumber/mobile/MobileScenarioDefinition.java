@@ -18,7 +18,7 @@ public class MobileScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
     EkamTest ekamTest = buildEkamTest(scenario);
-    new EkamMobileInjector(ekamTest).create();
+    new EkamMobileInjector(ekamTest, ekamConfig).create();
   }
 
   public void tearDown() {

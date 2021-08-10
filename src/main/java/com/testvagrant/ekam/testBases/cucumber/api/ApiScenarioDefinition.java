@@ -9,6 +9,6 @@ public class ApiScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
     EkamTest ekamTest = buildEkamTest(scenario);
-    new EkamAPIInjector(ekamTest).create();
+    new EkamAPIInjector(ekamTest, ekamConfig).create();
   }
 }

@@ -35,7 +35,7 @@ public class MobileTest extends TestNgTest {
   @BeforeMethod(alwaysRun = true)
   public void ekamMobileSetup(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamMobileInjector(ekamTest).create();
+    new EkamMobileInjector(ekamTest, ekamConfig).create();
   }
 
   /**
@@ -59,6 +59,6 @@ public class MobileTest extends TestNgTest {
     if (mobileDriverDetails.getService() != null) mobileDriverDetails.getService().stop();
 
     DeviceCacheDisposeFactory.dispose(
-        Objects.requireNonNull(mobileDriverDetails).getTargetDetails(), ekam.getMobile());
+        Objects.requireNonNull(mobileDriverDetails).getTargetDetails(), ekamConfig.getMobile());
   }
 }

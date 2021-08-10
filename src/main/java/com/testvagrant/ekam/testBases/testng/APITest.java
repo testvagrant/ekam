@@ -21,7 +21,7 @@ public class APITest extends TestNgTest {
   @BeforeMethod(alwaysRun = true)
   public void initTest(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamAPIInjector(ekamTest).create();
+    new EkamAPIInjector(ekamTest, ekamConfig).create();
   }
 
   /**

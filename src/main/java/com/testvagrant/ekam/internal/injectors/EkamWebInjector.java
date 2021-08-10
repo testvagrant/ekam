@@ -1,6 +1,7 @@
 package com.testvagrant.ekam.internal.injectors;
 
 import com.google.inject.Injector;
+import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.devicemanager.models.EkamSupportedPlatforms;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
@@ -11,8 +12,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class EkamWebInjector extends EkamInjector {
 
-  public EkamWebInjector(EkamTest ekamTest) {
-    super(ekamTest);
+  public EkamWebInjector(EkamTest ekamTest, EkamConfig ekamConfig) {
+    super(ekamTest, ekamConfig);
   }
 
   public Injector create() {

@@ -1,56 +1,78 @@
 package com.testvagrant.ekam.internal.logger;
 
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.config.builder.api.*;
-import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+import com.testvagrant.ekam.config.models.LogConfig;
+import org.apache.log4j.*;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EkamLogger {
 
   private final String filePath;
-  private final ConfigurationBuilder<BuiltConfiguration> builder;
+  private final LogConfig logConfig;
 
-  public EkamLogger(String filePath) {
+  public EkamLogger(String filePath, LogConfig logConfig) {
     this.filePath = filePath;
-    builder = ConfigurationBuilderFactory.newConfigurationBuilder();
+    this.logConfig = logConfig;
   }
 
-  public void init(String level, List<String> logTypes) {
-    ConfigurationBuilder<BuiltConfiguration> builder =
-        ConfigurationBuilderFactory.newConfigurationBuilder();
-    RootLoggerComponentBuilder rootLogger = builder.newRootLogger(level);
+  public Logger init() {
+    String randomName = UUID.randomUUID().toString().replace("-", "");
+    Logger logger = Logger.getLogger(randomName);
 
-    List<AppenderComponentBuilder> appenders = new ArrayList<>();
+    List<WriterAppender> appenders = new ArrayList<>();
+    List<String> logTypes = logConfig.getTypes();
 
-    if (logTypes.contains("console")) appenders.add(buildConsoleAppender());
-    if (logTypes.contains("file")) appenders.add(buildFileAppender());
-
-    appenders.parallelStream().forEach(builder::add);
-    appenders.parallelStream()
-        .forEach(appender -> rootLogger.add(builder.newAppenderRef(appender.getName())));
-    builder.add(rootLogger);
-
-    Configurator.reconfigure(builder.build());
+    if (logTypes.contains("file")) appenders.add(buildRollingFileAppender(randomName));
+    if (logTypes.contains("console")) appenders.add(buildConsoleAppender(randomName));
+    logger.setAdditivity(false);
+    appenders.forEach(logger::addAppender);
+    return logger;
   }
 
-  private AppenderComponentBuilder buildFileAppender() {
-    AppenderComponentBuilder file = builder.newAppender("logToFile", "File");
-    file.addAttribute("fileName", filePath);
-    file.add(layoutBuilder(builder));
-    return file;
+  private RollingFileAppender buildRollingFileAppender(String name) {
+    RollingFileAppender appender = new RollingFileAppender();
+
+    String pattern =
+        logConfig.getFileLogPattern().isEmpty()
+            ? logConfig.getPattern()
+            : logConfig.getFileLogPattern();
+
+    String level =
+        logConfig.getFileLogLevel().isEmpty()
+            ? logConfig.getLogLevel()
+            : logConfig.getFileLogLevel();
+
+    appender.setName(name);
+    appender.setLayout(new PatternLayout(pattern));
+    appender.setFile(filePath);
+    appender.setAppend(true);
+    appender.setImmediateFlush(true);
+    appender.setMaxFileSize(logConfig.getMaxFileSize());
+    appender.setMaxBackupIndex(10);
+    appender.activateOptions();
+    appender.setThreshold(Level.toLevel(level));
+    return appender;
   }
 
-  private AppenderComponentBuilder buildConsoleAppender() {
-    AppenderComponentBuilder console = builder.newAppender("stdout", "Console");
-    console.add(layoutBuilder(builder));
-    return console;
-  }
+  private ConsoleAppender buildConsoleAppender(String name) {
+    ConsoleAppender appender = new ConsoleAppender();
+    String pattern =
+        logConfig.getConsoleLogPattern().isEmpty()
+            ? logConfig.getPattern()
+            : logConfig.getConsoleLogPattern();
 
-  private LayoutComponentBuilder layoutBuilder(ConfigurationBuilder<BuiltConfiguration> builder) {
-    LayoutComponentBuilder standard = builder.newLayout("PatternLayout");
-    standard.addAttribute("pattern", "%d [%t] %-5level: %msg%n%throwable");
-    return standard;
+    String level =
+        logConfig.getConsoleLogLevel().isEmpty()
+            ? logConfig.getLogLevel()
+            : logConfig.getConsoleLogLevel();
+
+    appender.setName(name);
+    appender.setWriter(new OutputStreamWriter(System.out));
+    appender.setLayout(new PatternLayout(pattern));
+    appender.setThreshold(Level.toLevel(level));
+    return appender;
   }
 }

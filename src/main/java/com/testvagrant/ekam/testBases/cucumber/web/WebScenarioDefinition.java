@@ -13,7 +13,7 @@ public class WebScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
     EkamTest ekamTest = buildEkamTest(scenario);
-    new EkamWebInjector(ekamTest).create();
+    new EkamWebInjector(ekamTest, ekamConfig).create();
   }
 
   public void tearDown() {

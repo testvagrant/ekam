@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     jcenter()
 }
 
@@ -43,9 +44,7 @@ dependencies {
     implementation 'io.qameta.allure:allure-cucumber6-jvm:2.14.0'
 
     //logger
-    implementation('org.apache.logging.log4j:log4j-api:2.14.1')
-    implementation('org.apache.logging.log4j:log4j-core:2.14.1')
-    implementation('org.apache.logging.log4j:log4j-slf4j-impl:2.14.1')
+    implementation('log4j:log4j:1.2.17')
 
     //github
     implementation('com.github.javafaker:javafaker:1.0.2')
@@ -58,8 +57,8 @@ dependencies {
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.0.3-alpha')
     implementation('com.testvagrant.ekam:ekam-commons:0.0.9-beta')
-    implementation('com.testvagrant.ekam:ekam-config:1.0.1')
-    implementation('com.testvagrant.ekam:ekam-atoms:0.0.4-beta')
+    implementation('com.testvagrant.ekam:ekam-config:1.0.2')
+    implementation('com.testvagrant.ekam:ekam-atoms:0.0.5-beta')
     implementation('com.testvagrant.ekam:ekam-device-manager:0.0.5-beta')
 
     //selenium
@@ -198,6 +197,6 @@ task runTests(type: Test) {
     useTestNG()
 }
 
-signing {
-    sign publishing.publications
-}
+//signing {
+//    sign publishing.publications
+//}
