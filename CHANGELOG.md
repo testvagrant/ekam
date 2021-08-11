@@ -1,5 +1,10 @@
+# 0.2.4-beta
+* Updated Ekam Config 1.0.2
+* Updated Ekam Drivers 1.0.4
+* Added EkamLogger
+* Fixed DeviceFilters logic
+* 
 # 0.2.3-beta
-
 * Updated Ekam Commons 0.0.9-beta
 * Updated Ekam Atoms to 0.0.4-beta
 * Removed stale tests ApiTestFeedTests
