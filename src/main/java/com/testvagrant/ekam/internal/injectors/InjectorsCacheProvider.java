@@ -2,7 +2,7 @@ package com.testvagrant.ekam.internal.injectors;
 
 public class InjectorsCacheProvider {
 
-  private static InjectorsCache injectorsCacheProvider;
+  private static volatile InjectorsCache injectorsCacheProvider;
 
   private InjectorsCacheProvider() {}
 

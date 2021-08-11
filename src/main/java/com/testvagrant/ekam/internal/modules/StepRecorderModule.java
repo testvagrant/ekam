@@ -19,6 +19,7 @@ public class StepRecorderModule extends AbstractModule {
     StepRecorder stepRecorder = new StepRecorder(ekamTest.getFeature(), ekamTest.getScenario());
     EkamTestScreenshotTaker scenarioTimeline = new EkamTestScreenshotTaker(testContext);
 
+    bind(EkamTestContext.class).toInstance(testContext);
     bind(StepRecorder.class).toInstance(stepRecorder);
     bind(EkamTestScreenshotTaker.class).toInstance(scenarioTimeline);
   }

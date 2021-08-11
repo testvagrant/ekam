@@ -2,7 +2,9 @@ package com.testvagrant.ekam.testBases.testng;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
-import com.testvagrant.ekam.internal.injectors.EkamInjector;
+import com.testvagrant.ekam.internal.executiontimeline.models.EkamTestContext;
+import com.testvagrant.ekam.internal.injectors.EkamWebInjector;
+import com.testvagrant.ekam.web.ErrorCollector;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -31,7 +33,7 @@ public class WebTest extends TestNgTest {
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {
     EkamTest ekamTest = buildEkamTest(iTestResult);
-    new EkamInjector(ekamTest).createWebInjector(false);
+    new EkamWebInjector(ekamTest, ekamConfig).create();
   }
 
   /**
@@ -49,6 +51,10 @@ public class WebTest extends TestNgTest {
   private void dispose() {
     Injector injector = injectorsCache().getInjector();
     WebDriver webDriver = injector.getInstance(WebDriver.class);
+    EkamTestContext context = injector.getInstance(EkamTestContext.class);
+    if (ekamConfig.getWeb().isLogConsoleErrors())
+      new ErrorCollector()
+          .logConsoleMessages(context.getTestDirectory(), ekamConfig.getLogConfig());
     if (webDriver != null) webDriver.quit();
   }
 }

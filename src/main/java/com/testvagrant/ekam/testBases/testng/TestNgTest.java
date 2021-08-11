@@ -21,7 +21,7 @@ import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.inj
 public class TestNgTest {
 
   private final String target;
-  @Inject protected EkamConfig ekam;
+  @Inject protected EkamConfig ekamConfig;
   @Inject private DashboardTestNgBuildManager dashboardTestNgBuildManager;
 
   public TestNgTest(String target) {
@@ -31,7 +31,7 @@ public class TestNgTest {
   /** Start Dashboard build if dashboard url specified in config */
   @BeforeSuite(alwaysRun = true)
   public void onStart() {
-    if (ekam.getDashboardConfig().publishToDashboard()) {
+    if (ekamConfig.getDashboardConfig().publishToDashboard()) {
       dashboardTestNgBuildManager.start(target);
     }
   }
@@ -39,8 +39,8 @@ public class TestNgTest {
   /** Finalize current build for dashboard if dashboard url specified in config */
   @AfterSuite(alwaysRun = true)
   public void onFinish() {
-    if (ekam.getDashboardConfig().publishToDashboard()) {
-      String dashboardUrl = ekam.getDashboardConfig().getDashboardUrl();
+    if (ekamConfig.getDashboardConfig().publishToDashboard()) {
+      String dashboardUrl = ekamConfig.getDashboardConfig().getDashboardUrl();
       dashboardTestNgBuildManager.finish(dashboardUrl);
     }
   }
@@ -51,7 +51,7 @@ public class TestNgTest {
    * @param result: Testng ITestResult
    */
   protected void updateBuild(ITestResult result) {
-    if (ekam.getDashboardConfig().publishToDashboard()) {
+    if (ekamConfig.getDashboardConfig().publishToDashboard()) {
       EkamTestNGBuildGenerator buildGenerator =
           (EkamTestNGBuildGenerator)
               dataStoreProvider().get("buildGenerator").orElse(new EkamTestNGBuildGenerator());

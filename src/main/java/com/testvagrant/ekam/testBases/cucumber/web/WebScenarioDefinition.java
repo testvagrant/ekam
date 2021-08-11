@@ -2,7 +2,7 @@ package com.testvagrant.ekam.testBases.cucumber.web;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
-import com.testvagrant.ekam.internal.injectors.EkamInjector;
+import com.testvagrant.ekam.internal.injectors.EkamWebInjector;
 import com.testvagrant.ekam.testBases.cucumber.ScenarioDefinition;
 import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
@@ -13,7 +13,7 @@ public class WebScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
     EkamTest ekamTest = buildEkamTest(scenario);
-    new EkamInjector(ekamTest).createWebInjector(false);
+    new EkamWebInjector(ekamTest, ekamConfig).create();
   }
 
   public void tearDown() {

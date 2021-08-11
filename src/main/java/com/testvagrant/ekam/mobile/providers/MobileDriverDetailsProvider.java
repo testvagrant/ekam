@@ -2,11 +2,14 @@ package com.testvagrant.ekam.mobile.providers;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.testvagrant.ekam.commons.io.ResourcePaths;
+import com.testvagrant.ekam.commons.path.PathBuilder;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.devicemanager.devicefinder.LocalDeviceFinder;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.drivers.mobile.MobileDriverManager;
 import com.testvagrant.ekam.drivers.mobile.ServerManager;
+import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import io.appium.java_client.AppiumDriver;
@@ -17,6 +20,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 
+import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 import static com.testvagrant.ekam.mobile.remote.RemoteMobileDriverFactory.remoteMobileDriverFactory;
 
 public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails> {
@@ -58,8 +62,15 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
     DesiredCapabilities deviceCapabilities = new DesiredCapabilities(availableDevice.asMap());
     DesiredCapabilities capabilities = desiredCapabilities.merge(deviceCapabilities);
 
+    EkamTest ekamTest = injectorsCache().getInjector().getInstance(EkamTest.class);
+    String logFilePath =
+        new PathBuilder(ResourcePaths.getTestPath(ekamTest.getFeature(), ekamTest.getScenario()))
+            .append("logs")
+            .append("appium.log")
+            .toString();
+
     AppiumDriverLocalService appiumDriverLocalService =
-        new ServerManager().startService(mobileConfigParser.getServerArguments());
+        new ServerManager().startService(mobileConfigParser.getServerArguments(), logFilePath);
     AppiumDriver<MobileElement> driver =
         new MobileDriverManager(appiumDriverLocalService.getUrl(), capabilities).createDriver();
 

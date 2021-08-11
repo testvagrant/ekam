@@ -32,7 +32,7 @@ public class EkamTestScreenshotTaker {
     File file = takeScreenshotAsFile();
     Path destinationPath =
         new File(
-                new PathBuilder(testContext.getTestFolder())
+                new PathBuilder(testContext.getTestDirectory())
                     .append("screenshots")
                     .append(LocalDateTime.now() + ".png")
                     .toString())
