@@ -64,7 +64,9 @@ public class MobileConfigParser extends TestConfigParser {
 
   private void setDeviceFilters() {
     if (mobileConfig.isDeviceFiltersProvided()) {
-      deviceFilters = loadFeed(mobileConfig.getDeviceFilters(), MOBILE_ENV, DeviceFilters.class);
+      deviceFilters =
+          loadFeed(
+              mobileConfig.getDeviceFilters(), System.getProperty(MOBILE_ENV), DeviceFilters.class);
       return;
     }
 
@@ -102,22 +104,22 @@ public class MobileConfigParser extends TestConfigParser {
     List<Map<String, Object>> capabilitiesList = testFeed.getDesiredCapabilities();
     RuntimeException exception = new RuntimeException("Cannot find desired capabilities");
 
-    if (capabilitiesList.isEmpty() || mobileConfig.isAny() || capabilitiesList.size() == 1) {
-      desiredCapabilities =
-          new DesiredCapabilities(capabilitiesList.stream().findAny().orElseThrow(() -> exception));
-      return;
-    }
+    Map<String, Object> capabilities;
 
-    Map<String, Object> capabilities =
-        capabilitiesList.stream()
-            .filter(
-                desiredCaps ->
-                    desiredCaps
-                        .get(MobileCapabilityType.PLATFORM_NAME)
-                        .toString()
-                        .equalsIgnoreCase(platform))
-            .findFirst()
-            .orElseThrow(() -> exception);
+    if (mobileConfig.isAny() || capabilitiesList.size() == 1) {
+      capabilities = capabilitiesList.stream().findAny().orElseThrow(() -> exception);
+    } else {
+      capabilities =
+          capabilitiesList.stream()
+              .filter(
+                  desiredCaps ->
+                      desiredCaps
+                          .get(MobileCapabilityType.PLATFORM_NAME)
+                          .toString()
+                          .equalsIgnoreCase(platform))
+              .findFirst()
+              .orElseThrow(() -> exception);
+    }
 
     Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
     desiredCapabilities = new DesiredCapabilities(updatedCapabilities);

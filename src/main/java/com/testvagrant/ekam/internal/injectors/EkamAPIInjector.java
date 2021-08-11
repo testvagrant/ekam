@@ -9,7 +9,6 @@ public class EkamAPIInjector extends EkamInjector {
     super(ekamTest, ekamConfig);
   }
 
-  /** Creates API Injector binding APIHostsModule, StepRecorderModule */
   public void create() {
     createInjector(new ModulesLibrary().baseModules());
     createTargetJson();

@@ -18,9 +18,7 @@ import static com.testvagrant.ekam.commons.LayoutInitiator.Screen;
 public abstract class MobileScreen extends QueryFunctions {
 
   @Inject protected AppiumDriver<MobileElement> driver;
-
   @Inject protected AndroidDeviceDriver androidDeviceDriver;
-
   @Inject protected IOSDeviceDriver iosDeviceDriver;
 
   protected Element element(By locator) {
