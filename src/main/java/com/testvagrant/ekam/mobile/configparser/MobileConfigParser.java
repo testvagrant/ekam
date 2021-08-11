@@ -64,7 +64,9 @@ public class MobileConfigParser extends TestConfigParser {
 
   private void setDeviceFilters() {
     if (mobileConfig.isDeviceFiltersProvided()) {
-      deviceFilters = loadFeed(mobileConfig.getDeviceFilters(), MOBILE_ENV, DeviceFilters.class);
+      deviceFilters =
+          loadFeed(
+              mobileConfig.getDeviceFilters(), System.getProperty(MOBILE_ENV), DeviceFilters.class);
       return;
     }
 

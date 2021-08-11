@@ -6,7 +6,6 @@ import com.testvagrant.ekam.config.models.LogConfig;
 import com.testvagrant.ekam.internal.logger.EkamLogger;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 
 import java.util.List;
@@ -15,12 +14,6 @@ import java.util.logging.Level;
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
 
 public class ErrorCollector {
-
-  public LogEntries collect() {
-    Injector injector = injectorsCache().getInjector();
-    WebDriver driver = injector.getInstance(WebDriver.class);
-    return driver.manage().logs().get("browser");
-  }
 
   public void logConsoleMessages(String testDirectory, LogConfig logConfig) {
     Injector injector = injectorsCache().getInjector();
