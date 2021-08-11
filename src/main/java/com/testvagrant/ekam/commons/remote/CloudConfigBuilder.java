@@ -11,7 +11,7 @@ public class CloudConfigBuilder {
   public CloudConfigBuilder(String hub) {
     userName = System.getenv("username");
     accessKey = System.getenv("accessKey");
-    cloudConfig = new ConfigLoader().loadConfig(hub);
+    cloudConfig = new ConfigLoader().loadConfig(hub).parseSystemProperties();
     overrideCloudConfig(cloudConfig);
   }
 

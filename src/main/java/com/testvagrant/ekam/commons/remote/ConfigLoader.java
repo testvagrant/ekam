@@ -13,6 +13,8 @@ public class ConfigLoader {
     String file = String.format("cloud_config/%s.json", hub);
     InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(file);
     if (resourceAsStream == null) throw new HubNotFoundException(hub);
-    return new GsonParser().deserialize(new InputStreamReader(resourceAsStream), CloudConfig.class);
+    CloudConfig cloudConfig =
+        new GsonParser().deserialize(new InputStreamReader(resourceAsStream), CloudConfig.class);
+    return cloudConfig.parseSystemProperties();
   }
 }

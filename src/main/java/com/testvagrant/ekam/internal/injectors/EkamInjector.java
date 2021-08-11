@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.internal.injectors;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.testvagrant.ekam.api.modules.ApiHostsModule;
@@ -30,8 +29,8 @@ public class EkamInjector {
 
   protected final EkamTest ekamTest;
   protected final EkamTestContext testContext;
-  private Logger logger;
   private final EkamConfig ekamConfig;
+  private Logger logger;
 
   public EkamInjector(EkamTest ekamTest, EkamConfig ekamConfig) {
     this.ekamTest = ekamTest;
