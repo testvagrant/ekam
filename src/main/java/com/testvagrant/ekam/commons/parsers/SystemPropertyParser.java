@@ -1,9 +1,6 @@
 package com.testvagrant.ekam.commons.parsers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +8,7 @@ import java.util.regex.Pattern;
 public class SystemPropertyParser {
 
   public static String parse(String text) {
+    if (Objects.isNull(text) || text.isEmpty()) return text;
     List<String> allMatches = new ArrayList<>();
     Pattern p = Pattern.compile("\\$\\{env:(.*?)}");
     Matcher m = p.matcher(text);
