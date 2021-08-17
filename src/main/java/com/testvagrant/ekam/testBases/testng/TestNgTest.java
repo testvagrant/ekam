@@ -2,11 +2,11 @@ package com.testvagrant.ekam.testBases.testng;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.dashboard.EkamTestNGBuildGenerator;
 import com.testvagrant.ekam.dashboard.StepRecorder;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
+import com.testvagrant.ekam.internal.modules.EkamConfigModule;
 import com.testvagrant.ekam.reports.dashboard.DashboardTestNgBuildManager;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterSuite;

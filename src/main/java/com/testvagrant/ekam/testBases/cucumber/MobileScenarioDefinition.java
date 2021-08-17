@@ -1,11 +1,10 @@
-package com.testvagrant.ekam.testBases.cucumber.mobile;
+package com.testvagrant.ekam.testBases.cucumber;
 
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamMobileInjector;
 import com.testvagrant.ekam.mobile.DeviceCacheDisposeFactory;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
-import com.testvagrant.ekam.testBases.cucumber.ScenarioDefinition;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.cucumber.java.Scenario;

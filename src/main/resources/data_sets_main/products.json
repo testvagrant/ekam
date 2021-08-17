@@ -1,0 +1,12 @@
+{
+  "models": [
+    {
+      "name": "Google Pixel 2",
+      "platform": "Android"
+    },
+    {
+      "name": "iphone 12",
+      "platform": "IOS"
+    }
+  ]
+}

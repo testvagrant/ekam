@@ -1,8 +1,7 @@
-package com.testvagrant.ekam.testBases.cucumber.api;
+package com.testvagrant.ekam.testBases.cucumber;
 
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamAPIInjector;
-import com.testvagrant.ekam.testBases.cucumber.ScenarioDefinition;
 import io.cucumber.java.Scenario;
 
 public class ApiScenarioDefinition extends ScenarioDefinition {

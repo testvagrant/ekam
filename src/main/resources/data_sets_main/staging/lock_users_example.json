@@ -1,0 +1,30 @@
+{
+  "authorizedUser": [
+    {
+      "username": "standard_user_1_staging",
+      "password": "P@ssword"
+    },
+    {
+      "username": "standard_user_2_staging",
+      "password": "P@$$word"
+    },
+    {
+      "username": "standard_user_3_staging",
+      "password": "P@ssword"
+    },
+    {
+      "username": "standard_user_4_staging",
+      "password": "P@$$word"
+    }
+  ],
+  "unauthorizedUser": [
+    {
+      "username": "unauthorized_user_1_staging",
+      "password": "P@ssword"
+    },
+    {
+      "username": "unauthorized_user_2_staging",
+      "password": "P@$$word"
+    }
+  ]
+}

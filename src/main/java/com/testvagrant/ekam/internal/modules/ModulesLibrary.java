@@ -1,7 +1,6 @@
 package com.testvagrant.ekam.internal.modules;
 
 import com.google.inject.Module;
-import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.mobile.modules.MobileModule;
 import com.testvagrant.ekam.reports.modules.InterceptorModule;
 import com.testvagrant.ekam.web.modules.WebModule;

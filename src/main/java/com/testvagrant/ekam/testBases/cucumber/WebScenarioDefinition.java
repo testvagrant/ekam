@@ -1,9 +1,8 @@
-package com.testvagrant.ekam.testBases.cucumber.web;
+package com.testvagrant.ekam.testBases.cucumber;
 
 import com.google.inject.Injector;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamWebInjector;
-import com.testvagrant.ekam.testBases.cucumber.ScenarioDefinition;
 import io.cucumber.java.Scenario;
 import org.openqa.selenium.WebDriver;
 

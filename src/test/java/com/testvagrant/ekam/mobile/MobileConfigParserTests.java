@@ -2,12 +2,12 @@ package com.testvagrant.ekam.mobile;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.testvagrant.ekam.config.EkamConfigModule;
 import com.testvagrant.ekam.config.models.EkamConfig;
 import com.testvagrant.ekam.devicemanager.DeviceFiltersManager;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
 import com.testvagrant.ekam.devicemanager.models.EkamSupportedPlatforms;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
+import com.testvagrant.ekam.internal.modules.EkamConfigModule;
 import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

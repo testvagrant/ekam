@@ -1,0 +1,12 @@
+{
+  "debitCards_": [
+    ""
+  ],
+  "debitCards": [
+    "visa"
+  ],
+  "debitCardsGateway": [
+    "mastercard"
+  ],
+  "debitCardsGatewayApi": "maestro"
+}

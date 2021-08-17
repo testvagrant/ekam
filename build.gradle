@@ -7,6 +7,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     jcenter()
 }
 
@@ -55,8 +56,8 @@ dependencies {
     implementation('com.testvagrant.ekam:ekam-drivers:1.0.3')
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.0.3-alpha')
-    implementation('com.testvagrant.ekam:ekam-commons:0.1.1-beta')
-    implementation('com.testvagrant.ekam:ekam-config:1.0.2')
+    implementation('com.testvagrant.ekam:ekam-commons:0.1.0')
+    implementation('com.testvagrant.ekam:ekam-config:1.0.3')
     implementation('com.testvagrant.ekam:ekam-atoms:0.0.4-beta')
     implementation('com.testvagrant.ekam:ekam-device-manager:0.0.5-beta')
 
@@ -82,6 +83,7 @@ dependencies {
 
     // generic wait
     implementation('org.awaitility:awaitility:4.1.0')
+    testImplementation("org.assertj:assertj-guava:2.0.1")
 }
 
 test {
@@ -110,7 +112,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.2.4-beta'
+            version '0.3.0-beta'
 
             from components.java
 
