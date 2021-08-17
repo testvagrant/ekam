@@ -1,10 +1,12 @@
+# 0.3.0-beta
+* Added Data Clients and EkamConfigModule 
+
 # 0.2.4-beta
 
 * Updated Ekam Config 1.0.2
 * Updated Ekam Drivers 1.0.4
 * Added EkamLogger
 * Fixed DeviceFilters logic
-*
 
 # 0.2.3-beta
 
