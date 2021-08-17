@@ -3,9 +3,10 @@ package com.testvagrant.ekam.web;
 import com.google.inject.Inject;
 import com.testvagrant.ekam.atoms.MultiPlatformFinder;
 import com.testvagrant.ekam.atoms.web.*;
-import com.testvagrant.ekam.reports.allure.ReportLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import static com.testvagrant.ekam.commons.LayoutInitiator.Page;
 
 public class WebPage extends QueryFunctions {
 
@@ -35,7 +36,7 @@ public class WebPage extends QueryFunctions {
     return new ElementCollection(driver, locator);
   }
 
-  public void log(String message) {
-    ReportLogger.log(message);
+  protected <T extends WebPage> T createInstance(Class<T> clazz) {
+    return Page(clazz);
   }
 }

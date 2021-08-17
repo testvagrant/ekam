@@ -49,10 +49,6 @@ public abstract class MobileScreen extends QueryFunctions {
     return MultiPlatformFinder.builder().androidFindBy(androidFindBy).iosFindBy(iosFindBy).build();
   }
 
-  public void log(String message) {
-    ReportLogger.log(message);
-  }
-
   protected <T extends MobileScreen> T createInstance(Class<T> clazz) {
     return Screen(clazz);
   }
