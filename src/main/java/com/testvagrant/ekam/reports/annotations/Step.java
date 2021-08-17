@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Step {
-  String keyword();
+  String keyword() = "";
 
-  String persona();
+  String persona() = "";
 
   String description();
 }
