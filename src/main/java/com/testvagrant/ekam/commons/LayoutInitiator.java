@@ -4,9 +4,7 @@ import com.google.inject.Injector;
 import com.testvagrant.ekam.dashboard.StepRecorder;
 import com.testvagrant.ekam.dashboard.models.Step;
 import com.testvagrant.ekam.internal.executiontimeline.EkamTestScreenshotTaker;
-import com.testvagrant.ekam.mobile.MobileScreen;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
-import com.testvagrant.ekam.web.WebPage;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -23,11 +21,11 @@ public class LayoutInitiator {
     return new LayoutInitiator();
   }
 
-  public static <Page extends WebPage> Page Page(Class<Page> tPage) {
+  public static <Page> Page Page(Class<Page> tPage) {
     return layoutInitiator().createWebLayout(tPage);
   }
 
-  public static <Activity extends MobileScreen> Activity Screen(Class<Activity> tActivity) {
+  public static <Activity> Activity Screen(Class<Activity> tActivity) {
     return layoutInitiator().createMobileLayout(tActivity);
   }
 
@@ -46,7 +44,7 @@ public class LayoutInitiator {
     stepRecorder.addStep(step);
   }
 
-  private <Page extends WebPage> Page createWebLayout(Class<Page> tPage) {
+  private <Page> Page createWebLayout(Class<Page> tPage) {
     Injector pageInjector = getInjector();
     WebDriver webDriver = pageInjector.getInstance(WebDriver.class);
     Page instance = pageInjector.getInstance(tPage);
@@ -54,7 +52,7 @@ public class LayoutInitiator {
     return instance;
   }
 
-  private <Activity extends MobileScreen> Activity createMobileLayout(Class<Activity> tActivity) {
+  private <Activity> Activity createMobileLayout(Class<Activity> tActivity) {
     Injector activityInjector = getInjector();
     MobileDriverDetails mobileDriverDetails =
         activityInjector.getInstance(MobileDriverDetails.class);
