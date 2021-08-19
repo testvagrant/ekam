@@ -1,3 +1,6 @@
+# 0.3.1-beta
+* Bump-up ekam-drivers
+
 # 0.3.0-beta
 * Added Data Clients and EkamConfigModule 
 

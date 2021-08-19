@@ -52,7 +52,7 @@ dependencies {
     implementation('io.appium:java-client:7.5.1')
 
     //testvagrant
-    implementation('com.testvagrant.ekam:ekam-drivers:1.0.3')
+    implementation('com.testvagrant.ekam:ekam-drivers:1.0.4')
     implementation('com.testvagrant.ekam:ekam-report-publisher:0.0.3-beta')
     implementation('com.testvagrant.ekam:ekam-api:0.1.0')
     implementation('com.testvagrant.ekam:ekam-commons:0.1.0')
@@ -110,7 +110,7 @@ publishing {
             customizePom(pom)
             groupId 'com.testvagrant.ekam'
             artifactId 'ekam'
-            version '0.3.0-beta'
+            version '0.3.1-beta'
 
             from components.java
 
