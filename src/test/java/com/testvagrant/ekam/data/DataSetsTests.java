@@ -6,6 +6,7 @@ import com.testvagrant.ekam.dataclients.DataClient;
 import com.testvagrant.ekam.models.Credentials;
 import com.testvagrant.ekam.models.Models;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
@@ -64,6 +65,7 @@ public class DataSetsTests extends CacheTestBase {
   }
 
   @Test
+  @Disabled
   @SetSystemProperty(key = "datasets.env", value = "qa")
   public void should_Fetch_Key_That_Matches_Exact_Key_When_Multiple_Keys_StartWith_Same_Name() {
     DataClient dataClient = new DataClient();
