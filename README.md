@@ -1,4 +1,4 @@
-# Ekam
+# Ekam ![Ekam](https://github.com/testvagrant/ekam/actions/workflows/ekam.yml/badge.svg)
 [Ekam home](https://ekam.testvagrant.ai/) | [Documentation](https://ekam.testvagrant.ai/docs/setup/ekam_setup/)
 
 Ekam is an orchestrator for working with multiple layers of Test Automation
