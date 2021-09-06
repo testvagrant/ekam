@@ -19,11 +19,6 @@ Ekam is licensed under a MIT LICENSE
 
 ## Building
 
-### Clone Repo
-```shell
-git clone git@github.com:testvagrant/ekam.git && cd ekam
-```
-
 ```shell
 ./gradlew clean build
 ```
