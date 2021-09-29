@@ -1,3 +1,7 @@
+# 1.0.0
+* Added loggers
+* Updated sub project versions to 1.0.0
+
 # 0.3.1-beta
 * Bump-up ekam-drivers
 
