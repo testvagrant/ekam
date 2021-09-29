@@ -6,11 +6,13 @@ import com.testvagrant.ekam.internal.executiontimeline.models.EkamTestContext;
 import com.testvagrant.ekam.internal.injectors.EkamWebInjector;
 import com.testvagrant.ekam.web.ErrorCollector;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.MDC;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 /** TestBase for Ekam Web tests */
 public class WebTest extends TestNgTest {
@@ -32,6 +34,7 @@ public class WebTest extends TestNgTest {
    */
   @BeforeMethod(alwaysRun = true)
   public void ekamWebSetup(ITestResult iTestResult) {
+    initLogger(iTestResult);
     EkamTest ekamTest = buildEkamTest(iTestResult);
     new EkamWebInjector(ekamTest, ekamConfig).create();
   }

@@ -10,11 +10,13 @@ import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyDeviceManagerPro
 
 import static com.testvagrant.ekam.commons.remote.constants.Hub.P_CLOUDY;
 import static com.testvagrant.ekam.commons.remote.constants.Hub.QUALITY_KIOSK;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class DeviceCacheDisposeFactory {
 
   public static void dispose(TargetDetails targetDetails, MobileConfig mobileConfig) {
     if (!mobileConfig.isRemote()) {
+      ekamLogger().info("Releasing device {}", targetDetails);
       LocalDeviceManagerProvider.deviceManager().releaseDevice(targetDetails);
       return;
     }
@@ -25,6 +27,7 @@ public class DeviceCacheDisposeFactory {
 
   private static void releaseRemoteDevice(
       TargetDetails targetDetails, String hub, CloudConfig cloudConfig) {
+    ekamLogger().info("Releasing remote device on {}", hub);
     switch (hub) {
       case P_CLOUDY:
       case QUALITY_KIOSK:

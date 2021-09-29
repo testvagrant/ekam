@@ -6,11 +6,13 @@ import com.testvagrant.ekam.devicemanager.remote.browserstack.BrowserStackUpload
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;
 
 import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class RemoteDriverUploadFactory {
 
   public static String uploadUrl(String hub, String appPath) {
     CloudConfig cloudConfig = new ConfigLoader().loadConfig(hub);
+    ekamLogger().info("Uploading app to {}", hub);
     switch (hub.toLowerCase()) {
       case BROWSERSTACK:
         return BrowserStackUploadManager.getInstance(

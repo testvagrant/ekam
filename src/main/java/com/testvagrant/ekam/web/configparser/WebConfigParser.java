@@ -9,6 +9,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.List;
 
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
+
 public class WebConfigParser extends TestConfigParser {
 
   private final WebConfig webConfig;
@@ -19,19 +21,20 @@ public class WebConfigParser extends TestConfigParser {
 
   public BrowserConfig buildBrowserConfig() {
     WebTestFeed webTestFeed = getTestFeed(webConfig.getFeed());
+    ekamLogger().info("Parsing web feed {}", webTestFeed);
     DesiredCapabilities capabilities =
         new DesiredCapabilities(webTestFeed.getDesiredCapabilities());
 
     List<String> arguments = webTestFeed.getArguments();
     if (webConfig.isHeadless()) arguments.add("--headless");
-
-    return BrowserConfig.builder()
-        .desiredCapabilities(capabilities)
-        .arguments(arguments)
-        .preferences(webTestFeed.getPreferences())
-        .experimentalOptions(webTestFeed.getExperimentalOptions())
-        .extensions(webTestFeed.getExtensions())
-        .build();
+    BrowserConfig browserConfig = BrowserConfig.builder()
+            .desiredCapabilities(capabilities)
+            .arguments(arguments)
+            .preferences(webTestFeed.getPreferences())
+            .experimentalOptions(webTestFeed.getExperimentalOptions())
+            .extensions(webTestFeed.getExtensions())
+            .build();
+    return browserConfig;
   }
 
   private WebTestFeed getTestFeed(String testFeedName) {

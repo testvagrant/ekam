@@ -2,9 +2,12 @@ package com.testvagrant.ekam.testBases.testng;
 
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.injectors.EkamAPIInjector;
+import org.slf4j.MDC;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 /** TestBase for Ekam API Tests */
 public class APITest extends TestNgTest {
@@ -20,6 +23,7 @@ public class APITest extends TestNgTest {
    */
   @BeforeMethod(alwaysRun = true)
   public void initTest(ITestResult iTestResult) {
+    initLogger(iTestResult);
     EkamTest ekamTest = buildEkamTest(iTestResult);
     new EkamAPIInjector(ekamTest, ekamConfig).create();
   }

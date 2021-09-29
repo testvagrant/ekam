@@ -24,6 +24,7 @@ import java.util.List;
 import static com.testvagrant.ekam.commons.Toggles.LOGS;
 import static com.testvagrant.ekam.commons.io.FileUtilities.fileUtils;
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class EkamInjector {
 
@@ -64,12 +65,13 @@ public class EkamInjector {
     String fileName =
         new PathBuilder(testContext.getTestDirectory()).append("target.json").toString();
     fileUtils().writeFile(fileName, targets);
+    ekamLogger().info("Created targets json {}", targets);
   }
 
   private EkamTestContext init() {
     String testDirectoryPath =
         ResourcePaths.getTestPath(ekamTest.getFeature(), ekamTest.getScenario());
-
+    ekamLogger().info("Initialised test directory path {}", testDirectoryPath);
     EkamTestContext context =
         EkamTestContext.builder().ekamTest(ekamTest).testDirectory(testDirectoryPath).build();
 
@@ -85,13 +87,14 @@ public class EkamInjector {
   private void initScreenShotDirectory(String testDirectory) {
     String path = new PathBuilder(testDirectory).append("screenshots").toString();
     fileUtils().createDirectory(path);
+    ekamLogger().info("Initialised screenshots directory path {}", path);
   }
 
   private void initLogger(String testDirectory) {
     if (LOGS.isOn()) {
       String logDirectory = new PathBuilder(testDirectory).append("logs").toString();
       fileUtils().createDirectory(logDirectory);
-
+      ekamLogger().info("Initialised log directory path {}", logDirectory);
       String logFilePath = new PathBuilder(logDirectory).append("logs.log").toString();
       logger = new EkamLogger(logFilePath, ekamConfig.getLogConfig()).init();
     }

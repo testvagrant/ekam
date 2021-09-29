@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
+
 /** Replace ${env:VARIABLE} with the system property */
 public class SystemPropertyParser {
 
@@ -21,7 +23,7 @@ public class SystemPropertyParser {
       String replaceValue = System.getProperty(allMatch, "");
       text = text.replaceAll(replaceText, replaceValue);
     }
-
+    ekamLogger().info("Parsing system property {}", text);
     return text;
   }
 

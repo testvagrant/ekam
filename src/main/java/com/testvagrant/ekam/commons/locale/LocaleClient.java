@@ -3,6 +3,7 @@ package com.testvagrant.ekam.commons.locale;
 import com.testvagrant.ekam.commons.cache.LocaleCache;
 
 import static com.testvagrant.ekam.commons.cache.providers.LocaleProvider.localeProvider;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class LocaleClient {
@@ -14,6 +15,8 @@ public class LocaleClient {
   }
 
   public synchronized <T> T getLocale(String key, Class<T> tClass) {
-    return (T) localCache.get(key, tClass);
+    T t = (T) localCache.get(key, tClass);
+    ekamLogger().info("[Locale Client] Found value {} for key {}", t, key);
+    return t;
   }
 }

@@ -19,4 +19,12 @@ public class EkamTest {
   public int hashCode() {
     return Objects.hashCode(this.feature, this.scenario);
   }
+
+  @Override
+  public String toString() {
+    return "{"
+            + "\"feature\":\"" + feature + "\""
+            + ", \"scenario\":\"" + scenario + "\""
+            + "}";
+  }
 }

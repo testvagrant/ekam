@@ -7,6 +7,7 @@ import io.cucumber.java.Scenario;
 public class ApiScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
+    initLogger(scenario);
     EkamTest ekamTest = buildEkamTest(scenario);
     new EkamAPIInjector(ekamTest, ekamConfig).create();
   }

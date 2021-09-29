@@ -18,4 +18,15 @@ public class WebTestFeed {
   @Builder.Default private Map<String, Object> preferences = new HashMap<>();
   @Builder.Default private List<String> extensions = new ArrayList<>();
   @Builder.Default private Map<String, Object> experimentalOptions = new HashMap<>();
+
+  @Override
+  public String toString() {
+    return "{"
+            + "\"desiredCapabilities\":" + desiredCapabilities
+            + ", \"arguments\":" + arguments
+            + ", \"preferences\":" + preferences
+            + ", \"extensions\":" + extensions
+            + ", \"experimentalOptions\":" + experimentalOptions
+            + "}";
+  }
 }

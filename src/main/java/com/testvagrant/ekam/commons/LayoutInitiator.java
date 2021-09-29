@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.time.Duration;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class LayoutInitiator {
 
@@ -59,11 +60,13 @@ public class LayoutInitiator {
     FieldDecorator fieldDecorator =
         new AppiumFieldDecorator(mobileDriverDetails.getDriver(), Duration.ofSeconds(30));
     PageFactory.initElements(fieldDecorator, this);
-    return activityInjector.getInstance(tActivity);
+    Activity instance = activityInjector.getInstance(tActivity);
+    return instance;
   }
 
   private <Client> Client createAPILayout(Class<Client> tClient) {
-    return getInjector().getInstance(tClient);
+    Client instance = getInjector().getInstance(tClient);
+    return instance;
   }
 
   private Injector getInjector() {

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.testvagrant.ekam.commons.cache.providers.DataSetsProvider.dataSetsProvider;
 import static com.testvagrant.ekam.commons.constants.ResourcesConfigKeys.DATASETS;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DataSetsClient {
@@ -29,11 +30,14 @@ public class DataSetsClient {
   public <T> T getValue(String key, Class<T> tClass) {
     if (tClass.getTypeName().toLowerCase().contains("list")) {
       try {
-        return (T)
-            this.dataSets
-                .get(key.toLowerCase())
-                .orElseThrow(() -> new RuntimeException(key + " not found"));
+        T t = (T)
+                this.dataSets
+                        .get(key.toLowerCase())
+                        .orElseThrow(() -> new RuntimeException(key + " not found"));
+        ekamLogger().info("Found value {} for key {}", t, key);
+        return t;
       } catch (Throwable throwable) {
+        ekamLogger().warn("Cannot find any suitable value for key {}", key);
         throw new RuntimeException(throwable);
       }
     }
@@ -49,12 +53,14 @@ public class DataSetsClient {
                   .orElseThrow(() -> new RuntimeException(key + " not found"));
 
       GsonParser gsonParser = new GsonParser();
+      ekamLogger().info("Found list value {} for key {}", values, key);
       return (List<T>)
           values.stream()
               .map(value -> gsonParser.deserialize(value, tClass))
               .collect(Collectors.toList());
 
     } catch (Throwable throwable) {
+      ekamLogger().warn("Cannot find value for key {}", key);
       throw new RuntimeException(throwable);
     }
   }
@@ -74,6 +80,7 @@ public class DataSetsClient {
 
   public <T> T getValue(String key, Type type, boolean lock) {
     String value = getJsonString(key, lock);
+    ekamLogger().info("Getting value for key {}", key);
     return new Gson().fromJson(value, type);
   }
 
@@ -141,6 +148,7 @@ public class DataSetsClient {
                       });
       return new GsonParser().serialize(type);
     } catch (Throwable throwable) {
+      ekamLogger().warn("Key {} not found in datasets", key);
       throw new RuntimeException(throwable);
     }
   }

@@ -8,6 +8,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
+
 public class ApiStepInterceptor extends StepInterceptor implements MethodInterceptor {
   @Override
   public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -25,6 +27,7 @@ public class ApiStepInterceptor extends StepInterceptor implements MethodInterce
     APIStep stepAnnotation = invocation.getMethod().getAnnotation(APIStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
     LayoutInitiator.layoutInitiator().addStep(step);
+    ekamLogger().info("Executing step {}", step.getName());
     recordAllureStep(
         stepAnnotation.keyword(), stepAnnotation.persona(), stepAnnotation.description());
   }

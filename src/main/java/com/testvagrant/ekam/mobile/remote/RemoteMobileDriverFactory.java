@@ -8,12 +8,14 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 
 import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class RemoteMobileDriverFactory {
 
   public static Triple<URL, DesiredCapabilities, TargetDetails> remoteMobileDriverFactory(
       MobileConfigParser mobileConfigParser) {
     String hub = mobileConfigParser.getMobileConfig().getHub();
+    ekamLogger().info("Creating remote mobile driver for {}", hub);
     switch (hub) {
       case BROWSERSTACK:
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();

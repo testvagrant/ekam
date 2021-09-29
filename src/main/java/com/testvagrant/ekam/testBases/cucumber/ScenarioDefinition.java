@@ -7,6 +7,10 @@ import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.internal.modules.EkamConfigModule;
 import io.cucumber.java.Scenario;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
+import org.testng.ITestResult;
+
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public abstract class ScenarioDefinition {
 
@@ -22,5 +26,10 @@ public abstract class ScenarioDefinition {
         .scenario(scenario.getName())
         .feature(StringUtils.capitalize(scenario.getName().replaceAll("\\s", "")))
         .build();
+  }
+
+  protected void initLogger(Scenario scenario) {
+    MDC.put("logFileName", scenario.getId());
+    ekamLogger().info("Running test {}", scenario.getName());
   }
 }

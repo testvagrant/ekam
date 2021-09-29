@@ -16,6 +16,7 @@ import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.inj
 public class MobileScenarioDefinition extends ScenarioDefinition {
 
   public void setup(Scenario scenario) {
+    initLogger(scenario);
     EkamTest ekamTest = buildEkamTest(scenario);
     new EkamMobileInjector(ekamTest, ekamConfig).create();
   }

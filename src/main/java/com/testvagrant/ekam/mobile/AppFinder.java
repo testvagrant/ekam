@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.List;
 
 import static com.testvagrant.ekam.commons.io.ResourcePaths.APP_DIR;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 import static com.testvagrant.ekam.mobile.constants.MobilePlatform.ANDROID;
 import static com.testvagrant.ekam.mobile.constants.MobilePlatform.IOS;
 
@@ -21,11 +22,17 @@ public class AppFinder {
         List<File> iosFiles = fileFinder.findWithExtension(".ipa");
         List<File> iosSimFiles = fileFinder.findWithExtension(".app");
         iosFiles.addAll(iosSimFiles);
-        return iosFiles.stream().findAny().orElseThrow(() -> exception).getAbsolutePath();
+        return iosFiles.stream().findAny().orElseThrow(() -> {
+          ekamLogger().warn("Cannot find {} app in {}", platform, APP_DIR);
+          return exception;}
+                ).getAbsolutePath();
       case ANDROID:
       default:
         List<File> androidFiles = fileFinder.findWithExtension(".apk");
-        return androidFiles.stream().findAny().orElseThrow(() -> exception).getAbsolutePath();
+        return androidFiles.stream().findAny().orElseThrow(() -> {
+          ekamLogger().warn("Cannot find {} app in {}", platform, APP_DIR);
+          return exception;
+        }).getAbsolutePath();
     }
   }
 

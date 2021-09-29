@@ -22,6 +22,8 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
+
 public class WebDriverProvider implements Provider<WebDriver> {
 
   @Inject private EkamConfig ekam;
@@ -73,6 +75,7 @@ public class WebDriverProvider implements Provider<WebDriver> {
 
     String url = ekam.getWeb().getLaunchUrl().trim();
     webDriver.get(url);
+    ekamLogger().info("Launched site {}", url);
 
     for (int retry = 0; retry < 3; retry++) {
       try {

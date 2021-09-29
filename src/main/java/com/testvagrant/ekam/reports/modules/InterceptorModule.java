@@ -12,6 +12,7 @@ import com.testvagrant.ekam.reports.interceptors.WebStepInterceptor;
 
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.any;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class InterceptorModule extends AbstractModule {
 
@@ -21,10 +22,13 @@ public class InterceptorModule extends AbstractModule {
     ScreenshotInterceptor screenshotInterceptor = new ScreenshotInterceptor();
     requestInjection(screenshotInterceptor);
     binder().bindInterceptor(any(), annotatedWith(Screenshot.class), screenshotInterceptor);
-
+    ekamLogger().info("Binding Screenshot interceptor");
     // bind Step listener
     binder().bindInterceptor(any(), annotatedWith(WebStep.class), new WebStepInterceptor());
+    ekamLogger().info("Binding WebStep interceptor");
     binder().bindInterceptor(any(), annotatedWith(MobileStep.class), new MobileStepInterceptor());
+    ekamLogger().info("Binding MobileStep interceptor");
     binder().bindInterceptor(any(), annotatedWith(APIStep.class), new ApiStepInterceptor());
+    ekamLogger().info("Binding ApiStep interceptor");
   }
 }

@@ -20,6 +20,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.*;
 
 import static com.testvagrant.ekam.config.models.ConfigKeys.Env.MOBILE_ENV;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 import static com.testvagrant.ekam.mobile.constants.MobilePlatform.ANDROID;
 import static com.testvagrant.ekam.mobile.constants.MobilePlatform.IOS;
 
@@ -33,6 +34,7 @@ public class MobileConfigParser extends TestConfigParser {
   private Map<ServerArgument, String> serverArguments;
 
   public MobileConfigParser(MobileConfig mobileConfig) {
+    ekamLogger().info("Parsing Mobile Config {}", mobileConfig);
     this.mobileConfig = mobileConfig;
     setPlatform();
     this.testFeed = getTestFeed(mobileConfig.getFeed());
@@ -78,7 +80,6 @@ public class MobileConfigParser extends TestConfigParser {
 
     DeviceFilter udidFilter =
         new DeviceFilter().toBuilder().include(Collections.singletonList(udid)).build();
-
     DeviceFilter modelFilter =
         new DeviceFilter().toBuilder().include(Collections.singletonList(model)).build();
 
@@ -92,12 +93,14 @@ public class MobileConfigParser extends TestConfigParser {
                 .udid(udidFilter)
                 .platformVersion(platformVersionFilter)
                 .build();
+    ekamLogger().info("Created device filters for {}", deviceFilters);
   }
 
   private void setServerArguments() {
     List<String> serverArgs =
         mobileConfig.isServerArgsProvided() ? loadServerArguments() : testFeed.getServerArguments();
     serverArguments = new ServerArgumentParser(serverArgs).getServerArguments();
+    ekamLogger().info("Setting server arguments {}", serverArguments);
   }
 
   private void setDesiredCapabilities() {
@@ -123,11 +126,13 @@ public class MobileConfigParser extends TestConfigParser {
 
     Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
     desiredCapabilities = new DesiredCapabilities(updatedCapabilities);
+    ekamLogger().info("Setting desired capabilities {}", desiredCapabilities);
   }
 
   private Map<String, Object> updateMandatoryCapabilities(Map<String, Object> capabilities) {
+    ekamLogger().info("Updating mandatory capabilities");
     capabilities.put(CapabilityType.PLATFORM_NAME, platform);
-
+    ekamLogger().info("platform {}", platform);
     String app = (String) capabilities.getOrDefault(MobileCapabilityType.APP, "");
     if (!app.isEmpty()) {
       String appPath =
@@ -135,6 +140,7 @@ public class MobileConfigParser extends TestConfigParser {
               ? AppFinder.getDefaultApp(platform)
               : app.contains(":") ? app : AppFinder.findApp(app);
       capabilities.put(MobileCapabilityType.APP, appPath);
+      ekamLogger().info("platform {}", platform);
     }
 
     if (!mobileConfig.isRemote() && platform.equalsIgnoreCase(ANDROID)) {
@@ -150,15 +156,18 @@ public class MobileConfigParser extends TestConfigParser {
     if (mobileConfig.isAny()) {
       List<String> randomPlatforms = generateRandomPlatforms();
       platform = FindAny.inList(randomPlatforms);
+      ekamLogger().info("Platform is any, generating default platform as {}", platform);
       mobileConfig.setTarget(platform.trim());
     }
-
     platform = mobileConfig.getTarget().trim();
+    ekamLogger().info("Platform is {}", platform);
   }
 
   private MobileTestFeed getTestFeed(String testFeed) {
     if (testFeed == null || testFeed.isEmpty()) {
-      return MobileTestFeed.builder().desiredCapabilities(generateDefaultCapabilities()).build();
+      MobileTestFeed build = MobileTestFeed.builder().desiredCapabilities(generateDefaultCapabilities()).build();
+      ekamLogger().info("mobile.feed is empty, generating a default feed {}", build);
+      return build;
     }
 
     return loadFeed(testFeed, System.getProperty(MOBILE_ENV), MobileTestFeed.class);

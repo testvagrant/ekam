@@ -7,6 +7,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.layoutInitiator;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class WebStepInterceptor extends StepInterceptor implements MethodInterceptor {
   @Override
@@ -24,6 +25,7 @@ public class WebStepInterceptor extends StepInterceptor implements MethodInterce
   private void addStep(MethodInvocation invocation) throws Throwable {
     WebStep stepAnnotation = invocation.getMethod().getAnnotation(WebStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
+    ekamLogger().info("Executing step {}", step.getName());
     layoutInitiator().addStep(step);
     recordAllureStep(
         stepAnnotation.keyword(),

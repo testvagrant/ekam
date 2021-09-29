@@ -21,6 +21,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 import static com.testvagrant.ekam.mobile.remote.RemoteMobileDriverFactory.remoteMobileDriverFactory;
 
 public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails> {
@@ -36,6 +37,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
   }
 
   private MobileDriverDetails createRemoteDriver(MobileConfigParser mobileConfigParser) {
+    ekamLogger().info("Creating remote driver");
     Triple<URL, DesiredCapabilities, TargetDetails> sessionDetails =
         remoteMobileDriverFactory(mobileConfigParser);
     URL remoteUrl = sessionDetails.getLeft();
@@ -53,11 +55,12 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
   }
 
   private MobileDriverDetails createLocalDriver(MobileConfigParser mobileConfigParser) {
+    ekamLogger().info("Creating local driver");
     TargetDetails availableDevice =
         new LocalDeviceFinder(
                 mobileConfigParser.getPlatform(), mobileConfigParser.getDeviceFilters())
             .findDevice();
-
+    ekamLogger().info("Found available device {}", availableDevice);
     DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
     DesiredCapabilities deviceCapabilities = new DesiredCapabilities(availableDevice.asMap());
     DesiredCapabilities capabilities = desiredCapabilities.merge(deviceCapabilities);
@@ -74,6 +77,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
     AppiumDriver<MobileElement> driver =
         new MobileDriverManager(appiumDriverLocalService.getUrl(), capabilities).createDriver();
 
+    ekamLogger().info("Created local driver");
     return MobileDriverDetails.builder()
         .driver(driver)
         .targetDetails(availableDevice)

@@ -18,6 +18,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 
 import static com.testvagrant.ekam.internal.injectors.InjectorsCacheProvider.injectorsCache;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 /** Captures and save screenshots for the EkamTest specified */
 public class EkamTestScreenshotTaker {
@@ -58,6 +59,7 @@ public class EkamTestScreenshotTaker {
 
       return driver.getScreenshotAs(OutputType.FILE);
     } catch (WebDriverException ex) {
+      ekamLogger().warn("Failed to take screenshot {}", ex.getMessage());
       throw new RuntimeException("Failed to take screenshot." + ex.getMessage());
     }
   }

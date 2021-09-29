@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
+
 public class BrowserStackDriver {
 
   private final DesiredCapabilities desiredCapabilities;
@@ -29,6 +31,7 @@ public class BrowserStackDriver {
 
   public Triple<URL, DesiredCapabilities, TargetDetails> buildRemoteMobileConfig() {
     TargetDetails target = findTarget();
+    ekamLogger().info("Found remote target {}", target);
     String appUrl = uploadApp();
     URL url = RemoteUrlBuilder.build(cloudConfig);
 
@@ -36,7 +39,7 @@ public class BrowserStackDriver {
         new CapabilityMapper().mapToBrowserStackCaps(appUrl, target);
     DesiredCapabilities updatedCapabilities =
         desiredCapabilities.merge(new DesiredCapabilities(browserStackCaps));
-
+    ekamLogger().info("Building remote capabilities {}", updatedCapabilities);
     return Triple.of(url, updatedCapabilities, target);
   }
 

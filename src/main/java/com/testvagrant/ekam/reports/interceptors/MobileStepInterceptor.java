@@ -7,6 +7,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.testvagrant.ekam.commons.LayoutInitiator.layoutInitiator;
+import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class MobileStepInterceptor extends StepInterceptor implements MethodInterceptor {
   @Override
@@ -16,6 +17,7 @@ public class MobileStepInterceptor extends StepInterceptor implements MethodInte
       addStep(invocation);
       return proceed.get();
     } catch (Throwable e) {
+      ekamLogger().error("Failed to invoke method {} in class {}", invocation.getMethod().getName(), invocation.getMethod().getDeclaringClass());
       addStep(invocation);
       throw e;
     }
@@ -25,6 +27,7 @@ public class MobileStepInterceptor extends StepInterceptor implements MethodInte
     MobileStep stepAnnotation = invocation.getMethod().getAnnotation(MobileStep.class);
     com.testvagrant.ekam.dashboard.models.Step step = buildStep(stepAnnotation);
     layoutInitiator().addStep(step);
+    ekamLogger().info("Executing step {}", step.getName());
     recordAllureStep(
         stepAnnotation.keyword(),
         stepAnnotation.persona(),
