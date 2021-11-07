@@ -8,8 +8,7 @@ import com.testvagrant.ekam.devicemanager.LocalDeviceManagerProvider;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyDeviceManagerProvider;
 
-import static com.testvagrant.ekam.commons.remote.constants.Hub.P_CLOUDY;
-import static com.testvagrant.ekam.commons.remote.constants.Hub.QUALITY_KIOSK;
+import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
 import static com.testvagrant.ekam.logger.EkamLogger.ekamLogger;
 
 public class DeviceCacheDisposeFactory {
@@ -35,10 +34,12 @@ public class DeviceCacheDisposeFactory {
                 cloudConfig.getApiHost(), cloudConfig.getUsername(), cloudConfig.getAccessKey())
             .releaseDevice(targetDetails);
         break;
-      default:
+      case BROWSERSTACK:
         BrowserStackDeviceManagerProvider.deviceManager(
                 cloudConfig.getUsername(), cloudConfig.getAccessKey())
             .releaseDevice(targetDetails);
+        break;
+      default:
         break;
     }
   }

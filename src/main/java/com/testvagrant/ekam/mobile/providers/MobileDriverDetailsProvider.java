@@ -49,7 +49,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
 
     return MobileDriverDetails.builder()
         .driver(driver)
-        .targetDetails(targetDetails)
+        .targetDetails(targetDetails) // TODO: Create Target Details from driver object
         .capabilities(desiredCapabilities)
         .build();
   }

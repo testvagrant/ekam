@@ -23,6 +23,8 @@ public class RemoteMobileDriverFactory {
         return new PCloudyDriver(mobileConfigParser).buildRemoteMobileConfig();
       case QUALITY_KIOSK:
         return new QualityKioskDriver(mobileConfigParser).buildRemoteMobileConfig();
+      case PERFECTO:
+        return new PerfectoDriver(mobileConfigParser).buildRemoteMobileConfig();
       case KOBITON:
       case SAUCE_LABS:
       default:
