@@ -3,6 +3,7 @@ package com.testvagrant.ekam.mobile;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.testvagrant.ekam.config.models.EkamConfig;
+import com.testvagrant.ekam.config.properties.ConfigPropertyLoader;
 import com.testvagrant.ekam.devicemanager.DeviceFiltersManager;
 import com.testvagrant.ekam.devicemanager.models.DeviceFilters;
 import com.testvagrant.ekam.devicemanager.models.EkamSupportedPlatforms;
@@ -13,9 +14,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.junitpioneer.jupiter.SetSystemProperty;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -90,6 +93,31 @@ public class MobileConfigParserTests {
 
     Assertions.assertEquals(matchingTargets.get(0).getUdid(), udid);
     Assertions.assertEquals(matchingTargets.get(0).getName(), name);
+  }
+
+  @Test
+  @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
+  @SetSystemProperty(key = "app", value = "bs://blahhh.com")
+  @SetSystemProperty(key="automationName",value="UiAutomator2")
+  public void shouldConsiderTheDesiredCapabilitiesWhenSpecifiedViaEnvVariable(){
+    Injector injector = Guice.createInjector(new EkamConfigModule());
+    EkamConfig ekamConfig = injector.getInstance(EkamConfig.class);
+    MobileConfigParser mobileConfigParser=new MobileConfigParser(ekamConfig.getMobile());
+    DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
+    Assertions.assertEquals("bs://blahhh.com", desiredCapabilities.getCapability("app"));
+    Assertions.assertEquals("UiAutomator2",desiredCapabilities.getCapability("automationName"));
+  }
+
+  @Test
+  @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
+  @SetSystemProperty(key="automationName",value="UiAutomator2")
+  @SetSystemProperty(key="app",value="")
+  public void shouldNotConsiderAppIfAppIsEmptyInDesiredCapabilities(){
+    Injector injector=Guice.createInjector(new EkamConfigModule());
+    EkamConfig ekamConfig=injector.getInstance(EkamConfig.class);
+    MobileConfigParser mobileConfigParser=new MobileConfigParser(ekamConfig.getMobile());
+    DesiredCapabilities desiredCapabilities=mobileConfigParser.getDesiredCapabilities();
+    Assertions.assertEquals("", desiredCapabilities.getCapability("app"));
   }
 
   private List<TargetDetails> getTargetDetails() {

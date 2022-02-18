@@ -124,7 +124,7 @@ public class MobileConfigParser extends TestConfigParser {
               .orElseThrow(() -> exception);
     }
 
-    Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(capabilities);
+    Map<String, Object> updatedCapabilities = updateMandatoryCapabilities(testFeed.parseSystemProperty(capabilities));
     desiredCapabilities = new DesiredCapabilities(updatedCapabilities);
     ekamLogger().info("Setting desired capabilities {}", desiredCapabilities);
   }
