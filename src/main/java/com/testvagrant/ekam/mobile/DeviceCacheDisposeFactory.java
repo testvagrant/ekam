@@ -36,7 +36,7 @@ public class DeviceCacheDisposeFactory {
             .releaseDevice(targetDetails);
         break;
       case BROWSERSTACK:
-        if(Toggles.browserStackCacheLock.isOn())
+        if(Toggles.BROWSER_STACK_CACHE_LOCK.isOn())
           BrowserStackDeviceManagerProvider.deviceManager(
                   cloudConfig.getUsername(), cloudConfig.getAccessKey())
               .releaseDevice(targetDetails);
