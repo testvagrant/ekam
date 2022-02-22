@@ -1,0 +1,10 @@
+{
+  "desiredCapabilities": [
+    {
+      "app": "${env:app}",
+      "appWaitActivity": "com.swaglabsmobileapp.MainActivity",
+      "platformName": "android",
+      "automationName": "${env:automationName}"
+    }
+  ]
+}
