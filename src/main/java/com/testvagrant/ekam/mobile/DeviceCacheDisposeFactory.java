@@ -1,5 +1,6 @@
 package com.testvagrant.ekam.mobile;
 
+import com.testvagrant.ekam.commons.Toggles;
 import com.testvagrant.ekam.commons.remote.ConfigLoader;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.config.models.MobileConfig;
@@ -35,9 +36,10 @@ public class DeviceCacheDisposeFactory {
             .releaseDevice(targetDetails);
         break;
       case BROWSERSTACK:
-        BrowserStackDeviceManagerProvider.deviceManager(
-                cloudConfig.getUsername(), cloudConfig.getAccessKey())
-            .releaseDevice(targetDetails);
+        if(Toggles.browserStackCacheLock.isOn())
+          BrowserStackDeviceManagerProvider.deviceManager(
+                  cloudConfig.getUsername(), cloudConfig.getAccessKey())
+              .releaseDevice(targetDetails);
         break;
       default:
         break;

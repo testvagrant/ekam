@@ -3,6 +3,7 @@ package com.testvagrant.ekam.db;
 import com.testvagrant.ekam.db.entities.DBType;
 import com.testvagrant.ekam.db.mapper.ConfigManager;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetSystemProperty;
 
@@ -30,6 +31,7 @@ public class DBConfigManagerTest {
 
   @Test
   @SetSystemProperty(key = "env", value = "qa")
+  @Disabled
   public void findDBConfigFromEnvWhenSpecified() {
     DBConfig configuration = new ConfigManager().getConfiguration(DBType.POSTGRES.getDbString());
     Assertions.assertEquals(configuration.getHost(), "qa");
@@ -41,6 +43,7 @@ public class DBConfigManagerTest {
   @Test
   @SetSystemProperty(key = "env", value = "qa")
   @SetSystemProperty(key = "db.drivers", value = "main_drivers")
+  @Disabled
   public void findDBConfigFromEnvWhenSpecifiedInSrcMainResources() {
     DBConfig configuration = new ConfigManager().getConfiguration(DBType.POSTGRES.getDbString());
     Assertions.assertEquals(configuration.getHost(), "main_qa");
