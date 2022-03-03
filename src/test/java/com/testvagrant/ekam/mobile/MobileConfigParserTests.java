@@ -120,6 +120,17 @@ public class MobileConfigParserTests {
     Assertions.assertEquals("", desiredCapabilities.getCapability("app"));
   }
 
+  @Test
+  @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
+  @SetSystemProperty(key = "app", value = "bs://blahhh.com")
+  @SetSystemProperty(key="automationName",value="UiAutomator2")
+  public void shouldConsiderTheIntegerTypeInDesiredCapabilities(){
+    Injector injector=Guice.createInjector(new EkamConfigModule());
+    EkamConfig ekamConfig=injector.getInstance(EkamConfig.class);
+    MobileConfigParser mobileConfigParser=new MobileConfigParser(ekamConfig.getMobile());
+    DesiredCapabilities desiredCapabilities=mobileConfigParser.getDesiredCapabilities();
+    Assertions.assertEquals(desiredCapabilities.getCapability("newCommandTimeout").getClass(), Integer.class);
+  }
   private List<TargetDetails> getTargetDetails() {
     TargetDetails iosEmulator =
         TargetDetails.builder()
