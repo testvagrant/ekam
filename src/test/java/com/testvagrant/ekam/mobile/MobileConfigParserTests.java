@@ -16,6 +16,7 @@ import org.junitpioneer.jupiter.ClearSystemProperty;
 import org.junitpioneer.jupiter.SetSystemProperty;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -106,6 +107,24 @@ public class MobileConfigParserTests {
     DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
     Assertions.assertEquals("bs://blahhh.com", desiredCapabilities.getCapability("app"));
     Assertions.assertEquals("UiAutomator2",desiredCapabilities.getCapability("automationName"));
+  }
+  @Test
+  @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
+  @SetSystemProperty(key = "app", value = "bs://blahhh.com")
+  @SetSystemProperty(key="automationName",value="UiAutomator2")
+  @SetSystemProperty(key = "app1",value = "bs://app1.com")
+  @SetSystemProperty(key = "app2",value = "bs://app2.com")
+  public void shouldConsiderTheOtherAppsCapabilitiesWhenSpecifiedViaEnvVariable(){
+    Injector injector = Guice.createInjector(new EkamConfigModule());
+    EkamConfig ekamConfig = injector.getInstance(EkamConfig.class);
+    MobileConfigParser mobileConfigParser=new MobileConfigParser(ekamConfig.getMobile());
+    DesiredCapabilities desiredCapabilities = mobileConfigParser.getDesiredCapabilities();
+    Assertions.assertEquals("bs://blahhh.com", desiredCapabilities.getCapability("app"));
+    Assertions.assertEquals("UiAutomator2",desiredCapabilities.getCapability("automationName"));
+    ArrayList<String>apps=new ArrayList<>();
+    apps.add("bs://app1.com");
+    apps.add("bs://app2.com");
+    Assertions.assertEquals(apps,desiredCapabilities.getCapability("otherApps"));
   }
 
   @Test

@@ -5,7 +5,8 @@
       "appWaitActivity": "com.swaglabsmobileapp.MainActivity",
       "platformName": "android",
       "automationName": "${env:automationName}",
-      "newCommandTimeout": 300
+      "newCommandTimeout": 300,
+      "otherApps": ["${env:app1}","${env:app2}"]
     }
   ]
 }
