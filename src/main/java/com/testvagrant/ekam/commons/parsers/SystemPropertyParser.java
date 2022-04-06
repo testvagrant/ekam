@@ -36,4 +36,11 @@ public class SystemPropertyParser {
 
     return updatedPair;
   }
+
+  public static ArrayList<String> parse(ArrayList<String>capabilities){
+    ArrayList<String>parsedCapabilities=new ArrayList<>();
+    for (String capability : capabilities)
+      parsedCapabilities.add(parse(capability));
+    return parsedCapabilities;
+  }
 }
