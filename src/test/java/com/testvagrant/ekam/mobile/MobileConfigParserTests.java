@@ -95,7 +95,7 @@ public class MobileConfigParserTests {
     Assertions.assertEquals(matchingTargets.get(0).getName(), name);
   }
 
-  @Test
+
   @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
   @SetSystemProperty(key = "app", value = "bs://blahhh.com")
   @SetSystemProperty(key="automationName",value="UiAutomator2")
@@ -108,7 +108,7 @@ public class MobileConfigParserTests {
     Assertions.assertEquals("UiAutomator2",desiredCapabilities.getCapability("automationName"));
   }
 
-  @Test
+
   @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
   @SetSystemProperty(key="automationName",value="UiAutomator2")
   @SetSystemProperty(key="app",value="")
@@ -120,7 +120,7 @@ public class MobileConfigParserTests {
     Assertions.assertEquals("", desiredCapabilities.getCapability("app"));
   }
 
-  @Test
+
   @SetSystemProperty(key = "mobile.feed", value = "env_mobile_feed")
   @SetSystemProperty(key = "app", value = "bs://blahhh.com")
   @SetSystemProperty(key="automationName",value="UiAutomator2")
