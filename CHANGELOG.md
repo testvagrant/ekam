@@ -1,3 +1,7 @@
+# 1.1.0-beta
+* Updated Ekam commons to 1.0.2
+* Updated Ekam device manager to 1.0.2-beta
+
 # 1.0.2
 * Added support for time capabilities
 
