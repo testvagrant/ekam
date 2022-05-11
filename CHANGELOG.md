@@ -1,3 +1,6 @@
+# 1.1.0
+* release 1.1.0
+
 # 1.1.0-beta
 * Updated Ekam commons to 1.0.2
 * Updated Ekam device manager to 1.0.2-beta
