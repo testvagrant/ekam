@@ -3,7 +3,8 @@ package com.testvagrant.ekam.commons;
 public enum Toggles {
   TIMELINE(Boolean.parseBoolean(System.getProperty("timeline", "true"))),
   LOGS(Boolean.parseBoolean(System.getProperty("enableLogs", "true"))),
-  BROWSER_STACK_CACHE_LOCK(Boolean.parseBoolean(System.getProperty("cloud.browserstack.cache.lock", "true")));
+  BROWSER_STACK_CACHE_LOCK(Boolean.parseBoolean(System.getProperty("cloud.browserstack.cache.lock", "true"))),
+  LAMBDA_TEST_CACHE_LOCK(Boolean.parseBoolean(System.getProperty("cloud.lambdatest.cache.lock", "true")));
 
   private final Boolean active;
 

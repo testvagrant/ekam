@@ -5,6 +5,7 @@ import com.testvagrant.ekam.commons.remote.ConfigLoader;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.config.models.MobileConfig;
 import com.testvagrant.ekam.devicemanager.BrowserStackDeviceManagerProvider;
+import com.testvagrant.ekam.devicemanager.LambdaTestDeviceManagerProvider;
 import com.testvagrant.ekam.devicemanager.LocalDeviceManagerProvider;
 import com.testvagrant.ekam.devicemanager.models.TargetDetails;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyDeviceManagerProvider;
@@ -41,6 +42,12 @@ public class DeviceCacheDisposeFactory {
                   cloudConfig.getUsername(), cloudConfig.getAccessKey())
               .releaseDevice(targetDetails);
         break;
+      case LAMBDATEST:
+          if (Toggles.LAMBDA_TEST_CACHE_LOCK.isOn())
+              LambdaTestDeviceManagerProvider.deviceManager(
+                  cloudConfig.getUsername(), cloudConfig.getAccessKey())
+                .releaseDevice(targetDetails);
+          break;
       default:
         break;
     }

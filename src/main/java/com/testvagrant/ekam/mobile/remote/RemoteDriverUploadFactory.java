@@ -3,6 +3,7 @@ package com.testvagrant.ekam.mobile.remote;
 import com.testvagrant.ekam.commons.remote.ConfigLoader;
 import com.testvagrant.ekam.commons.remote.models.CloudConfig;
 import com.testvagrant.ekam.devicemanager.remote.browserstack.BrowserStackUploadManager;
+import com.testvagrant.ekam.devicemanager.remote.lambdatest.LambdaTestUploadManager;
 import com.testvagrant.ekam.devicemanager.remote.pcloudy.PCloudyUploadManager;
 
 import static com.testvagrant.ekam.commons.remote.constants.Hub.*;
@@ -26,6 +27,11 @@ public class RemoteDriverUploadFactory {
             .upload(appPath)
             .getResult()
             .getFile();
+      case LAMBDATEST:
+        return LambdaTestUploadManager.getInstance(
+                        cloudConfig.getUsername(), cloudConfig.getAccessKey())
+                .upload(appPath)
+                .getAppUrl();
       default:
         return "";
     }
