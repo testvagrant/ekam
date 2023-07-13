@@ -1,3 +1,6 @@
+# 1.1.1
+* Added capability to run test on lambdaTest
+
 # 1.1.0
 * release 1.1.0
 
