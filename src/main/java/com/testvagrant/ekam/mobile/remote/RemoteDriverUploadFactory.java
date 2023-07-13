@@ -19,6 +19,11 @@ public class RemoteDriverUploadFactory {
                 cloudConfig.getUsername(), cloudConfig.getAccessKey())
             .upload(appPath)
             .getAppUrl();
+      case LAMBDA_TEST:
+        return LambdaTestUploadManager.getInstance(
+                        cloudConfig.getUsername(), cloudConfig.getAccessKey())
+                .upload(appPath)
+                .getAppUrl();
       case QUALITY_KIOSK:
       case P_CLOUDY:
         return PCloudyUploadManager.getInstance(

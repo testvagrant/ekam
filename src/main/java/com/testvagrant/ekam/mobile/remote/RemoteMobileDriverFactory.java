@@ -19,6 +19,8 @@ public class RemoteMobileDriverFactory {
     switch (hub) {
       case BROWSERSTACK:
         return new BrowserStackDriver(mobileConfigParser).buildRemoteMobileConfig();
+      case LAMBDA_TEST:
+        return new LambdaTestDriver(mobileConfigParser).buildRemoteMobileConfig();
       case P_CLOUDY:
         return new PCloudyDriver(mobileConfigParser).buildRemoteMobileConfig();
       case QUALITY_KIOSK:
