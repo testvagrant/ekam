@@ -22,7 +22,8 @@ public class ApiEnvTests {
 
   @Test
   @SetSystemProperty(key = "env", value = "qa")
-  public void shouldPickUpHostFromEnvWhenSpecified() {
+  public void shouldPickUpHostFromEnvWhenSpecified(){
+    System.out.printf("Host: %s", config.getHost());
     Assertions.assertEquals("qa", config.getHost());
   }
 
