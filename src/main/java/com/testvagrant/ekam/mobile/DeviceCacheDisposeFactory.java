@@ -41,6 +41,12 @@ public class DeviceCacheDisposeFactory {
                   cloudConfig.getUsername(), cloudConfig.getAccessKey())
               .releaseDevice(targetDetails);
         break;
+      case LAMBDA_TEST:
+        if(Toggles.LAMBDA_TEST_CACHE_LOCK.isOn())
+          LambdaTestDeviceManagerProvider.deviceManager(
+                          cloudConfig.getUsername(), cloudConfig.getAccessKey())
+                  .releaseDevice(targetDetails);
+        break;
       default:
         break;
     }
