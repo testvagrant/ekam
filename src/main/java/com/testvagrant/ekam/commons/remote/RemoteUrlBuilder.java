@@ -14,7 +14,7 @@ public class RemoteUrlBuilder {
       } else {
         urlString =
             String.format(
-                "%s://%s:%s@%s/wd/hub",
+                "%s://%s:%s@%s/",
                 cloudConfig.getProtocol(),
                 cloudConfig.getUsername(),
                 cloudConfig.getAccessKey(),
