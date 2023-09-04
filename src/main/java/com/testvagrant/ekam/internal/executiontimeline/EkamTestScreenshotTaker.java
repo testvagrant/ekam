@@ -51,12 +51,6 @@ public class EkamTestScreenshotTaker {
             WebDriver mobileDriver =
                     injectorsCache().getInjector().getInstance(MobileDriverDetails.class).getDriver();
 
-//      // Convert Mobile/WebDriver to ScreenshotDriver
-//      TakesScreenshot driver =
-//          mobileDriver == null
-//              ? (TakesScreenshot) injectorsCache().getInjector().getInstance(WebDriver.class)
-//              : mobileDriver;
-
             TakesScreenshot screenshotDriver =
                     (mobileDriver instanceof TakesScreenshot)
                             ? (TakesScreenshot) mobileDriver
