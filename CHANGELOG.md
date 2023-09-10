@@ -1,3 +1,6 @@
+# 1.2.1
+* Support for appium 2.0 and selenium 4.x.x
+* 
 # 1.1.1
 * Added capability to run test on lambdaTest
 
