@@ -12,10 +12,9 @@ import com.testvagrant.ekam.drivers.mobile.ServerManager;
 import com.testvagrant.ekam.internal.executiontimeline.models.EkamTest;
 import com.testvagrant.ekam.mobile.configparser.MobileConfigParser;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.apache.commons.lang3.tuple.Triple;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
@@ -44,7 +43,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
     DesiredCapabilities desiredCapabilities = sessionDetails.getMiddle();
     TargetDetails targetDetails = sessionDetails.getRight();
 
-    AppiumDriver<MobileElement> driver =
+    WebDriver driver =
         new MobileDriverManager(remoteUrl, desiredCapabilities).createDriver();
 
     return MobileDriverDetails.builder()
@@ -74,7 +73,7 @@ public class MobileDriverDetailsProvider implements Provider<MobileDriverDetails
 
     AppiumDriverLocalService appiumDriverLocalService =
         new ServerManager().startService(mobileConfigParser.getServerArguments(), logFilePath);
-    AppiumDriver<MobileElement> driver =
+    WebDriver driver =
         new MobileDriverManager(appiumDriverLocalService.getUrl(), capabilities).createDriver();
 
     ekamLogger().info("Created local driver");

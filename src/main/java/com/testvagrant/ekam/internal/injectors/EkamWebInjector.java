@@ -30,7 +30,7 @@ public class EkamWebInjector extends EkamInjector {
 
     return TargetDetails.builder()
         .name(capabilities.getBrowserName())
-        .platformVersion(capabilities.getVersion())
+        .platformVersion(capabilities.getBrowserVersion())
         .platform(EkamSupportedPlatforms.valueOf(capabilities.getBrowserName().toUpperCase()))
         .build();
   }

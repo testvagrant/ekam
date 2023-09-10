@@ -3,20 +3,19 @@ package com.testvagrant.ekam.mobile.providers;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
+import org.openqa.selenium.WebDriver;
 
-public class AppiumDriverProvider implements Provider<AppiumDriver<MobileElement>> {
+public class AppiumDriverProvider implements Provider<WebDriver> {
 
-  private final MobileDriverDetails mobileDriverDetails;
+    private final MobileDriverDetails mobileDriverDetails;
 
-  @Inject
-  public AppiumDriverProvider(MobileDriverDetails mobileDriverDetails) {
-    this.mobileDriverDetails = mobileDriverDetails;
-  }
+    @Inject
+    public AppiumDriverProvider(MobileDriverDetails mobileDriverDetails) {
+        this.mobileDriverDetails = mobileDriverDetails;
+    }
 
-  @Override
-  public AppiumDriver<MobileElement> get() {
-    return mobileDriverDetails.getDriver();
-  }
+    @Override
+    public WebDriver get() {
+        return mobileDriverDetails.getDriver();
+    }
 }

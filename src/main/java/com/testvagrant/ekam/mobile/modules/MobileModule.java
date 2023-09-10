@@ -5,19 +5,19 @@ import com.google.inject.TypeLiteral;
 import com.testvagrant.ekam.mobile.models.MobileDriverDetails;
 import com.testvagrant.ekam.mobile.providers.AppiumDriverProvider;
 import com.testvagrant.ekam.mobile.providers.MobileDriverDetailsProvider;
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
+import org.openqa.selenium.WebDriver;
 
 public class MobileModule extends AbstractModule {
 
-  @Override
-  protected void configure() {
-    bind(MobileDriverDetails.class)
-        .toProvider(MobileDriverDetailsProvider.class)
-        .asEagerSingleton();
+    @Override
+    protected void configure() {
+        bind(MobileDriverDetails.class)
+                .toProvider(MobileDriverDetailsProvider.class)
+                .asEagerSingleton();
 
-    bind(new TypeLiteral<AppiumDriver<MobileElement>>() {})
-        .toProvider(AppiumDriverProvider.class)
-        .asEagerSingleton();
-  }
+        bind(new TypeLiteral<WebDriver>() {
+        })
+                .toProvider(AppiumDriverProvider.class)
+                .asEagerSingleton();
+    }
 }
