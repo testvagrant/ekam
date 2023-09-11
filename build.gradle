@@ -36,7 +36,7 @@ dependencies {
     implementation('org.jboss.aerogear:aerogear-otp-java:1.0.0')
 
     //allure
-    implementation('io.qameta.allure:allure-gradle:2.24.0')
+    implementation('io.qameta.allure:allure-gradle:2.8.1')
     implementation('io.qameta.allure:allure-java-commons:2.24.0')
     implementation('io.qameta.allure:allure-testng:2.24.0')
     implementation('io.qameta.allure:allure-okhttp3:2.24.0')
