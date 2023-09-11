@@ -16,7 +16,7 @@ sourceCompatibility = 1.8
 dependencies {
     //google
     implementation('com.google.guava:guava:32.1.2-jre')
-    implementation('com.google.inject:guice:5.0.1')
+    implementation('com.google.inject:guice:7.0.0')
     implementation('com.google.protobuf:protobuf-java:3.24.3')
 
     // retrofit
